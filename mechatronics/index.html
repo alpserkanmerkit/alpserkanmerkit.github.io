@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- shell:head (byte-identical on every page; page-specific title, meta, JSON-LD and page CSS follow it) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080b'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='15' fill='%23ffb547'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script>/* before first paint: hide the Home loader on repeat visits; record the incoming View Transition (window.__vtP, html[data-vt]) */
+(function(d){var h=d.documentElement;try{if(sessionStorage.getItem('asm-seen')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)h.classList.add('seen')}catch(e){}
+window.__vtP='onpagereveal' in window?new Promise(function(r){addEventListener('pagereveal',function(e){h.dataset.vt=e.viewTransition?'yes':'no';r(e.viewTransition||null)},{once:true})}):Promise.resolve(null)})(document);</script>
+<!-- /shell:head -->
+<title>It wakes you with a sunrise. · Mechatronics · Alp Serkan Merkit</title>
+<meta name="description" content="Ortam Aurora, an ESP32-S3 room monitor that wakes you with a sunrise — on video, as a moving code diagram and as a breadboard drawing — plus the Arduino proximity alert it grew from.">
+<link rel="canonical" href="https://alpserkanmerkit.github.io/mechatronics/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="It wakes you with a sunrise. · Mechatronics · Alp Serkan Merkit">
+<meta property="og:description" content="Ortam Aurora, an ESP32-S3 room monitor and sunrise alarm, on video — plus the Arduino proximity alert it grew from.">
+<meta property="og:url" content="https://alpserkanmerkit.github.io/mechatronics/">
+<meta property="og:image" content="https://alpserkanmerkit.github.io/assets/media/ortam_wiring.jpg">
+<meta property="og:image:width" content="1840">
+<meta property="og:image:height" content="1330">
+<meta property="og:image:alt" content="Breadboard wiring drawing of Ortam Aurora: ESP32-S3, four sensors, an OLED and a 60-LED strip">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="expect" href="#track-hero" blocking="render">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebPage", "@id": "https://alpserkanmerkit.github.io/mechatronics/#webpage", "url": "https://alpserkanmerkit.github.io/mechatronics/",
+ "inLanguage": "en", "isPartOf": {"@type": "WebSite", "url": "https://alpserkanmerkit.github.io/"}, "name": "It wakes you with a sunrise. · Mechatronics · Alp Serkan Merkit",
+ "description": "Ortam Aurora (ESP32-S3 room monitor and sunrise alarm) on video, as a moving code diagram and as a breadboard drawing; origin: an Arduino Uno + HC-SR04 proximity alert.",
+ "mainEntity": {"@type": "CreativeWork", "name": "It wakes you with a sunrise.", "author": {"@id": "https://alpserkanmerkit.github.io/#person"},
+   "about": ["ESP32-S3", "WS2812B LED strip", "BLE", "Arduino", "HC-SR04 ultrasonic sensor"], "image": "https://alpserkanmerkit.github.io/assets/media/ortam_wiring.jpg"}}
+</script>
+<style>
+/* ---------- mechatronics page only: a showroom ---------- */
+main{--sec-y:max(170px,22vh);--sec-y-lg:max(200px,26vh)}
+.pad{padding:var(--sec-y-lg) 0 var(--sec-y)}
+.sec-head .aside{margin-left:auto;text-align:right}
+.sec-head h2 em{font-style:normal;background:linear-gradient(90deg,#ffd27d,#ff8a3d 40%,#ff5d5d 70%,#ffd27d);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:sun 6s linear infinite}
+@keyframes sun{to{background-position:200% 0}}
+
+/* hero: blurred copy of the clip fills the screen, the sharp clip stands in the middle */
+#track-hero .hero-fill{position:absolute;inset:-8%;z-index:0;overflow:hidden;pointer-events:none}
+#track-hero .hero-fill video{width:100%;height:100%;object-fit:cover;filter:blur(42px) saturate(1.5) brightness(.68)}
+#track-hero .hero-vid{--hv:min(80vh,780px);position:absolute;z-index:1;left:0;right:0;margin-inline:auto;top:calc(50% - var(--hv) / 2);height:var(--hv);aspect-ratio:464/832;
+  border-radius:30px;overflow:hidden;border:1px solid #ffffff26;background:#000;box-shadow:0 70px 140px -40px #ff8a3d80,0 0 0 1px #ffffff10 inset}
+#track-hero .hero-vid video{display:block;width:100%;height:100%;object-fit:cover}
+#track-hero .hero-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(#07080b00 40%,#07080bcc 82%,#07080b),radial-gradient(70% 60% at 50% 45%,transparent,#07080b99)}
+#track-hero .track-title{max-width:min(900px,70vw);text-shadow:0 6px 40px #000c}
+
+/* hover-play tiles */
+.tile{position:relative;margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#000;cursor:pointer;
+  transition:transform .6s var(--ease-door),border-color .4s,box-shadow .6s}
+.tile video,.tile>img{display:block;width:100%;height:100%;object-fit:cover}
+.tile:hover{transform:translateY(-6px);border-color:#ffb54799;box-shadow:0 40px 80px -30px #ffb54766}
+.tile figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 16px 14px;background:linear-gradient(transparent,#000000cc);font-size:11px;letter-spacing:.06em;color:var(--txt);pointer-events:none}
+.tile .pl{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#0009;border:1px solid #ffffff40;pointer-events:none;transition:opacity .35s,transform .35s}
+.tile .pl::before{content:"";margin-left:3px;border-left:11px solid var(--txt);border-top:7px solid transparent;border-bottom:7px solid transparent}
+.tile.playing .pl{opacity:0;transform:scale(.6)}
+.tile[data-lightbox]{cursor:zoom-in}
+.tall{aspect-ratio:464/832}
+
+/* ortam showroom */
+.show{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.show .wide{grid-column:1/-1;aspect-ratio:16/9}
+.show .wide img{object-position:50% 52%}
+
+/* code, as a picture */
+.flow{position:relative;border:1px solid var(--line);border-radius:26px;background:radial-gradient(700px 360px at 50% 50%,#141a24,#07080b 75%);padding:clamp(14px,3vw,40px);overflow:hidden}
+.flow svg{display:block;width:100%;height:auto;overflow:visible}
+.flow .wire{fill:none;stroke:#ffffff1f;stroke-width:2}
+.flow .wire.lit{stroke-width:2.5}
+.flow .wire.in.lit{stroke:#ffb54788}
+.flow .wire.out.lit{stroke:#5ce1e688}
+.flow .node rect.box{fill:#0d1017;stroke:#ffffff26;stroke-width:1.2}
+.flow .node.in rect.box{stroke:#ffb54766}
+.flow .node.out rect.box{stroke:#5ce1e666}
+.flow text{font-family:var(--f-display);fill:var(--txt)}
+.flow .t-sub{font-family:var(--f-mono);fill:var(--mute)}
+.flow .ico{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.flow .in .ico{stroke:var(--amber)}
+.flow .out .ico{stroke:var(--cyan,#5ce1e6)}
+.flow .chip rect.die{fill:#10141c;stroke:#ffb547;stroke-width:1.6}
+.flow .chip .pin{stroke:#ffb54788;stroke-width:3}
+.flow .chip .halo{fill:#ffb547;opacity:.16;animation:halo 2.8s ease-in-out infinite}
+@keyframes halo{50%{opacity:.32}}
+.flow .dot.in{fill:#ffd27d}
+.flow .dot.out{fill:#5ce1e6}
+.flow .led{transition:fill .3s}
+
+/* schematic → real build */
+.pair{display:grid;grid-template-columns:minmax(0,3.3fr) minmax(0,1fr);gap:24px;align-items:center}
+.scheme{margin:0;cursor:zoom-in}
+.wire-frame{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.wire-ghost-img{position:absolute;inset:0;width:100%;height:100%;filter:grayscale(1) brightness(.32) contrast(1.15)}
+.wire-print{position:relative;display:block}
+.wire-print img{display:block;width:100%}
+.wire-edge{position:absolute;top:0;bottom:0;left:100%;width:2px;margin-left:-1px;background:var(--amber);box-shadow:0 0 22px 4px #ffb54799;opacity:0;pointer-events:none}
+/* .live: drawing shown whole; a current pulse (amber trail + bright head) runs left → right on a loop, no scroll needed */
+.wire-frame.live .wire-ghost-img{display:none}
+.wire-frame.live .wire-edge{opacity:1;width:160px;margin-left:-160px;background:linear-gradient(90deg,#ffb54700,#ffb54733 70%,#ffb54799);box-shadow:none;animation:wire-run 2.4s linear infinite}
+.wire-frame.live .wire-edge::after{content:"";position:absolute;right:0;top:0;bottom:0;width:3px;background:#fff3d6;box-shadow:0 0 20px 5px #ffb547cc,0 0 6px 1px #fff}
+@keyframes wire-run{from{left:0}to{left:calc(100% + 160px)}}
+.scheme figcaption,.honest{margin-top:12px;font-size:11px;letter-spacing:.06em;color:var(--mute)}
+
+/* origin + final */
+.trio{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:28px}
+.trio .tile{aspect-ratio:560/700}
+.zones{border:1px solid var(--line);border-radius:22px;background:#0b0d12;padding:clamp(12px,2.4vw,30px);margin-bottom:28px}
+.zones svg{display:block;width:100%;height:auto}
+.zones text{font-family:var(--f-mono);fill:var(--soft)}
+.zones .big{font-family:var(--f-display);fill:var(--txt);font-weight:700}
+.fan-clip{aspect-ratio:1080/472;margin-bottom:28px}
+
+/* more builds */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(48px,7vw,96px);align-items:start}
+.card{border:1px solid var(--line);border-radius:24px;background:#0b0d12;padding:clamp(16px,2vw,26px);scroll-margin-top:90px}
+.card h3{font-family:var(--f-display);font-size:clamp(26px,2.6vw,38px);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin:8px 0 18px}
+.card .tag{display:inline-block;font-size:10.5px;letter-spacing:.06em;padding:4px 10px;border-radius:999px;border:1px solid #ffb54766;color:var(--amber)}
+.card .tag.ok{border-color:#57e08a66;color:var(--green)}
+.card .stack{display:grid;gap:clamp(18px,2.4vw,28px)}
+.card .two{display:grid;grid-template-columns:1fr;gap:clamp(18px,2.4vw,28px)}
+.enc{aspect-ratio:848/364}
+.card .ph{aspect-ratio:928/598}
+.servo-anim{display:block;width:100%;max-height:min(460px,60vh);height:auto;border-radius:16px;background:radial-gradient(260px 160px at 50% 70%,#151922,#07080b)}
+.servo-anim .arm{transform-origin:200px 170px;animation:sweep 4.6s ease-in-out infinite alternate}
+@keyframes sweep{from{transform:rotate(-80deg)}to{transform:rotate(80deg)}}
+
+@media (max-width:900px){
+  .pair,.cards{grid-template-columns:1fr}
+  .pair .tile{width:min(320px,70%);justify-self:center}
+  .sec-head .aside{text-align:left;margin-left:0}
+}
+@media (max-width:720px){
+  main{--sec-y:120px;--sec-y-lg:136px}
+  #track-hero .hero-vid{--hv:56svh;top:calc(40% - var(--hv) / 2);border-radius:22px}
+  #track-hero .track-copy{bottom:5vh}
+  #track-hero .track-title{max-width:100%}
+  .show{grid-template-columns:1fr 1fr;gap:12px}
+  .trio{grid-template-columns:1fr 1fr;gap:12px}
+  .tile figcaption{padding:32px 10px 10px;font-size:10px}
+  .tile .pl{width:30px;height:30px;top:10px;right:10px}
+  .wire-frame{border-radius:14px}
+  .card .two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.sec-head h2 em{animation:none}.servo-anim .arm{animation-duration:9s}}
+</style>
+</head>
+<body data-page="mechatronics">
+<!-- shell:top (byte-identical on every page; first thing in the body, after the Home-only #loader) -->
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div><div class="cursor-ring" aria-hidden="true"></div>
+<div class="sprog" aria-hidden="true"></div>
+<div class="hud mono" aria-hidden="true"><span class="hud-n">00</span> / <span class="hud-total">00</span> — <span class="hud-t">INTRO</span></div>
+<nav class="site-nav" aria-label="Primary">
+  <a class="logo" href="/" aria-label="Alp Serkan Merkit — home">ASM</a>
+  <ul>
+    <li><a href="/mechanical/">Mechanical</a></li>
+    <li><a href="/mechatronics/">Mechatronics</a></li>
+    <li><a href="/software-ai/">Software &amp; AI</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<!-- /shell:top -->
+
+<main id="main">
+<section id="track-hero" data-hud="INTRO">
+  <div class="hero-fill" aria-hidden="true"><video data-src="/assets/media/ortam_voice_led_colours.mp4" poster="/assets/media/ortam_voice_led_colours_poster.jpg" preload="none" muted loop playsinline></video></div>
+  <div class="hero-vid"><video data-src="/assets/media/ortam_voice_led_colours.mp4" poster="/assets/media/ortam_voice_led_colours_poster.jpg" preload="none" muted loop playsinline aria-label="Ortam Aurora: voice commands change the LED strip on the breadboard build from pink to red to green"></video></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="wrap track-copy">
+    <span class="kicker mono">Mechanical Engineer · B.Sc. 2026 · İzmir, Türkiye</span>
+    <h1 class="track-title">It wakes you with a sunrise.</h1>
+    <p class="identity">I build with AI — <a href="/mechanical/">generative-design hardware</a>, <a href="/mechatronics/">ESP32 devices</a>, and <a href="/software-ai/">AI-agent-built software</a> held to automated quality gates.</p>
+  </div>
+</section>
+
+<section id="ortam" class="pad" data-hud="ORTAM" data-stack><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Ortam Aurora · ESP32-S3</span><h2>Watch it <em>glow</em>.</h2></div>
+    <p class="mono aside">Voice in, colour out</p>
+  </div>
+  <div class="show">
+    <figure class="tile tall reveal"><video data-hover data-src="/assets/media/ortam_voice_led_colours.mp4" poster="/assets/media/ortam_voice_led_colours_poster.jpg" preload="none" muted loop playsinline aria-label="Voice commands change the LED strip on the breadboard build from pink to red to green"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">Voice → LED colours</figcaption></figure>
+    <figure class="tile tall reveal"><video data-hover data-src="/assets/media/ortam_voice_led_class.mp4" poster="/assets/media/ortam_voice_led_class_poster.jpg" preload="none" muted loop playsinline aria-label="Class demo: asked by voice to turn the LED on, the strip on the table lights up red"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">Class demo · voice</figcaption></figure>
+    <figure class="tile tall reveal"><video data-hover data-src="/assets/media/ortam_demo.mp4" poster="/assets/media/ortam_demo_poster.jpg" preload="none" muted loop playsinline aria-label="Early Ortam Aurora bench build: sensors and the LED strip under test"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">Workbench · dev build</figcaption></figure>
+    <figure class="tile tall reveal"><video data-hover data-src="/assets/media/mechatronics/ortam_app_early.mp4" poster="/assets/media/mechatronics/ortam_app_early_poster.jpg" preload="none" muted loop playsinline aria-label="Companion app, earlier build: the cards start empty and fill with live readings from the board"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">Companion app · early</figcaption></figure>
+    <figure class="tile wide reveal" data-lightbox><img src="/assets/media/mechatronics/ortam_class_presentation.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Presenting Ortam in class: a prototype of the sleep-report screen on the classroom display and #KISS written on it"><figcaption class="mono">Presented in class · #KISS</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="flow" class="pad" data-hud="CODE" data-stack><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Ortam Aurora · firmware</span><h2>Code, as a picture.</h2></div>
+    <p class="mono aside">Senses in · sunrise out</p>
+  </div>
+  <div class="flow reveal" data-flow role="img" aria-label="Ortam Aurora firmware as a diagram: BH1750 light, SGP30 air quality, DHT22 temperature and humidity and MAX4466 sound sensors feed the ESP32-S3, which drives an SSD1306 OLED, a 60-LED WS2812B sunrise strip, the alarm and the phone app over Wi-Fi and BLE"></div>
+</div></section>
+
+<section id="wiring" class="pad" data-hud="WIRING" data-stack><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Ortam Aurora · breadboard</span><h2>Drawn, then built.</h2></div>
+    <p class="mono aside">Schematic → the real build</p>
+  </div>
+  <div class="pair">
+    <figure class="scheme reveal" data-lightbox>
+      <div class="wire-frame live"><img class="wire-ghost-img" src="/assets/media/mechatronics/ortam_wiring_drawing.webp" width="1840" height="800" loading="lazy" decoding="async" alt="" aria-hidden="true">
+        <span class="wire-print"><img src="/assets/media/mechatronics/ortam_wiring_drawing.webp" width="1840" height="800" loading="lazy" decoding="async" alt="Ortam Aurora breadboard wiring drawing: ESP32-S3 DevKitC-1, SSD1306 OLED, BH1750, SGP30, DHT22, MAX4466 and a 60-LED WS2812B strip"></span>
+        <i class="wire-edge" aria-hidden="true"></i></div>
+      <figcaption class="mono">Click to enlarge</figcaption>
+    </figure>
+    <figure class="tile tall reveal"><video data-hover data-src="/assets/media/ortam_demo.mp4" poster="/assets/media/ortam_demo_poster.jpg" preload="none" muted loop playsinline aria-label="The real Ortam Aurora bench build: sensors and the LED strip under test"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">The real build</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="final" class="pad" data-hud="FINAL BUILD"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Proximity alert · final build</span><h2>Light, then <em>air</em>.</h2></div>
+    <p class="mono aside">Your hand sets the fan</p>
+  </div>
+  <figure class="tile fan-clip reveal"><video data-hover data-src="/assets/media/mechatronics/fan_in_hand.mp4" poster="/assets/media/mechatronics/fan_in_hand_poster.jpg" preload="none" muted loop playsinline aria-label="Alp holds the propeller fan of the final build in his hand while the LEDs change colour"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">The fan, in hand</figcaption></figure>
+  <div class="zones reveal" data-zones="fan" role="img" aria-label="Zone diagram: as a hand nears the sensor the fan runs slow when far, fast at medium distance and stops when near"></div>
+  <figure class="scheme reveal" data-lightbox>
+    <div class="wire-frame live"><img class="wire-ghost-img" src="/assets/media/mechatronics/wiring_proximity_final_fan_drawing.webp" width="1960" height="962" loading="lazy" decoding="async" alt="" aria-hidden="true">
+      <span class="wire-print"><img src="/assets/media/mechatronics/wiring_proximity_final_fan_drawing.webp" width="1960" height="962" loading="lazy" decoding="async" alt="Breadboard wiring drawing of the final proximity alert with a propeller fan driven from the Arduino Uno"></span>
+      <i class="wire-edge" aria-hidden="true"></i></div>
+    <figcaption class="mono">wiring redrawn 2026 · logic as the builder describes it</figcaption>
+  </figure>
+</div></section>
+
+<section id="origin" class="pad" data-hud="ORIGIN"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Where it started · Arduino</span><h2>A hand, three colours.</h2></div>
+    <p class="mono aside">Closer hand, warmer light</p>
+  </div>
+  <div class="trio">
+    <figure class="tile reveal"><video data-hover data-src="/assets/media/inv/evo_1_simple.mp4" poster="/assets/media/inv/evo_1_simple_poster.jpg" preload="none" muted loop playsinline aria-label="v1 build: a hand approaches the sensor and the LEDs step through the three zones"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">v1 · three zones</figcaption></figure>
+    <figure class="tile reveal"><video data-hover data-src="/assets/media/mechatronics/proximity_first_bench.mp4" poster="/assets/media/mechatronics/proximity_first_bench_poster.jpg" preload="none" muted loop playsinline aria-label="First bench test: the Tinkercad draft above, the real breadboard below; a hand comes closer and the LEDs change"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">First bench test</figcaption></figure>
+  </div>
+  <div class="zones reveal" data-zones="led" role="img" aria-label="Zone diagram: as a hand nears the HC-SR04 sensor the LED is green beyond 15 cm, blinks blue between 5 and 15 cm and turns red under 5 cm"></div>
+  <figure class="scheme reveal" data-lightbox>
+    <div class="wire-frame live"><img class="wire-ghost-img" src="/assets/media/mechatronics/wiring_proximity_v1_v2_drawing.webp" width="1960" height="826" loading="lazy" decoding="async" alt="" aria-hidden="true">
+      <span class="wire-print"><img src="/assets/media/mechatronics/wiring_proximity_v1_v2_drawing.webp" width="1960" height="826" loading="lazy" decoding="async" alt="Breadboard wiring drawing of the proximity alert v1 and v2: Arduino Uno, HC-SR04 sensor and red, blue and green LEDs"></span>
+      <i class="wire-edge" aria-hidden="true"></i></div>
+    <figcaption class="mono">v1 + v2 wiring</figcaption>
+  </figure>
+</div></section>
+
+<section id="more" class="pad" data-hud="MORE BUILDS"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="mono">Two more builds</span><h2>Small machines.</h2></div>
+    <p class="mono aside">Plant · servo</p>
+  </div>
+  <div class="cards">
+    <article id="plant" class="card reveal">
+      <span class="tag mono">Tinkercad only · no build</span>
+      <h3>Water the plant.</h3>
+      <div class="stack">
+        <figure class="tile enc"><video data-hover data-src="/assets/media/mechatronics/superfulffy_enclosure_cad.mp4" poster="/assets/media/mechatronics/superfulffy_enclosure_cad_poster.jpg" preload="none" muted loop playsinline aria-label="Enclosure CAD in Autodesk Fusion: a sketch becomes an open box, then a lid plate with four slots"></video><i class="pl" aria-hidden="true"></i><figcaption class="mono">Enclosure CAD</figcaption></figure>
+        <div class="two">
+          <figure class="scheme" data-lightbox>
+            <div class="wire-frame live"><img class="wire-ghost-img" src="/assets/media/mechatronics/wiring_plant_watering_drawing.webp" width="1960" height="1132" loading="lazy" decoding="async" alt="" aria-hidden="true">
+              <span class="wire-print"><img src="/assets/media/mechatronics/wiring_plant_watering_drawing.webp" width="1960" height="1132" loading="lazy" decoding="async" alt="Breadboard wiring drawing for the plant waterer: soil moisture sensor and micro servo on an Arduino Uno"></span>
+              <i class="wire-edge" aria-hidden="true"></i></div>
+            <figcaption class="mono">Wiring drawing</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+    <article id="servo" class="card reveal">
+      <span class="tag ok mono">Tested</span>
+      <h3>Point at the distance.</h3>
+      <div class="stack">
+        <svg class="servo-anim" viewBox="0 0 400 220" role="img" aria-label="Servo arm sweeping from 0 to 180 degrees as the hand distance goes from 5 to 50 cm">
+          <path d="M60 170a140 140 0 0 1 280 0" fill="none" stroke="#ffffff22" stroke-width="2" stroke-dasharray="3 7"/>
+          <text x="52" y="198" fill="#8b91a0" font-family="JetBrains Mono,monospace" font-size="13" text-anchor="middle">5 cm</text>
+          <text x="348" y="198" fill="#8b91a0" font-family="JetBrains Mono,monospace" font-size="13" text-anchor="middle">50 cm</text>
+          <rect x="160" y="160" width="80" height="44" rx="6" fill="#1d3a8a" stroke="#4d8dff"/>
+          <g class="arm"><rect x="194" y="54" width="12" height="122" rx="6" fill="#e9e7e1"/><circle cx="200" cy="60" r="7" fill="#ffb547"/></g>
+          <circle cx="200" cy="170" r="11" fill="#e9e7e1" stroke="#07080b" stroke-width="3"/>
+        </svg>
+        <figure class="scheme" data-lightbox>
+          <div class="wire-frame live"><img class="wire-ghost-img" src="/assets/media/mechatronics/wiring_servo_follow_drawing.webp" width="1960" height="826" loading="lazy" decoding="async" alt="" aria-hidden="true">
+            <span class="wire-print"><img src="/assets/media/mechatronics/wiring_servo_follow_drawing.webp" width="1960" height="826" loading="lazy" decoding="async" alt="Breadboard wiring drawing for servo-follow: Arduino Uno, HC-SR04 sensor and a hobby servo"></span>
+            <i class="wire-edge" aria-hidden="true"></i></div>
+          <figcaption class="mono">Wiring drawing</figcaption>
+        </figure>
+      </div>
+    </article>
+  </div>
+</div></section>
+
+<section class="next-door" data-hud="NEXT"><div class="wrap">
+  <span class="mono">Next door</span>
+    <a class="door" data-door href="/software-ai/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/software/alphapulse_door_poster.jpg" width="1280" height="800" alt="" loading="lazy" decoding="async">
+        <span class="door-print"><video data-src="/assets/media/software/alphapulse_door.mp4" poster="/assets/media/software/alphapulse_door_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">03 · Software &amp; AI</span>
+        <h3 class="door-title">I orchestrate AI agents that build software.</h3>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+</div></section>
+</main>
+
+<!-- shell:footer (byte-identical on every page; right after the main element closes) -->
+<footer id="contact" class="site-footer" data-hud="CONTACT">
+  <div class="wrap">
+    <span class="mono">Open to engineering roles and an M.Sc. in Artificial Intelligence</span>
+    <h2><a href="mailto:alpserkanmer@outlook.com">Let's build something.</a></h2>
+    <div class="links">
+      <a class="btn primary magnetic" href="mailto:alpserkanmer@outlook.com">alpserkanmer@outlook.com</a>
+      <a class="btn magnetic" href="https://github.com/alpserkanmerkit" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/alp-serkan-merkit-b8990a202" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="foot-row"><span class="mono">© 2026 Alp Serkan Merkit</span><span class="mono">Built with AI agents · <span class="gate">verified by the gate</span></span></div>
+  </div>
+</footer>
+<div class="lightbox" role="dialog" aria-label="Enlarged image"><img alt=""></div>
+<!-- /shell:footer -->
+
+<!-- shell:scripts (byte-identical on every page; last thing before page-specific scripts and the end of the body) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="/assets/site.js"></script>
+<!-- /shell:scripts -->
+<script>
+/* mechatronics showroom: hero entry, hover-play clips, code-as-a-picture diagram, zone diagrams, wiring draw-in */
+(() => {
+  const G = window.gsap, ST = window.ScrollTrigger, ASM = window.ASM || {};
+  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches, HOVER = matchMedia('(hover: hover)').matches;
+  const MOBILE = matchMedia('(max-width: 720px)');
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, at, parent) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); if (parent) parent.append(n); return n; };
+
+  /* hero: the sharp clip rises in once the page may move (after the door morph), drifts up as the hero scrolls away */
+  const hv = $('#track-hero .hero-vid');
+  if (G && hv) {
+    G.set(hv, { opacity: 0, y: 40, scale: .94 });
+    (ASM.ready || Promise.resolve()).then(() => G.to(hv, { opacity: 1, y: 0, scale: 1, duration: 1.4, ease: 'expo.out' }));
+    if (ST) G.to(hv, { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '#track-hero', start: 'top top', end: 'bottom top', scrub: true } });
+  }
+
+  /* hover-play: video[data-hover] plays while the pointer is on its tile; touch screens play it while half in view */
+  const arm = v => { if (v.dataset.src) { v.src = v.dataset.src; v.removeAttribute('data-src'); } };
+  const play = v => { arm(v); const p = v.play(); if (p) p.catch(() => {}); };
+  const hvids = $$('video[data-hover]');
+  hvids.forEach(v => {
+    const box = v.closest('.tile') || v.parentElement;
+    v.addEventListener('playing', () => box.classList.add('playing'));
+    v.addEventListener('pause', () => box.classList.remove('playing'));
+    if (HOVER) { box.addEventListener('mouseenter', () => play(v)); box.addEventListener('mouseleave', () => v.pause()); }
+  });
+  if (!HOVER) {
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? play(e.target) : e.target.pause()), { threshold: .5 });
+    hvids.forEach(v => io.observe(v));
+  }
+
+  /* one animation clock for the diagrams: time only (independent of scroll, also under reduced motion — owner's choice); runs only while one is in view */
+  const live = new Set(); let raf = 0;
+  const tick = now => { const c = now / 1000; live.forEach(h => h._draw && h._draw(c)); raf = live.size ? requestAnimationFrame(tick) : 0; };
+  const watch = h => new IntersectionObserver(es => es.forEach(e => {
+    e.isIntersecting ? live.add(h) : live.delete(h);
+    if (live.size && !raf) raf = requestAnimationFrame(tick);
+  })).observe(h);
+
+  /* code, as a picture: sensors → ESP32-S3 → outputs, signal dots running along the wires */
+  const IN = [['BH1750', 'light', 'M9 14a5 5 0 1 0 10 0a5 5 0 1 0-10 0M14 2v4M14 22v4M2 14h4M22 14h4M5.5 5.5l2.8 2.8M19.7 19.7l2.8 2.8M5.5 22.5l2.8-2.8M19.7 8.3l2.8-2.8'],
+    ['SGP30', 'air quality', 'M3 10c4-4 8 4 12 0s8-4 10 0M3 18c4-4 8 4 12 0s8-4 10 0'],
+    ['DHT22', 'temp · humidity', 'M12 5a2.5 2.5 0 0 1 5 0v11a5 5 0 1 1-5 0zM14.5 10v9'],
+    ['MAX4466', 'sound', 'M4 12v4M9 8v12M14 4v20M19 9v10M24 12v4']];
+  const OUT = [['SSD1306', 'OLED display', 'M3 6h22v16H3zM7 12h8M7 16h12'],
+    ['WS2812B', '60-LED sunrise', null],
+    ['Alarm', 'wake-up', 'M7 19v-6a7 7 0 0 1 14 0v6l2 3H5zM12 25a2.5 2.5 0 0 0 4 0'],
+    ['Phone app', 'Wi-Fi · BLE', 'M9 2h10a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 22h4']];
+  const buildFlow = host => {
+    const m = MOBILE.matches, W = m ? 360 : 1200, H = m ? 600 : 560;
+    const nw = m ? 84 : 270, nh = m ? 96 : 88, cs = m ? 140 : 210, cx = W / 2, cy = m ? 300 : 280;
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' });
+    host.replaceChildren(svg);                              // in the DOM first: getTotalLength needs it
+    const gW = el('g', {}, svg), gD = el('g', {}, svg);
+    const pos = (side, i) => m ? { x: i * 92, y: side ? H - nh : 0 } : { x: side ? W - nw : 0, y: 20 + i * 140 };
+    const port = (side, i) => {                              // where wire i meets the chip
+      const o = (i - 1.5) * (m ? 36 : 42);
+      return m ? { x: cx + o, y: cy + (side ? 1 : -1) * cs / 2 } : { x: cx + (side ? 1 : -1) * cs / 2, y: cy + o };
+    };
+    const wires = [], leds = [];
+    [IN, OUT].forEach((list, side) => list.forEach(([name, sub, d], i) => {
+      const p = pos(side, i), q = port(side, i);
+      const a = m ? { x: p.x + nw / 2, y: side ? p.y : p.y + nh } : { x: side ? p.x : p.x + nw, y: p.y + nh / 2 };
+      const [s, e] = side ? [q, a] : [a, q];
+      const dd = m ? `M${s.x} ${s.y}C${s.x} ${s.y + 70} ${e.x} ${e.y - 70} ${e.x} ${e.y}` : `M${s.x} ${s.y}C${s.x + 110} ${s.y} ${e.x - 110} ${e.y} ${e.x} ${e.y}`;
+      const path = el('path', { d: dd, class: 'wire ' + (side ? 'out' : 'in') }, gW);
+      const L = path.getTotalLength();
+      path.style.strokeDasharray = L;
+      const dots = [0, .5].map(() => el('circle', { r: m ? 3.5 : 5, class: 'dot ' + (side ? 'out' : 'in') }, gD));
+      wires.push({ path, L, dots, side, k: i });
+      const g = el('g', { class: 'node ' + (side ? 'out' : 'in'), transform: `translate(${p.x} ${p.y})` }, svg);
+      el('rect', { class: 'box', width: nw, height: nh, rx: m ? 12 : 16 }, g);
+      const ix = m ? nw / 2 - 14 : 18, iy = m ? 10 : nh / 2 - 14;
+      if (d) el('path', { class: 'ico', d, transform: `translate(${ix} ${iy})` }, g);
+      else for (let j = 0; j < 5; j++) leds.push(el('circle', { class: 'led', cx: ix + 2 + j * 6, cy: iy + 14, r: 2.8 }, g));
+      const tx = m ? nw / 2 : 62, anchor = m ? 'middle' : 'start';
+      el('text', { x: tx, y: m ? 60 : 40, 'font-size': m ? 13 : 21, 'font-weight': 700, 'text-anchor': anchor }, g).textContent = name;
+      el('text', { x: tx, y: m ? 80 : 64, 'font-size': m ? 9 : 13.5, 'text-anchor': anchor, class: 't-sub' }, g).textContent = m ? sub.split(' ')[0] : sub;
+    }));
+    const chip = el('g', { class: 'chip', transform: `translate(${cx - cs / 2} ${cy - cs / 2})` }, svg);
+    el('rect', { class: 'halo', x: -16, y: -16, width: cs + 32, height: cs + 32, rx: 34 }, chip);
+    for (let j = 0; j < 6; j++) {
+      const t = cs * (j + 1) / 7;
+      [[t, -10, t, 0], [t, cs, t, cs + 10], [-10, t, 0, t], [cs, t, cs + 10, t]].forEach(([x1, y1, x2, y2]) => el('line', { class: 'pin', x1, y1, x2, y2 }, chip));
+    }
+    el('rect', { class: 'die', width: cs, height: cs, rx: m ? 14 : 20 }, chip);
+    el('text', { x: cs / 2, y: cs / 2 + (m ? 4 : 6), 'font-size': m ? 20 : 30, 'font-weight': 700, 'text-anchor': 'middle' }, chip).textContent = 'ESP32-S3';
+    el('text', { x: cs / 2, y: cs / 2 + (m ? 26 : 40), 'font-size': m ? 9 : 13, 'text-anchor': 'middle', class: 't-sub' }, chip).textContent = 'sense · decide · act';
+    const prog = host._prog || (host._prog = { v: G && ST ? 0 : 1 });
+    host._draw = c => {
+      wires.forEach(w => {
+        const v = Math.min(1, Math.max(0, prog.v * 2 - w.side));            // inputs draw first, then outputs
+        w.path.style.strokeDashoffset = w.L * (1 - v);
+        w.path.classList.toggle('lit', v > .99);
+        w.dots.forEach((dot, j) => {
+          const u = ((c * .45 + j * .5 + w.k * .17) % 1 + 1) % 1, pt = w.path.getPointAtLength(u * w.L * v);
+          dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); dot.style.opacity = v > .99 ? 1 : 0;
+        });
+      });
+      leds.forEach((led, j) => {                                           // a small sunrise: deep red → amber → warm white
+        const s = .5 - .5 * Math.cos(2 * Math.PI * ((c * .2 + j * .07) % 1));
+        led.style.fill = `hsl(${8 + s * 34} 100% ${22 + s * 58}%)`;
+      });
+    };
+    host._draw(0);
+  };
+
+  /* zone diagrams: a hand moves toward the HC-SR04; the output answers by zone */
+  const ZONES = { led: ['red', 'blue · blinks', 'green'], fan: ['stop', 'fast', 'slow'] };
+  const ZC = ['#ff5d5d', '#4d8dff', '#57e08a'];
+  const buildZones = host => {
+    const type = host.dataset.zones, m = MOBILE.matches, W = m ? 600 : 1000, H = m ? 380 : 340, f = m ? 1.35 : 1;
+    const x0 = m ? 180 : 230, x1 = W - 20, yA = H - 60, hy = yA - 70;
+    const cm = d => x0 + (x1 - x0) * (d < 5 ? d / 5 * .24 : d < 15 ? .24 + (d - 5) / 10 * .4 : .64 + (d - 15) / 10 * .36);   // zones get room for their labels
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' });
+    host.replaceChildren(svg);
+    const bands = [[0, 5], [5, 15], [15, 25]].map(([a, b], i) => {
+      const r = el('rect', { x: cm(a), y: yA - 150, width: cm(b) - cm(a), height: 150, fill: ZC[i], opacity: .06 }, svg);
+      const lab = el('text', { x: (cm(a) + cm(b)) / 2, y: yA - 14, 'font-size': 17 * f, 'text-anchor': 'middle', fill: ZC[i] }, svg);
+      (m ? ZONES[type][i].split(' · ').reverse() : [ZONES[type][i]]).forEach((t, j) => el('tspan', { x: (cm(a) + cm(b)) / 2, dy: j ? -26 : 0 }, lab).textContent = t);
+      el('text', { x: (cm(a) + cm(b)) / 2, y: yA + 34, 'font-size': 15 * f, 'text-anchor': 'middle' }, svg).textContent = ['< 5 cm', '5–15 cm', '> 15 cm'][i];
+      return r;
+    });
+    el('line', { x1: x0, y1: yA, x2: x1, y2: yA, stroke: '#ffffff33', 'stroke-width': 2 }, svg);
+    const sx = m ? 40 : 60;                                               // HC-SR04
+    el('rect', { x: sx, y: hy - 30, width: 120, height: 60, rx: 8, fill: '#1d3a8a', stroke: '#4d8dff' }, svg);
+    [sx + 30, sx + 90].forEach(x => { el('circle', { cx: x, cy: hy, r: 21, fill: '#222', stroke: '#9aa3b5', 'stroke-width': 3 }, svg); el('circle', { cx: x, cy: hy, r: 9, fill: '#444' }, svg); });
+    el('text', { x: sx + 60, y: hy + 58, 'font-size': 14 * f, 'text-anchor': 'middle' }, svg).textContent = 'HC-SR04';
+    const ping = el('line', { y1: hy, y2: hy, x1: sx + 122, stroke: '#ffffff55', 'stroke-width': 2, 'stroke-dasharray': '4 8' }, svg);
+    const ox = sx + 60, oy = hy - 125;                                    // the output, above the sensor
+    let glow, led, fan;
+    if (type === 'led') {
+      glow = el('circle', { cx: ox, cy: oy, r: 52, opacity: .28 }, svg);
+      led = el('circle', { cx: ox, cy: oy, r: 26 }, svg);
+    } else {
+      fan = el('g', {}, svg);
+      [0, 120, 240].forEach(a => el('ellipse', { cx: 26, cy: 0, rx: 28, ry: 9, fill: '#4d8dff', transform: `rotate(${a})` }, fan));
+      el('circle', { r: 8, fill: '#e9e7e1' }, fan);
+    }
+    const hand = el('g', {}, svg);                                        // palm toward the sensor, fingers up
+    el('rect', { x: -6, y: -22, width: 38, height: 52, rx: 12, fill: '#e9e7e1' }, hand);
+    [0, 9, 18, 27].forEach((x, i) => el('rect', { x: x - 4, y: -50 + (i === 0 || i === 3 ? 8 : 0), width: 8, height: 34, rx: 4, fill: '#e9e7e1' }, hand));
+    el('rect', { x: -18, y: -6, width: 22, height: 9, rx: 4.5, fill: '#e9e7e1', transform: 'rotate(-30 -6 0)' }, hand);
+    const read = el('text', { y: yA - 160, 'font-size': 26 * f, 'text-anchor': 'middle', class: 'big' }, svg);
+    let ang = 0, spd = 0, lastC = null;
+    host._draw = c => {
+      const d = 13 + 12 * Math.sin(c * .8), x = cm(d), z = d < 5 ? 0 : d <= 15 ? 1 : 2;
+      hand.setAttribute('transform', `translate(${x} ${hy})`);
+      ping.setAttribute('x2', x - 20);
+      read.setAttribute('x', Math.min(x + 13, W - 60)); read.textContent = Math.round(d) + ' cm';
+      bands.forEach((b, i) => b.setAttribute('opacity', i === z ? .2 : .05));
+      if (led) {
+        const on = !(z === 1 && (c * 3) % 1 > .5);
+        const col = on ? ZC[z] : '#1b2233';
+        led.setAttribute('fill', col); glow.setAttribute('fill', on ? ZC[z] : 'none');
+      } else {
+        const dc = lastC === null ? 0 : Math.max(0, Math.min(.1, Math.abs(c - lastC)));
+        spd += ([0, 900, 220][z] - spd) * .08; ang = (ang + spd * dc) % 360;
+        fan.setAttribute('transform', `translate(${ox} ${oy}) rotate(${ang})`);
+      }
+      lastC = c;
+    };
+    host._draw(0);
+  };
+
+  const flows = $$('[data-flow]'), zones = $$('[data-zones]');
+  const build = () => { flows.forEach(buildFlow); zones.forEach(buildZones); if (ST) ST.refresh(); };
+  build();
+  MOBILE.addEventListener('change', build);
+  [...flows, ...zones].forEach(watch);
+  if (G && ST) flows.forEach(h => G.to(h._prog, { v: 1, duration: 2.4, ease: 'power1.inOut', scrollTrigger: { trigger: h, start: 'top 80%' } }));   // draws itself once in view, no scrub
+
+  /* wiring drawings: the colour layer is drawn in left → right with an amber edge, scrubbed by scroll */
+  if (G && ST) $$('.wire-frame:not(.live)').forEach(fr => {
+    const wp = $('.wire-print', fr), we = $('.wire-edge', fr); if (!wp || !we) return;
+    G.timeline({ scrollTrigger: { trigger: fr, start: 'top 85%', end: 'center 45%', scrub: true } })
+      .fromTo(wp, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 }, 0)
+      .fromTo(we, { left: '0%', opacity: 1 }, { left: '100%', ease: 'none', duration: 1 }, 0)
+      .to(we, { opacity: 0, duration: .06 });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+/* ==========================================================================
+   site.css — shared shell for the v5 multi-page site (Home + 3 track pages + 404)
+   Page-specific CSS stays in each page's own <style>. Contract: /_shell/README.md
+   Colour language: amber = process / candidate · green = passed the gate · red = failing · cyan = 3D cool light only
+   ========================================================================== */
+
+/* ---------- tokens + base ---------- */
+:root{
+  --bg:#07080b; --bg2:#0d0f14; --line:#1c2029; --txt:#e9e7e1; --mute:#8b91a0; --soft:#b9bcc6;
+  --amber:#ffb547; --cyan:#5ce1e6; --red:#ff5d5d; --green:#57e08a;
+  --f-display:"Space Grotesk",system-ui,sans-serif; --f-body:"Inter",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  --ease-door:cubic-bezier(.7,0,.2,1);
+  --gutter:28px;
+  /* spacing scale (v5 spacing pass): section padding, heading → content, card grids */
+  --sec-y:max(120px,16vh); --sec-y-lg:max(140px,20vh); --head-gap:88px; --head-gap-s:64px; --card-gap:40px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--bg);color:var(--txt);font-family:var(--f-body);font-size:17px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%}
+img{height:auto}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+::selection{background:var(--amber);color:#000}
+.wrap{width:min(1240px,100% - 48px);margin-inline:auto}
+.mono{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.skip{position:fixed;left:16px;top:-80px;z-index:101;padding:10px 16px;border-radius:999px;background:var(--amber);color:#000;font-weight:600}
+.skip:focus{top:12px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+main section{position:relative;background:var(--bg)}
+main p{max-width:68ch}
+
+/* film grain (ambient → stopped under reduced motion) */
+.grain{pointer-events:none;position:fixed;inset:-50%;z-index:90;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+
+/* ---------- loader (Home only, first visit per session) ---------- */
+#loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center}
+#loader .count{font-family:var(--f-display);font-size:clamp(64px,14vw,180px);font-weight:700;letter-spacing:-.04em}
+#loader .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:linear-gradient(90deg,var(--amber),var(--green))}
+html.seen #loader{display:none}
+
+/* ---------- cursor ---------- */
+.cursor,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:95;border-radius:50%;transform:translate(-50%,-50%)}
+.cursor{width:6px;height:6px;background:var(--amber)}
+.cursor-ring{width:38px;height:38px;border:1px solid #ffffff55;transition:width .25s,height .25s,border-color .25s,background .25s,opacity .3s}
+.cursor,.cursor-ring{opacity:0}
+html.pointer .cursor,html.pointer .cursor-ring{opacity:1}   /* shown after the first pointer move */
+.cursor-ring.hover{width:70px;height:70px;border-color:var(--amber);background:#ffb54714}
+@media (hover:none){.cursor,.cursor-ring{display:none}}
+
+/* ---------- nav (byte-identical block; active tab = aria-current, set by site.js) ---------- */
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px var(--gutter);
+  background:linear-gradient(#07080be6,#07080b00);view-transition-name:site-nav;transition:background .3s,box-shadow .3s}
+/* .scrolled (site.js, scrollY > 40): solid glass bar so content never runs under the tabs */
+.site-nav.scrolled{background:#07080bd9;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.site-nav .logo{font-family:var(--f-display);font-weight:700;letter-spacing:.02em;font-size:17px}
+.site-nav ul{display:flex;gap:6px;list-style:none}
+.site-nav ul a{position:relative;display:block;padding:6px 12px;border-radius:999px;font-size:14px;color:#fff;opacity:.72;transition:opacity .2s,background .2s}
+.site-nav ul a:hover,.site-nav ul a:focus-visible{opacity:1;background:#ffffff0f}
+.site-nav ul a[aria-current="page"]{opacity:1}
+.site-nav ul a[aria-current="page"]::after{content:"";position:absolute;left:12px;right:12px;bottom:1px;height:2px;border-radius:2px;background:var(--amber)}
+@media (max-width:720px){
+  :root{--gutter:16px;--sec-y:96px;--sec-y-lg:112px;--head-gap:52px;--head-gap-s:40px;--card-gap:24px}
+  .site-nav{padding:12px var(--gutter);gap:8px}
+  .site-nav .logo{font-size:15px}
+  .site-nav ul{gap:0}
+  .site-nav ul a{padding:6px 7px;font-size:12px;letter-spacing:-.01em}
+  .site-nav ul a[aria-current="page"]::after{left:7px;right:7px}
+}
+@media (max-width:360px){.site-nav ul a{padding:6px 5px;font-size:11px}}
+
+/* ---------- kicker + identity line (identical on every hero; see _shell/identity.html) ---------- */
+.kicker{display:block}
+.identity{max-width:620px;color:#c9cbd2;font-size:clamp(16px,1.5vw,20px);line-height:1.55}
+.identity a{color:var(--amber);background:linear-gradient(var(--amber),var(--amber)) 0 100%/0 1px no-repeat;transition:background-size .35s var(--ease-door)}
+.identity a:hover,.identity a:focus-visible{background-size:100% 1px}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:1px solid #ffffff2a;font-size:15px;font-weight:500;transition:background .3s,color .3s,border-color .3s}
+.btn.primary{background:var(--txt);color:#000;border-color:var(--txt)}
+.btn:hover{border-color:var(--amber)}
+.btn.primary:hover{background:var(--amber);border-color:var(--amber)}
+button.btn{font-family:inherit;cursor:pointer}
+button.btn:disabled{opacity:.55;cursor:wait}
+
+/* ---------- section heads + heading print-wipe (bottom → top clip, amber edge riding it) ---------- */
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin-bottom:var(--head-gap);flex-wrap:wrap}
+.sec-head h2{font-family:var(--f-display);font-size:clamp(40px,6vw,88px);line-height:.95;letter-spacing:-.035em;font-weight:700}
+.hw{position:relative}
+.hw-in{display:block;clip-path:inset(125% -10% -25% -10%)}
+.hw-edge{position:absolute;left:-6px;right:-6px;top:100%;height:2px;opacity:0;pointer-events:none;background:var(--amber);box-shadow:0 0 18px 3px #ffb54780}
+.bridge{color:#c9ccd4}
+.reveal{opacity:0}
+[data-words] .w{opacity:.12}
+/* CDN (gsap) failed → show everything */
+.no-gsap .reveal,.no-gsap [data-intro],.no-gsap [data-words] .w{opacity:1!important}
+.no-gsap [data-split] .ch{transform:none!important}
+
+/* ---------- HUD (bottom-left, fed by [data-hud]) + page progress bar ---------- */
+/* vertical, reading bottom → top, so it lives in the left margin instead of over content */
+.hud{position:fixed;left:6px;bottom:24px;z-index:85;color:#fff;mix-blend-mode:difference;font-size:11px;writing-mode:vertical-rl;transform:rotate(180deg);transition:opacity .25s}
+@media (min-width:1300px){.hud{left:22px;font-size:12px}}
+.hud.hide{opacity:0}
+.hud .hud-n{color:var(--amber);mix-blend-mode:normal}
+@media (max-width:720px){.hud{display:none}}
+.sprog{position:fixed;top:0;left:0;right:0;height:2px;z-index:85;background:linear-gradient(90deg,var(--amber),var(--green));transform-origin:0 50%;transform:scaleX(0);transition:background .4s}
+.sprog.pass{background:var(--green)}
+
+/* ---------- lightbox ([data-lightbox] figure > img; Enter opens, Esc / click closes) ---------- */
+.lightbox{position:fixed;inset:0;z-index:99;background:#000e;display:none;place-items:center;padding:3vw;cursor:zoom-out}
+.lightbox.on{display:grid}
+.lightbox img{max-height:94vh;width:auto;border-radius:12px}
+[data-lightbox]{cursor:zoom-in}
+
+/* ---------- terminal ---------- */
+.term{padding:22px 26px;border-radius:16px;border:1px solid var(--line);background:#050608;font-family:var(--f-mono);font-size:14px;line-height:1.9;color:#c9ccd4;overflow-x:auto;white-space:pre}
+.term .t-dim,.t-dim{color:#7f8796}.term .t-red,.t-red{color:var(--red)}.term .t-ok,.t-ok{color:var(--green)}.t-amb{color:var(--amber)}
+.term .t-line{display:inline-block;opacity:0}
+@media (max-width:720px){.term{font-size:12px;padding:16px;white-space:pre-wrap}}
+
+/* ---------- track hero (track pages): #track-hero panel + its h1 carry the door morph names ---------- */
+#track-hero{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;background:radial-gradient(900px 520px at 70% 30%,#141822,transparent),var(--bg);
+  view-transition-name:door}
+#track-hero h1{view-transition-name:door-title;width:fit-content;max-width:100%}
+.track-title{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,7.4vw,120px);line-height:.95;letter-spacing:-.04em;text-wrap:balance}
+.track-copy{position:absolute;left:0;right:0;bottom:10vh;z-index:2}
+.track-copy .kicker{margin-bottom:22px}
+.track-copy .identity{margin-top:26px}
+
+/* ---------- door cards (Home ×3, and the "next door" card above the footer on track pages) ---------- */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap)}
+.door{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#10131a,#0a0c10);overflow:hidden;color:inherit;transition:border-color .3s,transform .5s var(--ease-door)}
+.door:hover,.door:focus-visible{border-color:#ffb54766;transform:translateY(-4px)}
+.door-media{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#0b0d12;border-bottom:1px solid var(--line)}
+.door-media img,.door-media .door-term{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* ghost = the un-printed part; .door-print = full colour, clipped in from the bottom on hover (or when in view on touch) */
+.door-media .door-ghost{filter:grayscale(1) brightness(.45) contrast(1.1);opacity:.55}
+.door-print{position:absolute;inset:0;clip-path:inset(100% 0 0 0);transition:clip-path .9s var(--ease-door)}
+.door-print::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0000 0 3px,#0000002e 3px 4px);pointer-events:none}
+.door-edge{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);box-shadow:0 0 18px 3px #ffb54780;opacity:0;transition:bottom .9s var(--ease-door),opacity .3s .6s}
+.door:hover .door-print,.door:focus-visible .door-print,.door.door-printed .door-print{clip-path:inset(0 0 0 0)}
+.door:hover .door-edge,.door:focus-visible .door-edge,.door.door-printed .door-edge{bottom:100%;opacity:1;transition:bottom .9s var(--ease-door),opacity .2s}
+.door-body{display:flex;flex-direction:column;gap:16px;padding:34px 36px 34px;flex:1}
+.door-kicker{color:var(--amber)}
+.door-title{font-family:var(--f-display);font-weight:700;font-size:clamp(24px,2.1vw,31px);line-height:1.08;letter-spacing:-.025em;width:fit-content;max-width:100%}
+.door-go{margin-top:auto;padding-top:6px;color:var(--txt);display:flex;align-items:center;gap:8px}
+.door-go::after{content:"→";transition:transform .4s var(--ease-door)}
+.door:hover .door-go::after{transform:translateX(6px)}
+/* the Software door has no photo: a tiny gate run is its "image" */
+.door-term{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 8%;background:#050608;font-family:var(--f-mono);font-size:clamp(11px,1vw,13.5px);line-height:1.7;color:#c9ccd4;white-space:nowrap}
+.door-ghost.door-term{filter:none;opacity:.35}
+@media (max-width:900px){.doors{grid-template-columns:1fr}.door-media{aspect-ratio:16/8}}
+/* Ortam door: a dark room until hover / in view, then the real LED strip lights up (looping video) and glows */
+.door-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.door-ortam .door-media img,.door-ortam .door-media video{object-position:50% 32%}
+/* Mechanical door: wide stress-test clip; keep the head in frame when the door is shorter (mobile 16:8) */
+.door-mech .door-media img,.door-mech .door-media video{object-position:50% 18%}
+.door-ortam .door-edge{background:#ff6fd8;box-shadow:0 0 22px 4px #ff6fd899}
+.door-ortam{transition:border-color .3s,transform .5s var(--ease-door),box-shadow .9s var(--ease-door)}
+.door-ortam:hover,.door-ortam:focus-visible,.door-ortam.door-printed{border-color:#ff6fd866;box-shadow:0 0 80px -18px #ff6fd8b3}
+
+/* next-door section (track pages, inside <main>, right above the footer) */
+.next-door{padding:var(--sec-y) 0 var(--sec-y-lg)}
+.next-door .mono{display:block;margin-bottom:36px}
+.next-door .door{flex-direction:row;max-width:980px}
+.next-door .door-media{flex:0 0 44%;aspect-ratio:auto;min-height:220px;border-bottom:0;border-right:1px solid var(--line)}
+.next-door .door-title{font-size:clamp(28px,3.4vw,46px)}
+@media (max-width:720px){.next-door .door{flex-direction:column}.next-door .door-media{min-height:170px;border-right:0;border-bottom:1px solid var(--line)}}
+
+/* ---------- footer (byte-identical block) ---------- */
+.site-footer{position:relative;z-index:5;padding:max(150px,22vh) 0 9vh;border-top:1px solid var(--line);background:var(--bg)}
+.site-footer h2{font-family:var(--f-display);font-weight:700;font-size:clamp(46px,7.6vw,118px);line-height:.92;letter-spacing:-.045em;margin-top:18px}
+.site-footer h2 a{display:inline-block;padding-bottom:.12em;margin-bottom:-.12em;background:linear-gradient(90deg,var(--txt) 50%,var(--amber) 50%);background-size:200% 100%;background-position:0 0;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position .6s var(--ease-door)}
+.site-footer h2 a:hover{background-position:-100% 0}
+.site-footer .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:56px}
+.site-footer .foot-row{display:flex;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-top:12vh;padding-top:32px;border-top:1px solid var(--line)}
+.site-footer .gate{color:var(--green)}
+@media (max-width:720px){.site-footer .btn{padding:12px 18px;font-size:14px}}
+
+/* ---------- stacked transitions (track pages only, desktop; opt-in with [data-stack] on main > section) ---------- */
+main section.stack-in{border-radius:28px 28px 0 0;box-shadow:0 -30px 60px #000}
+
+/* ---------- cross-document View Transitions (Home door → track hero morph) ---------- */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.35s}
+::view-transition-group(door),::view-transition-group(door-title){animation-duration:.6s;animation-timing-function:var(--ease-door)}
+::view-transition-old(door),::view-transition-new(door){height:100%;object-fit:cover;overflow:hidden}
+::view-transition-group(site-nav){animation:none}
+
+/* ---------- reduced motion: only ambient, autoplaying effects stop; scroll-driven motion stays on (owner's choice) ---------- */
+@media (prefers-reduced-motion:reduce){
+  .grain{animation:none}
+}

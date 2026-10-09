@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- shell:head (byte-identical on every page; page-specific title, meta, JSON-LD and page CSS follow it) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080b'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='15' fill='%23ffb547'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script>/* before first paint: hide the Home loader on repeat visits; record the incoming View Transition (window.__vtP, html[data-vt]) */
+(function(d){var h=d.documentElement;try{if(sessionStorage.getItem('asm-seen')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)h.classList.add('seen')}catch(e){}
+window.__vtP='onpagereveal' in window?new Promise(function(r){addEventListener('pagereveal',function(e){h.dataset.vt=e.viewTransition?'yes':'no';r(e.viewTransition||null)},{once:true})}):Promise.resolve(null)})(document);</script>
+<!-- /shell:head -->
+<title>Mechanical — from load cases to printed parts · Alp Serkan Merkit</title>
+<meta name="description" content="16-wheel rover: lead CAD designer of a 115-part Fusion 360 assembly (14 unique parts); generative-design bogie arm 0.086 kg, minimum safety factor 2.3 (Fusion PLA); production drawings from field measurements.">
+<link rel="canonical" href="https://alpserkanmerkit.github.io/mechanical/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mechanical — from load cases to printed parts · Alp Serkan Merkit">
+<meta property="og:description" content="16-wheel rover: lead CAD designer of a 115-part Fusion 360 assembly (14 unique parts); generative-design bogie arm 0.086 kg, minimum safety factor 2.3 (Fusion PLA); production drawings from field measurements.">
+<meta property="og:url" content="https://alpserkanmerkit.github.io/mechanical/">
+<meta property="og:image" content="https://alpserkanmerkit.github.io/assets/media/generative_design.jpg">
+<meta property="og:image:width" content="1760">
+<meta property="og:image:height" content="1052">
+<meta property="og:image:alt" content="Generative-design study of the rover bogie arm in Fusion 360 and the printed parts">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="expect" href="#track-hero" blocking="render">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebPage", "@id": "https://alpserkanmerkit.github.io/mechanical/#webpage", "url": "https://alpserkanmerkit.github.io/mechanical/", "name": "Mechanical — from load cases to printed parts · Alp Serkan Merkit",
+ "description": "Mechanical engineering work of Alp Serkan Merkit: a 16-wheel rover with a generative-design bogie arm, printed parts, and industry internships.",
+ "inLanguage": "en", "isPartOf": {"@type": "WebSite", "url": "https://alpserkanmerkit.github.io/"},
+ "mainEntity": {"@type": "CreativeWork", "name": "From load cases to printed parts.",
+   "about": "16-wheel rover: 115-part Fusion 360 assembly (14 unique parts), generative-design bogie arm (0.086 kg, minimum safety factor 2.3 (Fusion PLA)), 3D-printed parts",
+   "image": "https://alpserkanmerkit.github.io/assets/media/generative_design.jpg",
+   "author": {"@id": "https://alpserkanmerkit.github.io/#person"}}}
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<style>
+/* ===== Mechanical page only ===== */
+/* hero: the 3D arm prints behind the copy */
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+#track-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;z-index:1;pointer-events:none;background:linear-gradient(#07080b00,#07080bd9)}
+.hero-spec{position:absolute;z-index:2;top:112px;right:max(24px,calc((100% - 1240px) / 2));text-align:right;font-size:12px;line-height:2;opacity:0;transform:translateY(10px)}
+.hero-spec b{font-weight:400;color:var(--amber)}
+.hero-spec .ok{color:var(--green)}
+.no-gsap .hero-spec{opacity:1;transform:none}
+.hero-cue{display:inline-block;margin-top:30px;color:var(--amber);font-size:12px}
+.hero-cue:hover{color:var(--txt)}
+
+/* rover pinned story (v4) */
+#rover{background:var(--bg2)}
+/* z-index matters only while pinned: the pin is re-parented to <body> and must sit above the z-indexed sections */
+.rover-pin{z-index:10;height:100vh;display:grid;grid-template-columns:5fr 7fr;gap:5vw;align-items:center;padding-top:40px}
+.rover-left{display:flex;flex-direction:column;height:72vh}
+.rover-h{font-family:var(--f-display);font-size:clamp(36px,3.9vw,60px);line-height:.95;letter-spacing:-.035em;font-weight:700}
+.rover-sub{display:block;margin-top:12px;font-size:12px}
+.rover-steps{position:relative;flex:1;min-height:0}
+.rstep{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0}
+.rstep .mono{color:var(--amber);transition:color .4s}
+.rstep h3{font-family:var(--f-display);font-size:clamp(28px,3vw,46px);line-height:1;letter-spacing:-.03em;margin:14px 0 16px}
+.rstep p{color:var(--soft);max-width:470px}
+.rstep .rcap{color:var(--mute);margin-top:14px;font-size:12px}
+.rstep .rcap.bridge{color:#c9ccd4}
+.rover-stage{position:relative;height:72vh;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#0b0d12}
+.rover-stage .media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08)}
+.rover-stage .media.contain{object-fit:contain;background:#0b0d12}
+.stage3d{background:radial-gradient(60% 60% at 50% 45%,#1a1f29,#0b0d12)}
+.stage3d canvas{width:100%;height:100%;display:block}
+.s3d-fallback{display:none;width:100%;height:100%;object-fit:contain}
+.stage3d.no3d canvas,.stage3d.no3d .s3d-hint{display:none}
+.stage3d.no3d .s3d-fallback{display:block}
+.s3d-hint{position:absolute;left:24px;top:20px;color:var(--amber);font-size:12px}
+/* assemble: 90 Blender frames scrubbed by scroll on a held canvas; copy is DOM text on its own layer */
+.asm-pin{position:relative;z-index:10;height:100vh;overflow:hidden;background:#07080b}
+#asm-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.asm-pin::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(20deg,#07080be6 0%,#07080b99 28%,#07080b00 55%)}
+@media (max-width:720px){.asm-pin::after{background:linear-gradient(180deg,#07080be6 0%,#07080b00 32%)}}
+.asm-copy,.asm-tag,.asm-bar{z-index:1}
+.asm-copy{position:absolute;left:0;right:0;bottom:12vh;pointer-events:none}
+.asm-beat{position:absolute;left:var(--gutter,24px);bottom:0;max-width:640px;opacity:0;transform:translateY(24px)}
+.asm-beat .mono{display:block;font-size:12px;color:var(--amber);margin-bottom:12px}
+.asm-beat h2{font-family:var(--f-display);font-size:clamp(34px,4.6vw,72px);line-height:.98;letter-spacing:-.035em;font-weight:700;text-shadow:0 2px 30px #000}
+.asm-tag{position:absolute;right:24px;bottom:22px;font-size:11px;color:var(--soft)}
+.asm-bar{position:absolute;left:0;right:0;bottom:0;height:2px;background:#ffffff12}
+.asm-bar b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--green))}
+@media (max-width:720px){.asm-copy{top:96px;bottom:auto}.asm-beat{top:0;bottom:auto}.asm-tag{left:16px;right:16px}}
+/* teardown: the rover assembly comes apart while the stage is held (scroll) */
+.teardown{margin:0 0 var(--mx-head)}
+.td-stage{position:relative;z-index:10;height:min(74vh,700px);border-radius:20px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(70% 70% at 50% 55%,#171b24,#08090d)}
+.td-stage canvas{width:100%;height:100%;display:block}
+.td-fallback{display:none;width:100%;height:100%;object-fit:cover}
+.td-stage.no3d canvas,.td-stage.no3d .td-hint{display:none}.td-stage.no3d .td-fallback{display:block}
+.td-hint{position:absolute;left:24px;top:20px;color:var(--amber);font-size:12px}
+.td-legend{position:absolute;left:24px;bottom:22px;display:flex;flex-wrap:wrap;gap:8px 16px;margin:0;padding:0;list-style:none;font-size:11.5px;color:var(--soft)}
+.td-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:0}
+.td-bar{position:absolute;right:24px;top:24px;width:120px;height:3px;border-radius:2px;background:#ffffff1a}
+.td-bar b{display:block;height:100%;width:0;border-radius:2px;background:var(--amber)}
+@media (max-width:600px){.td-bar{left:24px;right:auto;top:68px}}
+.wipe-edge{position:absolute;top:0;bottom:0;width:2px;left:100%;opacity:0;z-index:2;background:var(--amber);box-shadow:0 0 24px 4px #ffb54799}
+.rover-stage .progress{position:absolute;left:24px;right:24px;bottom:20px;display:flex;gap:6px;z-index:2}
+.rover-stage .progress i{flex:1;height:3px;border-radius:2px;background:#ffffff26;overflow:hidden}
+.rover-stage .progress b{display:block;height:100%;width:0;background:var(--amber);transition:background-color .4s}
+/* pass state: the selected arm (step 04) passed the screen */
+.rover-pin.pass .rstep:nth-child(4)>.mono:first-child{color:var(--green)}
+.rover-pin.pass .progress i:nth-child(4) b{background:var(--green)}
+.no-gsap .rstep{position:static;opacity:1}.no-gsap .rover-pin{height:auto}.no-gsap .rover-left{height:auto}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-block:1px solid var(--line)}
+.stat{background:var(--bg2);padding:64px 32px 60px}
+.stat .v{font-family:var(--f-display);font-size:clamp(38px,4.2vw,64px);font-weight:700;letter-spacing:-.04em;line-height:1}
+.stat .v small{font-size:.42em;font-weight:500;color:var(--mute);margin-left:4px}
+.stat .l{color:var(--mute);font-size:14px;margin-top:10px}
+.stat .l em{font-style:normal;color:var(--soft)}
+
+/* page rhythm (EXP-M): every chapter gets its own air */
+#main{--mx-y:max(170px,24vh);--mx-head:88px;--mx-gap:120px}
+.mx{padding:var(--mx-y) 0}
+.mx .sec-head{margin-bottom:40px}
+#internships .sec-head{margin-bottom:var(--mx-head)}
+.mx-lede{font-size:clamp(18px,1.45vw,21px);line-height:1.6;color:var(--soft);max-width:780px;margin:0 0 var(--mx-head)}
+.fr{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#0b0d12}
+.fr img,.fr video{display:block;width:100%;height:100%;object-fit:cover}
+.fr.light{background:#f3f4f6}.fr.light img{object-fit:contain}
+.fr.slate{background:#333d49}.fr.slate img{object-fit:contain}
+.fr figcaption,.fr .tag{position:absolute;left:12px;bottom:12px;z-index:2;font-size:11px;padding:4px 9px;border-radius:6px;background:#07080bcc;color:var(--soft)}
+.cap{margin-top:16px;color:var(--mute);font-size:15px;line-height:1.55;max-width:62ch}
+.cap b{display:block;font-family:var(--f-mono);font-weight:400;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+
+/* the machine, part by part */
+.sys{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--mx-gap) 40px;align-items:start}
+.sys figure{margin:0}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:1 / -1}
+.sys .h-l{height:460px}.sys .h-m{height:400px}
+.sys .kin{aspect-ratio:1384/437;background:#1d2330}
+.sys .kin img{object-fit:contain}
+.sys .tpu{height:320px}.sys .tpu img{object-position:50% 88%}
+.spec-wrap{align-self:stretch;display:flex;flex-direction:column}
+.spec-wrap>.mono{display:block;font-size:12px;color:var(--amber);margin-bottom:18px}
+.spec{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.spec div{background:var(--bg2);padding:24px 24px 22px}
+.spec dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.spec dd{margin:8px 0 0;font-family:var(--f-display);font-size:clamp(19px,1.6vw,25px);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.spec dd small{display:block;margin-top:6px;font-family:var(--f-body);font-size:12.5px;font-weight:400;letter-spacing:0;color:var(--mute)}
+.open{align-self:start;border:1px solid #ffb54755;border-radius:20px;padding:40px 44px;background:linear-gradient(180deg,#ffb5470d,transparent 70%)}
+.open>.mono{display:block;font-size:12px;color:var(--amber)}
+.open ul{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:20px}
+.open li{position:relative;padding-left:26px;color:var(--soft);font-size:16px;line-height:1.6;max-width:none}
+.open li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;border:2px solid var(--amber)}
+.open li b{color:var(--txt);font-weight:600}
+
+/* generative candidates → selected */
+.cands{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.cand{position:relative;margin:0;border-radius:14px;overflow:hidden;border:1px solid #ffb54759;background:#2f3a4a;transition:border-color .4s,box-shadow .4s}
+.cand img{display:block;width:100%;height:auto;aspect-ratio:408/220;object-fit:cover}
+.cand figcaption{position:absolute;left:10px;top:8px;font-size:11px;color:var(--amber);background:#07080bb3;padding:2px 7px;border-radius:4px;transition:color .4s}
+.cand.pass{border-color:var(--green);box-shadow:0 0 0 1px var(--green),0 0 30px #57e08a40}
+.cand.pass figcaption{color:var(--green)}
+.scan{position:absolute;top:-8px;bottom:-8px;left:0;width:2px;opacity:0;pointer-events:none;background:var(--amber);box-shadow:0 0 22px 4px #ffb54799}
+.gd-sel{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;margin-top:var(--mx-gap);align-items:stretch}
+.sel-card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#0b0d12;transition:border-color .5s,box-shadow .5s}
+.sel-card.pass{border-color:var(--green);box-shadow:0 0 40px #57e08a26}
+.sel-media{position:relative;height:440px}
+.sel-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:56px 28px 24px;background:#333d49}
+.sel-badge{position:absolute;left:18px;top:16px;font-size:11.5px;padding:4px 11px;border-radius:999px;border:1px solid var(--amber);color:var(--amber);background:#07080bcc;transition:color .4s,border-color .4s}
+.sel-card.pass .sel-badge{color:var(--green);border-color:var(--green)}
+.sel-read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;background:var(--line);border-top:1px solid var(--line)}
+.sel-read div{background:#0d0f14;padding:16px 20px}
+.sel-read dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.sel-read dd{margin:4px 0 0;font-family:var(--f-display);font-size:22px;font-weight:700;letter-spacing:-.02em}
+.sel-card.pass .sel-read dd.g{color:var(--green)}
+.gd-copy{display:flex;flex-direction:column;justify-content:center;gap:36px}
+.gd-copy>span.mono{font-size:12px;color:var(--amber)}
+.gd-copy p{color:var(--soft);font-size:17px;line-height:1.7}
+.legend{list-style:none;padding:0;margin:0;font-size:11px;line-height:2.2}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
+.screen-notes{margin-top:var(--mx-gap);padding-top:48px;border-top:1px solid var(--line)}
+.more{margin-top:var(--mx-gap);border-top:1px solid var(--line);padding-top:18px}
+.more summary{display:inline-flex;align-items:center;gap:10px;cursor:pointer;list-style:none;color:var(--soft)}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"+";display:inline-grid;place-items:center;width:24px;height:24px;border:1px solid #ffffff2a;border-radius:50%;color:var(--amber)}
+.more[open] summary::before{content:"−"}
+.more summary:hover{color:var(--amber)}
+.more-body{display:grid;gap:28px;margin-top:24px}
+.more-body>p{color:var(--soft);font-size:16px;line-height:1.7;max-width:920px}
+.more .sel-read{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.more .sel-read dd.g{color:var(--green)}
+.more .screen-notes{margin-top:0;padding-top:0;border-top:0}
+.screen-notes>.mono{display:block;font-size:12px;margin-bottom:36px}
+.notes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px}
+.notes li{border-left:2px solid #3a3f4a;padding-left:20px}
+.notes li.keep{border-color:var(--green)}
+.notes b{display:block;font-family:var(--f-display);font-size:22px;letter-spacing:-.02em;margin-bottom:10px}
+.notes li.keep b{color:var(--green)}
+.notes span{display:block;color:var(--soft);font-size:15px;line-height:1.6}
+
+/* iterations: three arm families */
+.lane+.lane{margin-top:var(--mx-gap)}
+.lane-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px 48px;align-items:start;padding-top:32px;border-top:1px solid var(--line);margin-bottom:36px}
+.lane-head h3{font-family:var(--f-display);font-size:clamp(30px,3vw,46px);letter-spacing:-.03em;line-height:1;margin:14px 0 0}
+.chip{display:inline-block;font-size:11px;padding:4px 11px;border-radius:999px;border:1px solid var(--amber);color:var(--amber);transition:color .5s,border-color .5s}
+.lane.fail.on .chip{color:var(--red);border-color:var(--red)}
+.lane.ok.on .chip{color:var(--green);border-color:var(--green)}
+.lane-head p{color:var(--soft);font-size:16.5px;line-height:1.65;margin:0}
+.lane-head p i{display:block;font-style:normal;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px}
+.tile{margin:0;border-color:#ffb54733;transition:border-color .5s,box-shadow .5s}
+.tile.t-l{height:440px}.tile.t-m{height:360px}
+.tile video{object-position:50% 40%}
+.lane.fail.on .tile.end{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 0 34px #ff5d5d33}
+.lane.fail.on .tile.end figcaption{color:var(--red)}
+.lane.ok.on .tile{border-color:#57e08a99}
+.lane-out{margin-top:28px;font-size:12px}
+.lane-out a{color:var(--green)}
+
+/* screen → hand (three-frame match-cut) */
+/* z-index matters only while pinned: like the rover, the pin is re-parented to <body> (a stacked section carries a transform) */
+.hand-grid{position:relative;z-index:10;display:grid;grid-template-columns:minmax(0,1fr) min(500px,38vw);gap:7vw;align-items:center}
+.hand-copy h2{font-family:var(--f-display);font-size:clamp(40px,4.6vw,72px);line-height:.95;letter-spacing:-.035em;font-weight:700;margin:22px 0 40px}
+.hand-copy p{color:var(--soft);max-width:580px;font-size:17.5px}
+.hand-tags{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap}
+.hand-tags span{font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mute);transition:color .3s,border-color .3s}
+.hand-tags span.on{color:var(--amber);border-color:#ffb54780}
+.hand-tags span.on.g{color:var(--green);border-color:#57e08a80}
+.hand-frame{position:relative;z-index:10;margin:0;aspect-ratio:4/5;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#0b0d12}
+.hand-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hand-b,.hand-c{clip-path:inset(0% 0% 0% 100%)}
+.no-gsap .hand-c{clip-path:none}
+.hand-edge{position:absolute;top:0;bottom:0;width:2px;left:100%;opacity:0;z-index:2;background:var(--amber);box-shadow:0 0 24px 4px #ffb54799}
+.hand-frame figcaption{position:absolute;left:14px;bottom:12px;z-index:3;font-size:11px;padding:3px 9px;border-radius:6px;background:#07080bcc;color:var(--soft)}
+.hand-frame figcaption span{display:none}
+.hand-frame[data-beat="0"] .cap-0,.hand-frame[data-beat="1"] .cap-1,.hand-frame[data-beat="2"] .cap-2{display:inline}
+
+/* internships + field notes */
+.ints{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px}
+.int{position:relative;padding:36px 0 0;border-top:1px solid var(--line)}
+.int::before{content:"";position:absolute;left:0;top:-5px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:2px solid var(--amber)}
+.int .when{font-size:12px;color:var(--amber)}
+.int h3{font-family:var(--f-display);font-size:clamp(20px,1.75vw,26px);letter-spacing:-.02em;line-height:1.15;margin:8px 0 4px}
+.int .org{color:var(--mute);font-size:14.5px}
+.int ul{margin:16px 0 0;padding-left:16px;color:var(--soft);font-size:15.5px;line-height:1.6}
+.int li+li{margin-top:6px}
+.field{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:end;margin:var(--mx-gap) 0 0}
+.field .fr img{aspect-ratio:4/5;height:auto;object-position:50% 70%}
+.field figcaption{padding-bottom:12px}
+.field figcaption .mono{display:block;font-size:12px;color:var(--amber);margin-bottom:18px}
+.field figcaption p{font-family:var(--f-display);font-size:clamp(24px,2.3vw,34px);line-height:1.2;letter-spacing:-.02em;color:var(--txt);max-width:520px}
+
+@media (max-width:900px){
+  #main{--mx-y:120px;--mx-head:56px;--mx-gap:80px}
+  .rover-pin{grid-template-columns:1fr;height:100vh;align-content:center;gap:2vh;padding-top:56px}
+  .rover-left{height:auto}.rover-h{font-size:30px}.rover-sub{margin-top:6px;font-size:11px}
+  .rover-steps{height:34vh;flex:none}.rover-stage{height:40vh}
+  .rstep h3{font-size:24px;margin:8px 0 8px}.rstep p{font-size:15px;line-height:1.5}.rstep .rcap{margin-top:8px}
+  .stage3d canvas,.s3d-hint{display:none}.s3d-fallback{display:block}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .sys{grid-template-columns:minmax(0,1fr);row-gap:64px}
+  .c4,.c5,.c6,.c7,.c8,.c12{grid-column:auto}
+  .sys .h-l,.sys .h-m{height:300px}
+  .spec{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .open{padding:28px 24px}
+  .gd-sel,.hand-grid,.lane-head,.field{grid-template-columns:minmax(0,1fr)}
+  .gd-sel{gap:36px}.sel-media{height:300px}
+  .notes{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 24px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .tiles .tile{grid-column:auto}.tiles .tile.w{grid-column:1 / -1}
+  .tile.t-l,.tile.t-m{height:220px}.tile.w.t-l{height:240px}
+  .hand-frame{width:min(100%,460px)}
+  .spec div:last-child{grid-column:1 / -1}
+  .tiles figcaption{font-size:9.5px;letter-spacing:.04em;left:8px;bottom:8px;right:8px;width:fit-content}
+  .sys .tpu{height:260px}
+  .ints{grid-template-columns:minmax(0,1fr);gap:44px}
+  .field{gap:24px}
+}
+@media (max-width:720px){
+  .hero-spec{display:none}
+  .cands{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .sel-read{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .spec div{padding:18px 16px}.spec div:nth-child(-n+2){grid-column:1 / -1}
+  .notes{grid-template-columns:minmax(0,1fr)}
+  .sys .h-l,.sys .h-m{height:240px}
+}
+.tiles [data-s="3"]{grid-column:span 3}.tiles [data-s="4"]{grid-column:span 4}.tiles [data-s="5"]{grid-column:span 5}.tiles [data-s="6"]{grid-column:span 6}.tiles [data-s="7"]{grid-column:span 7}
+@media (max-width:900px){.tiles [data-s]{grid-column:auto}.tiles .tile.w{grid-column:1 / -1}}
+.dg{border:1px solid var(--line);border-radius:22px;background:#0b0d12;padding:clamp(14px,2.4vw,30px);overflow-x:auto;overflow-y:hidden}
+.dg svg{display:block;width:100%;height:auto}
+.dg text{font-family:var(--f-mono)}
+.dg .t{font-family:var(--f-display);font-weight:500}
+.dg.tiled{display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(18px,2.4vw,36px);--k:1.55}
+.dg.tiled svg.tile{flex:none;width:calc(var(--w) * var(--k) * 1px);max-width:100%;overflow:hidden}
+.dg svg.dg-src{position:absolute;width:0;height:0;overflow:hidden}
+@media (max-width:720px){.dg:not(.tiled) svg{min-width:740px}.dg:not(.tiled)::after{content:"swipe →";display:block;margin-top:8px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;color:var(--mute);position:sticky;left:0}}
+</style>
+</head>
+<body data-page="mechanical">
+<!-- shell:top (byte-identical on every page; first thing in the body, after the Home-only #loader) -->
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div><div class="cursor-ring" aria-hidden="true"></div>
+<div class="sprog" aria-hidden="true"></div>
+<div class="hud mono" aria-hidden="true"><span class="hud-n">00</span> / <span class="hud-total">00</span> — <span class="hud-t">INTRO</span></div>
+<nav class="site-nav" aria-label="Primary">
+  <a class="logo" href="/" aria-label="Alp Serkan Merkit — home">ASM</a>
+  <ul>
+    <li><a href="/mechanical/">Mechanical</a></li>
+    <li><a href="/mechatronics/">Mechatronics</a></li>
+    <li><a href="/software-ai/">Software &amp; AI</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<!-- /shell:top -->
+
+<main id="main">
+<section id="track-hero" data-hud="INTRO">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="hero-spec mono" aria-hidden="true">Bogie arm · Fusion 360 generative design<br><b>Load cases → candidates → print</b><br>PLA · 0.086 kg · min. SF 2.3 <span class="ok">✓</span></div>
+  <div class="wrap track-copy">
+    <span class="kicker mono">Mechanical Engineer · B.Sc. 2026 · İzmir, Türkiye</span>
+    <h1 class="track-title">From load cases to printed parts.</h1>
+    <p class="identity">I build with AI — <a href="/mechanical/">generative-design hardware</a>, <a href="/mechatronics/">ESP32 devices</a>, and <a href="/software-ai/">AI-agent-built software</a> held to automated quality gates.</p>
+    <a class="hero-cue mono" href="#rover">The rover ↓</a>
+  </div>
+</section>
+
+<section id="assemble" data-hud="BUILD">
+  <div class="asm-pin">
+    <canvas id="asm-canvas" role="img" aria-label="Blender render: one bogie arm, then the rest of the rover's parts fly in and assemble, the belt drive starts"></canvas>
+    <div class="wrap asm-copy" aria-live="off">
+      <div class="asm-beat" data-at="0"><span class="mono">01 · one part</span><h2>It starts with one arm.</h2></div>
+      <div class="asm-beat" data-at=".42"><span class="mono">02 · the assembly</span><h2>Then everything else finds its place.</h2></div>
+      <div class="asm-beat" data-at=".78"><span class="mono">03 · the drive</span><h2>Sixteen wheels. One motor.</h2></div>
+    </div>
+    <span class="mono asm-tag">Blender render · assembly STL · Outcome 1 arms · belt drive is a concept</span>
+    <div class="asm-bar" aria-hidden="true"><b></b></div>
+  </div>
+</section>
+
+<section id="rover" data-hud="ROVER" data-stack>
+  <div class="wrap rover-pin">
+    <div class="rover-left">
+      <div><h2 class="rover-h" data-wipe>16 wheels. One motor.</h2><span class="mono rover-sub">Senior design project · Yaşar University · Lead CAD designer</span></div>
+      <div class="rover-steps">
+        <div class="rstep"><span class="mono">01 — Concept</span><h3>A rover that climbs by geometry</h3><p>A two-stage passive bogie suspension lets all 16 wheels keep contact with uneven ground. A single central motor drives every wheel through 36-tooth pulleys (nominal 1:1) and a multi-stage TPU belt network.</p><span class="mono rcap">Video · team kinematic study</span></div>
+        <div class="rstep"><span class="mono">02 — CAD</span><h3>115 parts, one assembly</h3><p>I built and owned a 115-part assembly (14 unique parts) in Fusion 360 — chassis, axles, pulleys, wheels and the belt network — as the team's lead CAD designer.</p></div>
+        <div class="rstep"><span class="mono">03 — Generative design</span><h3>Let the algorithm draw the arm</h3><p>For the bogie arm I set loads, fixtures and keep-out zones and let Fusion generate candidate shapes — then screened them by mass, stress, safety factor, displacement and printability. Footage from the actual study.</p><span class="mono rcap bridge">Constraints in · candidates out · I screen</span></div>
+        <div class="rstep"><span class="mono">04 — Selected</span><h3>0.086 kg. Safety factor 2.3.</h3><p>The chosen arm, Outcome 1 of the study: 0.086 kg, maximum displacement 2.6 mm — light enough to print, with a 2.3 safety factor in the study's load case.</p></div>
+        <div class="rstep"><span class="mono">05 — Built</span><h3>From screen to floor</h3><p>Printed arms, assembled bogies — a rover of about 4.6 kg in printed PLA (estimated from CAD volumes) built to keep all 16 wheels on rough ground up a ≈ 32° benchmark slope.</p></div>
+      </div>
+    </div>
+    <div class="rover-stage">
+      <video class="media contain" data-src="/assets/media/rover_kinematics.mp4" poster="/assets/media/rover_kinematics_poster.jpg" muted loop playsinline preload="none" aria-label="2D kinematic study: the bogies follow uneven ground"></video>
+      <img class="media" src="/assets/media/rover_cad.jpg" width="1042" height="596" loading="lazy" decoding="async" alt="Isometric Fusion 360 render of the 16-wheel rover assembly">
+      <video class="media contain" data-src="/assets/media/rover_gd_setup_loads.mp4" poster="/assets/media/rover_gd_setup_loads_poster.jpg" muted loop playsinline preload="none" aria-label="Generative-design setup in Fusion 360: preserved geometry in green, load and fixture arrows on the bogie arm"></video>
+      <div class="media stage3d"><canvas id="stage3d-canvas" aria-label="Interactive 3D bogie arm"></canvas><img class="s3d-fallback" src="/assets/media/rover_gd_selected.jpg" width="1145" height="586" loading="lazy" decoding="async" alt="Selected generative-design outcome in Fusion 360: mass 0.086 kg, minimum safety factor 2.3 (Fusion PLA)25"><span class="mono s3d-hint">Live 3D · move your mouse</span></div>
+      <img class="media" src="/assets/media/rover_prototype.jpg" width="509" height="381" loading="lazy" decoding="async" alt="Assembled rover prototype with blue printed bogie arms">
+      <div class="wipe-edge"></div>
+      <div class="progress"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="v" data-count="16">16</div><div class="l">wheels, all driven</div></div>
+    <div class="stat"><div class="v" data-count="1">1</div><div class="l">central motor</div></div>
+    <div class="stat"><div class="v" data-count="115">115</div><div class="l">parts in the assembly · <em>14 unique</em></div></div>
+    <div class="stat"><div class="v"><span data-count="0.086" data-dec="3">0.086</span><small>kg</small></div><div class="l">optimized bogie arm</div></div>
+    <div class="stat"><div class="v" data-count="2.3" data-dec="1">2.3</div><div class="l">min. safety factor · Fusion PLA</div></div>
+    <div class="stat"><div class="v" data-count="4">4</div><div class="l">belt stages</div></div>
+  </div>
+</section>
+
+<section id="iter" class="mx" data-hud="ITERATIONS" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Three arms on the bench. One on the rover.</h2><span class="mono reveal">Iterations · on the way to Outcome 1</span></div>
+  <p class="mx-lede reveal">Before and around the generative study, arms were modeled, printed and tested — iterations on the way to the selected Outcome 1.</p>
+
+  <div class="lane fail">
+    <div class="lane-head">
+      <div><span class="chip mono">Printed · broke in test</span><h3>Truss arm</h3></div>
+      <p>A flat truss arm, modeled in Fusion 360 and printed in blue PLA. It broke in testing — on camera: “we'll redesign it — make it a bit thicker.”<i>Quote translated from Turkish</i></p>
+    </div>
+    <div class="tiles">
+      <figure class="fr light tile t-l w" data-lightbox data-s="7"><img src="/assets/media/mechanical/truss_arm_cad_front.jpg" width="926" height="496" loading="lazy" decoding="async" alt="Fusion 360 front view of a flat truss bogie arm with three hubs"><figcaption class="mono">01 · CAD · front</figcaption></figure>
+      <figure class="fr light tile t-l" data-lightbox data-s="5"><img src="/assets/media/mechanical/truss_arm_cad_iso.jpg" width="676" height="736" loading="lazy" decoding="async" alt="Fusion 360 isometric view of the same truss arm"><figcaption class="mono">02 · CAD · iso</figcaption></figure>
+      <figure class="fr tile t-m" data-lightbox data-s="5"><img src="/assets/media/mechanical/truss_arm_on_laptop.jpg" width="1600" height="688" loading="lazy" decoding="async" alt="Photo of a laptop screen showing the truss arm in Fusion 360"><figcaption class="mono">03 · On the laptop</figcaption></figure>
+      <figure class="fr tile t-m" data-lightbox data-s="3"><img src="/assets/media/mechanical/truss_arm_printed.jpg" width="720" height="770" loading="lazy" decoding="async" alt="Two blue printed truss-style bogie arms held in one hand" style="object-position:50% 40%"><figcaption class="mono">04 · Printed</figcaption></figure>
+      <figure class="fr tile t-m end" data-s="4"><video data-src="/assets/media/mechanical/truss_arm_broken.mp4" poster="/assets/media/mechanical/truss_arm_broken_poster.jpg" muted loop playsinline preload="none" aria-label="The printed truss arm, broken after a test, shown up close in hand"></video><figcaption class="mono">05 · Broke in test</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="lane">
+    <div class="lane-head">
+      <div><span class="chip mono">Iteration</span><h3>Solid arm</h3></div>
+      <p>Smooth, closed-sided arms: a render, an orbit and a close-up in Fusion 360, and a solid arm printed in blue PLA.</p>
+    </div>
+    <div class="tiles">
+      <figure class="fr slate tile t-l w" data-lightbox data-s="6"><img src="/assets/media/mechanical/arm_iteration_render.jpg" width="1000" height="570" loading="lazy" decoding="async" alt="Fusion 360 render of an arm iteration with smooth, solid sides"><figcaption class="mono">01 · Render</figcaption></figure>
+      <figure class="fr tile t-l" data-s="3"><video data-src="/assets/media/rover_gd_orbit.mp4" poster="/assets/media/rover_gd_orbit_poster.jpg" muted loop playsinline preload="none" aria-label="An arm iteration orbiting in Fusion 360 on a laptop screen" style="object-position:50% 35%"></video><figcaption class="mono">02 · Orbit · Fusion</figcaption></figure>
+      <figure class="fr tile t-l" data-s="3"><video data-src="/assets/media/mechanical/solid_arm_closeup.mp4" poster="/assets/media/mechanical/solid_arm_closeup_poster.jpg" muted loop playsinline preload="none" aria-label="Close-up of a solid arm iteration in Fusion 360 on a laptop screen" style="object-position:50% 45%"></video><figcaption class="mono">03 · Close-up · Fusion</figcaption></figure>
+      <figure class="fr tile t-m w" data-lightbox data-s="6"><img src="/assets/media/mechanical/solid_arm_printed_front.jpg" width="1600" height="720" loading="lazy" decoding="async" alt="A solid blue printed bogie arm held in one hand, front view"><figcaption class="mono">04 · Printed · front</figcaption></figure>
+      <figure class="fr tile t-m w" data-lightbox data-s="6"><img src="/assets/media/mechanical/solid_arm_printed_side.jpg" width="1600" height="720" loading="lazy" decoding="async" alt="The same solid blue printed arm, side view"><figcaption class="mono">05 · Printed · side</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="lane ok">
+    <div class="lane-head">
+      <div><span class="chip mono">Selected · printed · on the rover</span><h3>Outcome&nbsp;1 — printed and on the rover</h3></div>
+      <p>The selected Outcome 1 shape, printed and assembled: arms in natural and blue PLA, and a bogie with its wheels. Its study readout is under Details above.</p>
+    </div>
+    <div class="tiles">
+      <figure class="fr tile t-l w" data-lightbox data-s="6"><img src="/assets/media/bogie_printed.jpg" width="1400" height="630" loading="lazy" decoding="async" alt="Printed generative-design bogie arm held in hand, support material still attached"><figcaption class="mono">01 · Printed · natural PLA</figcaption></figure>
+      <figure class="fr tile t-l" data-lightbox data-s="3"><img src="/assets/media/bogie_printed_pair.jpg" width="630" height="1400" loading="lazy" decoding="async" alt="Two printed bogie arms, dark and blue, held together in one hand" style="object-position:50% 46%"><figcaption class="mono">02 · Two arms</figcaption></figure>
+      <figure class="fr tile t-l end" data-lightbox data-s="3"><img src="/assets/media/rover_bogie_closeup.jpg" width="494" height="371" loading="lazy" decoding="async" alt="Assembled blue bogie with printed arms, wheels and pulleys on a table"><figcaption class="mono">03 · Assembled bogie</figcaption></figure>
+    </div>
+    <p class="lane-out mono"><a href="#gd">↓ Study readout · C1</a> &nbsp;·&nbsp; <a href="#rover">↑ The same arch carries the rover</a></p>
+  </div>
+</div></section>
+
+<section id="system" class="mx" data-hud="SYSTEM" data-stack><div class="wrap">
+  <div class="sec-head"><h2>The machine, part by part.</h2><span class="mono reveal">Fusion 360 · lead CAD designer</span></div>
+  <p class="mx-lede reveal">I modeled the whole vehicle — chassis, bogies, wheels, pulleys, shafts and the belt network — and cleaned it up into one assembly of 115 occurrences and 14 unique parts. The team's final validation ran on this model.</p>
+  <figure class="teardown">
+    <div class="td-stage"><canvas id="td-canvas" aria-label="3D rover assembly that comes apart as you scroll"></canvas>
+      <img class="td-fallback" src="/assets/media/rover_blender_exploded.jpg" width="1600" height="900" loading="lazy" decoding="async" alt="Exploded view of the rover assembly rendered in Blender: chassis plate lifted, bogie arms, shafts, pulleys and wheels pulled apart">
+      <span class="mono td-hint">Live 3D · amber pulse = power path · scroll to take it apart</span>
+      <div class="td-bar" aria-hidden="true"><b></b></div>
+      <ul class="td-legend mono" aria-hidden="true"><li><i style="background:#9aa0a8"></i>chassis plate</li><li><i style="background:#86a6ff"></i>bogie arms · Outcome 1</li><li><i style="background:#e6e8ec"></i>shafts</li><li><i style="background:#f2e2bf"></i>pulleys</li><li><i style="background:#55575e"></i>wheels</li><li><i style="background:#6b5233"></i>belts · concept</li></ul>
+    </div>
+    <figcaption class="cap"><b>Assembly · Fusion 360 STL → Blender</b>The assembly exported as STL, split into its bodies and lit in Blender, with every bogie arm shown as the selected Outcome 1 design. The drive runs as designed — motor → centre shaft → primary bogies → secondary bogies → wheels, every stage 1:1 — then, as you scroll, it comes apart. Belts, centre shaft and multi-groove hubs are a concept animation drawn in Blender; they are not in the STL.</figcaption>
+  </figure>
+  <div class="sys">
+    <figure class="c5 reveal"><div class="fr light h-m" data-lightbox><img src="/assets/media/mechanical/primary_frame_cad.jpg" width="757" height="610" loading="lazy" decoding="async" alt="Fusion 360 render of the topology-optimized primary bogie frame with arched, cut-out web"></div>
+      <figcaption class="cap"><b>Primary bogie frame · CAD</b>Topology-optimized frame arm. Each primary frame carries two secondary bogies; each secondary bogie carries two wheels.</figcaption></figure>
+    <figure class="c7 reveal"><div class="fr light h-m" data-lightbox><img src="/assets/media/mechanical/bogie_assembly_cad.jpg" width="1147" height="654" loading="lazy" decoding="async" alt="Fusion 360 render of a bogie assembly: one primary frame, two secondary bogies and four wheels"></div>
+      <figcaption class="cap"><b>Bogie assembly · CAD</b>One primary frame with its two secondary bogies and four wheels — the unit that repeats four times under the chassis.</figcaption></figure>
+    <div class="c12 spec-wrap reveal">
+      <span class="mono">Spec sheet · design and CAD values from the team report</span>
+      <dl class="spec">
+        <div><dt>Envelope</dt><dd>1130 × 654 × 590<small>mm · full bogie extension</small></dd></div>
+        <div><dt>Chassis</dt><dd>600 × 307 × 100<small>mm · central frame</small></dd></div>
+        <div><dt>Wheels</dt><dd>16 × Ø50 mm<small>20 mm wide</small></dd></div>
+        <div><dt>Motor</dt><dd>1 × 12 V DC<small>JGB37-520 geared · 600 rpm</small></dd></div>
+        <div><dt>Transmission</dt><dd>4 belt stages<small>36-tooth pulleys · nominal 1:1</small></dd></div>
+        <div><dt>Est. mass</dt><dd>≈ 4.6 kg<small>printed parts in PLA, from CAD volumes · electronics &amp; battery not included</small></dd></div>
+        <div><dt>Bogie travel · theoretical</dt><dd>215 mm<small>primary 138 + secondary 77</small></dd></div>
+        <div><dt>Static clearance</dt><dd>≈ 161 mm</dd></div>
+        <div><dt>Benchmark terrain</dt><dd>50 mm rise<small>over 80 mm · ≈ 32° rough slope</small></dd></div>
+      </dl>
+    </div>
+    <figure class="c12 reveal"><div class="fr kin" data-lightbox><img src="/assets/media/mechanical/kinematics_layout_team.jpg" width="1384" height="437" loading="lazy" decoding="async" alt="2D kinematic layout of the two bogie stages under the chassis, over an uneven ground profile"></div>
+      <figcaption class="cap"><b>Kinematic layout · ME4920 Group 7 team work</b>The team's 2D layout of the two bogie stages over uneven ground, shown with credit. The benchmark — a 50 mm rise over 80 mm (≈ 32°) — was checked on this geometry and in CAD.</figcaption></figure>
+  </div>
+</div></section>
+
+<section id="gd" class="mx" data-hud="CANDIDATES" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Eight outcomes. One selected.</h2><span class="mono reveal">Fusion 360 generative design · bogie arm</span></div>
+  <p class="mx-lede reveal">I set the load cases, fixtures and keep-out zones; Fusion proposed the shapes. Every outcome was then screened by mass, stress, safety factor, displacement and printability — the algorithm drew, I decided.</p>
+  <div class="dg reveal" data-dg="gd" role="img" aria-label="Live diagram: the eight Fusion 360 generative-design outcomes are screened in four checks — printable, supported hub, open arch, symmetric. C2 is too thin; C3 and C6 have a weak centre hub; C4, C5 and C8 close the arch; C7 is asymmetric. Outcome 1 is selected: 0.086 kg, minimum safety factor 2.325 against a 1.5 limit, 2.641 mm maximum displacement, 21.5 MPa maximum von Mises stress."></div>
+  <div class="gd-sel">
+    <div class="sel-card pass">
+      <div class="sel-media">
+        <img src="/assets/media/mechanical/outcome1_selected.jpg" width="710" height="395" loading="lazy" decoding="async" alt="The selected design, Outcome 1 of the Fusion 360 generative study: an arched bogie arm with triangular cut-outs">
+        <span class="sel-badge mono">C1 · Selected</span>
+      </div>
+    </div>
+    <div class="gd-copy">
+      <span class="mono">Study 1 · Outcome 1 · converged</span>
+      <p>Outcome 1 cleared the 1.5 safety-factor limit with a minimum of 2.325 at 0.086 kg — the balance of mass, margin and printability chosen for the bogie arm.</p>
+      <ul class="legend mono"><li><i style="background:var(--amber)"></i>candidate · in screening</li><li><i style="background:var(--green)"></i>selected for print</li><li><i style="background:#3a3f4a"></i>not selected</li></ul>
+    </div>
+  </div>
+  <details class="more reveal"><summary class="mono">Details</summary><div class="more-body">
+    <dl class="sel-read">
+      <div><dt>Mass</dt><dd class="g">0.086 kg</dd></div>
+        <div><dt>Min. safety factor</dt><dd class="g">2.325</dd></div>
+        <div><dt>Max. displacement</dt><dd>2.641 mm</dd></div>
+        <div><dt>Max. von Mises</dt><dd>21.5 MPa</dd></div>
+        <div><dt>Safety-factor limit</dt><dd>1.5</dd></div>
+        <div><dt>Material</dt><dd>PLA · Fusion library</dd></div>
+      </dl>
+    <p>The axle bores and mounting hubs were fixed as preserved geometry; Fusion redistributed material between them.</p>
+  <div class="screen-notes">
+    <span class="mono">Why Outcome 1 · engineer's read of the eight</span>
+    <ul class="notes">
+      <li class="keep"><b>Supported centre hub</b><span>Material runs right under the top bore, where the pivot load enters. C3 hangs it on one thin link that could crack; C6 adds bulk but backs it thinly.</span></li>
+      <li class="keep"><b>Moves further</b><span>An open arch with nothing hanging below it: the bogie can swing further over rough ground before anything touches. C4, C5 and C8 fill that space.</span></li>
+      <li class="keep"><b>Lightest</b><span>The lightest outcome of the study (team report) — less unsprung mass on every wheel pair. C5 and C8 carry visibly more material.</span></li>
+      <li class="keep"><b>Symmetric</b><span>The arm pivots both ways on uneven ground, so it should answer the same either way. C7 is lopsided.</span></li>
+      
+    </ul>
+  </div>
+  </div></details>
+</div></section>
+
+<section id="hand" class="mx" data-hud="SCREEN → HAND" data-stack><div class="wrap">
+  <div class="hand-grid">
+    <div class="hand-copy">
+      <span class="mono">Screen → hand</span>
+      <h2 data-wipe>Modeled on screen. Held in hand.</h2>
+      <p>A hex socket-head cap screw I modeled in Fusion 360, with my name engraved on the head — “Alp Serkan A.Ş”. Three frames, two cuts: me at the workstation with the model on screen, the model itself, and the real fastener it models, in my palm. The same move as the rover, at the scale of a single fastener.</p>
+      <div class="hand-tags mono" aria-hidden="true"><span class="tag-0 on">01 · At the desk</span><span class="tag-1">02 · Model · Fusion 360</span><span class="tag-2">03 · Real part</span></div>
+    </div>
+    <figure class="hand-frame" data-beat="0">
+      <img class="hand-a" src="/assets/media/mechanical/bolt_selfie.jpg" width="918" height="1148" loading="lazy" decoding="async" alt="Alp Serkan Merkit at a workstation, making a peace sign next to a monitor that shows the cap-screw model in Fusion 360">
+      <img class="hand-b" src="/assets/media/mechanical/bolt_model.jpg" width="400" height="500" loading="lazy" decoding="async" alt="Hex socket-head cap screw modeled in Fusion 360, seen from the head end, with a finger pointing at it">
+      <img class="hand-c" src="/assets/media/mechanical/bolt_real.jpg" width="920" height="1150" loading="lazy" decoding="async" alt="A real hex socket-head cap screw lying in an open palm">
+      <i class="hand-edge" aria-hidden="true"></i>
+      <figcaption class="mono"><span class="cap-0">At the workstation</span><span class="cap-1">Model · Fusion 360</span><span class="cap-2">Real part · in hand</span></figcaption>
+    </figure>
+  </div>
+</div></section>
+
+<section id="internships" class="mx" data-hud="INTERNSHIPS" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Internships</h2><span class="mono reveal">Industry · 2023 — 2025</span></div>
+  <ul class="ints">
+    <li class="int reveal"><span class="when mono">Aug — Sep 2025</span><h3>R&amp;D and Manufacturing Engineering Intern</h3><div class="org">Katmerciler Araç Üstü Ekipman A.Ş.</div>
+      <ul><li>Production-ready SolidWorks models and technical drawings from field measurements</li><li>Material optimizations from cost-performance analysis</li><li>Infrared measurement and root-cause analysis on motor overheating</li></ul></li>
+    <li class="int reveal"><span class="when mono">Sep — Oct 2024</span><h3>Manufacturing Engineering Intern</h3><div class="org">Katmerciler Araç Üstü Ekipman A.Ş.</div>
+      <ul><li>End-to-end production analysis across fabrication, assembly and quality control</li><li>Design-for-manufacturing work on custom vehicle components in AutoCAD</li></ul></li>
+    <li class="int reveal"><span class="when mono">Sep — Oct 2023</span><h3>Quality Control and Process Engineering Intern</h3><div class="org">Elektral Elektromekanik A.Ş.</div>
+      <ul><li>Quality-control analysis on automated production lines</li><li>Effects of heat treatment and surface coating on component quality</li></ul></li>
+  </ul>
+  <figure class="field reveal">
+    <div class="fr"><img src="/assets/media/inv/tecus_f1.jpg" width="1200" height="1500" loading="lazy" decoding="async" alt="Alp Serkan Merkit pointing at a Haas F1 show car, number 20, at the TECUS booth"></div>
+    <figcaption><span class="mono">Field notes</span><p>At the TECUS booth with a Haas F1 show car (#20) — a fair visit.</p></figcaption>
+  </figure>
+</div></section>
+
+<section class="next-door" data-hud="NEXT"><div class="wrap">
+  <span class="mono">Next door</span>
+    <a class="door door-ortam" data-door href="/mechatronics/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/ortam_voice_led_colours_poster.jpg" width="464" height="832" alt="" loading="lazy" decoding="async">
+        <span class="door-print"><video data-src="/assets/media/ortam_voice_led_colours.mp4" poster="/assets/media/ortam_voice_led_colours_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">02 · Mechatronics</span>
+        <h3 class="door-title">It wakes you with a sunrise.</h3>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+</div></section>
+</main>
+
+<!-- shell:footer (byte-identical on every page; right after the main element closes) -->
+<footer id="contact" class="site-footer" data-hud="CONTACT">
+  <div class="wrap">
+    <span class="mono">Open to engineering roles and an M.Sc. in Artificial Intelligence</span>
+    <h2><a href="mailto:alpserkanmer@outlook.com">Let's build something.</a></h2>
+    <div class="links">
+      <a class="btn primary magnetic" href="mailto:alpserkanmer@outlook.com">alpserkanmer@outlook.com</a>
+      <a class="btn magnetic" href="https://github.com/alpserkanmerkit" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/alp-serkan-merkit-b8990a202" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="foot-row"><span class="mono">© 2026 Alp Serkan Merkit</span><span class="mono">Built with AI agents · <span class="gate">verified by the gate</span></span></div>
+  </div>
+</footer>
+<div class="lightbox" role="dialog" aria-label="Enlarged image"><img alt=""></div>
+<!-- /shell:footer -->
+
+<!-- shell:scripts (byte-identical on every page; last thing before page-specific scripts and the end of the body) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="/assets/site.js"></script>
+<!-- /shell:scripts -->
+<script>/* Mechanical: assemble — 90 Blender frames (a_0101..a_0190.webp) drawn on a canvas, scrubbed while the stage is held.
+   Created before the rover pin (it sits above it). Frame 1 loads first, the rest stream in when the stage is near. */
+(() => {
+  const G = window.gsap, ST = window.ScrollTrigger, cv = document.getElementById('asm-canvas');
+  if (!cv) return;
+  const N = 90, src = i => `/assets/media/assemble/a_${String(101 + i).padStart(4, '0')}.webp`;
+  const imgs = new Array(N), ctx = cv.getContext('2d');
+  let cur = 0;
+  const load = i => { if (imgs[i]) return imgs[i]; const im = new Image(); im.decoding = 'async'; if (i) im.fetchPriority = 'low'; im.src = src(i); im.onload = () => { if (i === cur || (!imgs[cur] || !imgs[cur].complete)) draw(cur); }; return (imgs[i] = im); };
+  const fit = () => { const d = Math.min(devicePixelRatio || 1, 1.5); cv.width = cv.clientWidth * d; cv.height = cv.clientHeight * d; draw(cur); };
+  /* nearest frame that has loaded (looking back first), drawn cover on landscape; on portrait 1.45× the width (sides crop, rover stays) */
+  function draw(i) {
+    let k = i; while (k > 0 && !(imgs[k] && imgs[k].complete && imgs[k].naturalWidth)) k--;
+    const im = imgs[k]; if (!im || !im.complete || !im.naturalWidth) return;
+    const W = cv.width, H = cv.height, s = W / H < 1 ? 1.45 * W / im.naturalWidth : Math.max(W / im.naturalWidth, H / im.naturalHeight);
+    const w = im.naturalWidth * s, h = im.naturalHeight * s;
+    ctx.fillStyle = '#07080b'; ctx.fillRect(0, 0, W, H); ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+  }
+  load(0); addEventListener('resize', fit); fit();
+  new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect();
+    let i = 1; const next = () => { const t = performance.now(); while (i < N && performance.now() - t < 8) load(i++); if (i < N) (window.requestIdleCallback || setTimeout)(next); };
+    next(); }, { rootMargin: '1200px 0px' }).observe(cv);
+  if (!G || !ST) return;
+  const beats = G.utils.toArray('.asm-beat'), at = beats.map(b => +b.dataset.at), bar = document.querySelector('.asm-bar b');
+  let shown = -1;
+  const beat = p => { let n = 0; at.forEach((a, j) => { if (p >= a) n = j; }); if (n === shown) return; shown = n;
+    beats.forEach((b, j) => G.to(b, { opacity: j === n ? 1 : 0, y: j === n ? 0 : (j < n ? -24 : 24), duration: .5, ease: 'power2.out', overwrite: true })); };
+  ST.create({ trigger: '.asm-pin', start: 'top top', end: '+=200%', pin: true, pinReparent: true, scrub: true, refreshPriority: 2,
+    onUpdate: st => { const p = st.progress, i = Math.min(N - 1, Math.round(p * (N - 1))); bar.style.width = (p * 100).toFixed(1) + '%'; beat(p); if (i !== cur) { cur = i; draw(i); } } });
+  beat(0);
+  addEventListener('load', () => ST.refresh());
+})();
+</script>
+<script>/* Mechanical: hero spec fade-in, rover pinned story (v4), candidates screen, arm lanes, screen → hand three-frame match-cut */
+(() => {
+  const G = window.gsap, ST = window.ScrollTrigger;
+  if (!G || !ST) return;
+  const $ = s => document.querySelector(s);
+
+  /* hero: the spec readout arrives once the door morph / page entry is done */
+  window.ASM.ready.then(() => G.to('.hero-spec', { opacity: 1, y: 0, duration: .9, ease: 'power2.out', delay: .4 }));
+
+  /* rover pinned story: 5 steps, 44 % of the viewport per step (≤ 55 % rule); clip-path wipe with an amber edge between media.
+     The live 3D stage (media 4) renders only while on screen (2.6 → 4.2); .pass from step 04 (≈2.9);
+     match-cut 04 → 05: the render turns printed-PLA blue and swings to the photo's profile view. */
+  const steps = G.utils.toArray('.rstep'), imgs = G.utils.toArray('.rover-stage .media'), bars = G.utils.toArray('.rover-stage .progress b');
+  const rpin = $('.rover-pin'), morph = { v: 0 };
+  G.set(steps[0], { opacity: 1 }); G.set(imgs[0], { opacity: 1, scale: 1 });
+  const rtl = G.timeline({
+    onUpdate() { const t = this.time(), s = window.__stage; rpin.classList.toggle('pass', t >= 2.9); if (s) { s.on = t > 2.6 && t < 4.2; s.morph = morph.v; } },
+    scrollTrigger: { trigger: rpin, start: 'top top', end: '+=' + steps.length * 44 + '%', pin: true, pinReparent: true, scrub: 1, refreshPriority: 1 } });
+  steps.forEach((s, i) => {
+    rtl.to(bars[i], { width: '100%', duration: 1, ease: 'none' }, i);
+    if (i < steps.length - 1) {
+      rtl.to(s, { opacity: 0, y: -40, duration: .18 }, i + .68)
+         .fromTo(steps[i + 1], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .2 }, i + .88)
+         .to(imgs[i], { scale: .94, opacity: .25, duration: .45, ease: 'power2.inOut' }, i + .7)
+         .fromTo(imgs[i + 1], { opacity: 1, clipPath: 'inset(0% 0% 0% 100%)', scale: 1.18 },
+                 { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: .45, ease: 'power2.inOut' }, i + .7)
+         .fromTo('.wipe-edge', { left: '100%', opacity: 1 }, { left: '0%', duration: .45, ease: 'power2.inOut' }, i + .7)
+         .set('.wipe-edge', { opacity: 0 }, i + 1.15);
+      if (i + 1 === 3) rtl.call(() => window.__stage && window.__stage.print(), null, i + .8);
+    }
+  });
+  rtl.to(morph, { v: 1, duration: .5, ease: 'power2.inOut' }, 3.4);
+
+  /* candidates: screened live in the [data-dg="gd"] diagram (own script below); the selected card stays green */
+  const card = $('.sel-card');
+  G.fromTo(card, { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'power2.out', scrollTrigger: { trigger: '.gd-sel', start: 'top 90%', end: 'top 55%', scrub: .6 } });
+
+  /* arm lanes: tiles arrive one by one; the truss lane ends red (broke), the Outcome 1 lane turns green */
+  G.utils.toArray('.lane').forEach(lane => {
+    const tiles = G.utils.toArray('.tile', lane);
+    G.fromTo(tiles, { opacity: 0, y: 36 }, { opacity: 1, y: 0, stagger: .12, ease: 'power2.out',
+      scrollTrigger: { trigger: lane, start: 'top 82%', end: 'top 22%', scrub: .6 } });
+    ST.create({ trigger: tiles[tiles.length - 1], start: 'top 70%', onToggle: st => lane.classList.toggle('on', st.isActive || st.progress > 0) });
+  });
+
+  /* screen → hand: desk selfie → on-screen model → real part; two wipes with the amber edge, same move as the rover 04 → 05 cut */
+  const hf = $('.hand-frame'), tags = G.utils.toArray('.hand-tags span');
+  const beat = n => { if (hf.dataset.beat === String(n)) return; hf.dataset.beat = n; tags.forEach((t, i) => { t.classList.toggle('on', i === n); t.classList.toggle('g', i === n && n === 2); }); };
+  const htl = G.timeline({
+    onUpdate() { const t = this.time(); beat(t >= 1.2 ? 2 : t >= .5 ? 1 : 0); },
+    /* held while the three frames play: the whole grid on desktop, the frame alone on phones (copy + frame are taller than the screen there); 3 beats over 120 % = 40 % per beat */
+    scrollTrigger: { trigger: matchMedia('(max-width: 900px)').matches ? hf : '.hand-grid', start: 'center center', end: '+=120%', pin: true, pinReparent: true, refreshPriority: 1, scrub: .6 } });
+  htl.to('.hand-a', { scale: .94, opacity: .25, duration: .45, ease: 'power2.inOut' }, .25)
+     .fromTo('.hand-b', { clipPath: 'inset(0% 0% 0% 100%)', scale: 1.18 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: .45, ease: 'power2.inOut' }, .25)
+     .fromTo('.hand-edge', { left: '100%', opacity: 1 }, { left: '0%', duration: .45, ease: 'power2.inOut' }, .25)
+     .set('.hand-edge', { opacity: 0 }, .71)
+     .to('.hand-b', { scale: .94, opacity: .25, duration: .45, ease: 'power2.inOut' }, .95)
+     .fromTo('.hand-c', { clipPath: 'inset(0% 0% 0% 100%)', scale: 1.18 }, { clipPath: 'inset(0% 0% 0% 0%)', scale: 1, duration: .45, ease: 'power2.inOut' }, .95)
+     .fromTo('.hand-edge', { left: '100%', opacity: 1 }, { left: '0%', duration: .45, ease: 'power2.inOut', immediateRender: false }, .95)
+     .set('.hand-edge', { opacity: 0 }, 1.41)
+     .to({}, { duration: .3 }, 1.41);
+})();
+</script>
+<script type="module">/* Mechanical 3D: hero arm (prints after ASM.ready) + live stage copy for rover step 04 (desktop only) */
+import { hero, stage } from '/assets/arm3d.js';
+import { teardown } from '/assets/rover3d.js';
+hero(document.getElementById('gl'));
+const box = document.querySelector('.stage3d');
+const s = matchMedia('(max-width: 900px)').matches ? null : stage(document.getElementById('stage3d-canvas'));
+if (s) { s.on = false; window.__stage = s; } else if (box) box.classList.add('no3d');
+
+/* teardown: hold the stage while the rover comes apart (scrub), then let the page move on */
+const tdStage = document.querySelector('.td-stage'), td = teardown(document.getElementById('td-canvas'));
+if (!td) tdStage.classList.add('no3d');
+else {
+  document.getElementById('td-canvas').addEventListener('rover:error', () => tdStage.classList.add('no3d'));
+  const bar = tdStage.querySelector('.td-bar b');
+  window.ScrollTrigger && ScrollTrigger.create({ trigger: tdStage, start: 'center center', end: '+=110%', pin: true, pinReparent: true, scrub: .6,
+    onUpdate: st => { td.p = st.progress; bar.style.width = (st.progress * 100).toFixed(1) + '%'; } });
+}
+</script>
+<script>
+/* Mechanical: the eight generative-design outcomes screened live (09.10, same style as the Software diagrams).
+   Real thumbnails and the page's own reasons; numbers only for C1 (Fusion study readout). Time-driven, runs while in view. */
+(() => {
+  const host = document.querySelector('[data-dg="gd"]'); if (!host) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const C = { amb: '#ffb547', grn: '#57e08a', red: '#ff5d5d', line: '#2a303c', box: '#0d1016', mute: '#8b91a0', txt: '#e9e7e1', soft: '#aab0bc' };
+  const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.append(e); return e; };
+  const tx = (p, x, y, s, a = {}) => { const e = el('text', { x, y, fill: a.class === 't' ? C.txt : C.soft, ...a }, p); e.textContent = s; return e; };
+  const box = (p, x, y, w, h, r = 14) => el('rect', { x, y, width: w, height: h, rx: r, fill: C.box, stroke: C.line, 'stroke-width': 2 }, p);
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+
+  /* tiles (09.10, as on Software & AI): drawn once into a hidden group, shown as cropped <use> tiles that wrap
+     below each other — taller and bigger instead of one wide strip; phone: 2 + 2 columns, then the readout */
+  const N = matchMedia('(max-width:720px)').matches;
+  const TILES = N ? [[0, 4, 332, 440], [324, 4, 336, 440], [670, 4, 330, 440]] : [[0, 4, 660, 440], [670, 4, 330, 440]];
+  const src = el('svg', { class: 'dg-src', 'aria-hidden': 'true' }), s = el('g', { id: 'dg-gd' }, src);
+  host.replaceChildren(src, ...TILES.map(([x, y, w, h]) => {
+    const t = el('svg', { class: 'tile', viewBox: `${x} ${y} ${w} ${h}`, 'aria-hidden': 'true', style: `--w:${w}` });
+    el('use', { href: '#dg-gd' }, t); return t;
+  }));
+  host.classList.add('tiled');
+  const fitK = () => { const H = TILES.reduce((a, t) => a + t[3], 0) + 30 * (TILES.length - 1);
+    host.style.setProperty('--k', Math.min(1.55, Math.max(1.25, (innerHeight - 120) / H)).toFixed(3)); };
+  fitK(); addEventListener('resize', fitK);
+  const defs = el('defs', {}, src), gray = el('filter', { id: 'gdGray' }, defs);
+  el('feColorMatrix', { type: 'saturate', values: '0' }, gray);
+  const REASON = { 2: 'too thin', 3: 'thin centre link', 4: 'closed web', 5: 'filled web', 6: 'hub unsupported', 7: 'asymmetric', 8: 'heaviest' };
+  const STEPS = [['printable', [2]], ['supported hub', [3, 6]], ['open arch', [4, 5, 8]], ['symmetric', [7]]];
+  const chips = STEPS.map(([name], i) => { const x = 10 + i * 162; const r = el('rect', { x, y: 14, width: 150, height: 34, rx: 17, fill: 'none', stroke: C.line, 'stroke-width': 2 }, s);
+    const t = tx(s, x + 75, 36, name, { 'font-size': 13, 'text-anchor': 'middle', fill: C.mute }); return { r, t }; });
+  const W = 150, H = 81;
+  const cands = [...Array(8)].map((_, i) => {
+    const n = i + 1, x = 10 + (i % 4) * 162, y = 84 + Math.floor(i / 4) * 170;
+    const clip = el('clipPath', { id: 'gdc' + n }, defs); el('rect', { x, y, width: W, height: H, rx: 10 }, clip);
+    const img = el('image', { href: `/assets/media/mechanical/cand_${n}.jpg`, x, y, width: W, height: H, preserveAspectRatio: 'xMidYMid slice', 'clip-path': `url(#gdc${n})` }, s);
+    const fr = el('rect', { x, y, width: W, height: H, rx: 10, fill: 'none', stroke: '#ffb54766', 'stroke-width': 2 }, s);
+    const lab = tx(s, x, y + H + 24, 'C' + n, { 'font-size': 14 });
+    const why = tx(s, x, y + H + 46, '', { 'font-size': 12, fill: C.red });
+    return { n, img, fr, lab, why };
+  });
+  box(s, 680, 14, 310, 420, 18);
+  const pT = tx(s, 705, 52, '', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+  const p1 = tx(s, 705, 92, '', { class: 't', 'font-size': 30 }), p2 = tx(s, 705, 122, '', { 'font-size': 14, fill: C.mute });
+  const sel = el('g', {}, s);
+  const mT = tx(sel, 705, 176, '', { class: 't', 'font-size': 26, fill: C.grn }); tx(sel, 705, 198, 'mass · lightest of the study', { 'font-size': 12, fill: C.mute });
+  tx(sel, 705, 240, 'min. safety factor', { 'font-size': 12, fill: C.mute });
+  el('rect', { x: 705, y: 252, width: 260, height: 12, rx: 6, fill: '#1a1e27' }, sel);
+  const sfB = el('rect', { x: 705, y: 252, width: 0, height: 12, rx: 6, fill: C.grn }, sel);
+  el('path', { d: `M${705 + 260 * 1.5 / 3} 244 V272`, stroke: C.red, 'stroke-width': 2 }, sel);
+  tx(sel, 705 + 260 * 1.5 / 3, 290, 'limit 1.5', { 'font-size': 11, fill: C.red, 'text-anchor': 'middle' });
+  const sfT = tx(sel, 965, 240, '', { 'font-size': 15, fill: C.grn, 'text-anchor': 'end' });
+  const dT = tx(sel, 705, 334, '', { 'font-size': 15 }), vT = tx(sel, 705, 362, '', { 'font-size': 15 });
+  tx(sel, 705, 410, 'Fusion 360 study 1 · PLA', { 'font-size': 11, fill: C.mute });
+
+  const draw = t => {
+    const u = t % 15, step = Math.floor((u - .8) / 2), out = new Set();
+    STEPS.forEach(([, ids], k) => { if (u > .8 + k * 2 + 1.2) ids.forEach(n => out.add(n)); });
+    chips.forEach((c, k) => { const done = u > .8 + k * 2 + 1.2, cur = k === step && !done;
+      c.r.setAttribute('stroke', cur ? C.amb : done ? C.grn : C.line); c.t.setAttribute('fill', cur ? C.amb : done ? C.grn : C.mute); });
+    const picked = u > 9.4;
+    cands.forEach(c => {
+      const o = out.has(c.n), win = picked && c.n === 1, checking = step >= 0 && step < 4 && STEPS[step][1].includes(c.n) && !o;
+      c.img.setAttribute('opacity', o ? .25 : 1); c.img.setAttribute('filter', o ? 'url(#gdGray)' : '');
+      c.fr.setAttribute('stroke', win ? C.grn : o ? '#ff5d5d88' : checking ? C.amb : '#ffb54766'); c.fr.setAttribute('stroke-width', win || checking ? 3 : 2);
+      c.why.textContent = o ? REASON[c.n] : ''; c.lab.setAttribute('fill', win ? C.grn : o ? C.mute : C.soft);
+      c.lab.textContent = win ? 'C1 · selected' : 'C' + c.n;
+    });
+    pT.textContent = picked ? 'SELECTED FOR PRINT' : 'SCREENING';
+    p1.textContent = picked ? 'Outcome 1' : `${8 - out.size} / 8 left`; p1.setAttribute('fill', picked ? C.grn : C.txt);
+    p2.textContent = picked ? 'arched arm · triangular cut-outs' : step >= 0 && step < 4 ? `check: ${STEPS[step][0]}` : 'eight Fusion outcomes';
+    const f = clamp((u - 9.6) / 1.4);
+    sel.setAttribute('opacity', picked ? 1 : 0);
+    mT.textContent = `${(0.086 * f).toFixed(3)} kg`;
+    sfB.setAttribute('width', 260 * 2.325 / 3 * f); sfT.textContent = `${(2.325 * f).toFixed(3)}`;
+    dT.textContent = `max. displacement  ${(2.641 * f).toFixed(3)} mm`; vT.textContent = `max. von Mises     ${(21.5 * f).toFixed(1)} MPa`;
+  };
+  draw(0);
+  if (N) {   // phone: no label below 10 px on screen
+    const ts = [...host.querySelectorAll('svg.tile')].map(t => ({ vb: t.viewBox.baseVal, k: t.getBoundingClientRect().width / t.viewBox.baseVal.width }));
+    s.querySelectorAll('text').forEach(e => { const x = +e.getAttribute('x'), fs = +e.getAttribute('font-size') || 16;
+      const t = ts.find(t => x >= t.vb.x - 1 && x < t.vb.x + t.vb.width); if (t && t.k && fs * t.k < 10) e.setAttribute('font-size', (10 / t.k).toFixed(1)); });
+  }
+  let raf = 0, on = false;
+  const tick = now => { draw(now / 1000); raf = on ? requestAnimationFrame(tick) : 0; };
+  new IntersectionObserver(es => es.forEach(e => { on = e.isIntersecting; if (on && !raf) raf = requestAnimationFrame(tick); })).observe(host);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alpserkanmerkit.github.io/sitemap.xml

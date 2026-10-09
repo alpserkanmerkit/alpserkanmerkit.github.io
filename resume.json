@@ -1,0 +1,193 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Alp Serkan Merkit",
+    "label": "Mechanical Engineer",
+    "email": "alpserkanmer@outlook.com",
+    "url": "https://alpserkanmerkit.github.io/",
+    "summary": "Mechanical engineer who builds with AI: generative-design hardware, ESP32 devices, and AI-agent-built software held to automated quality gates. Open to engineering roles and an M.Sc. in Artificial Intelligence.",
+    "location": {
+      "city": "İzmir",
+      "countryCode": "TR"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "alpserkanmerkit",
+        "url": "https://github.com/alpserkanmerkit"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "alp-serkan-merkit-b8990a202",
+        "url": "https://www.linkedin.com/in/alp-serkan-merkit-b8990a202"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Katmerciler Araç Üstü Ekipman A.Ş.",
+      "position": "R&D and Manufacturing Engineering Intern",
+      "location": "İzmir, Türkiye",
+      "startDate": "2025-08",
+      "endDate": "2025-09",
+      "summary": "Design and manufacturing engineering internship.",
+      "highlights": [
+        "Built production-ready SolidWorks 3D models and technical drawings from field measurements.",
+        "Proposed material optimizations from cost-performance analysis.",
+        "Took part in infrared measurement and root-cause analysis of motor overheating."
+      ]
+    },
+    {
+      "name": "Katmerciler Araç Üstü Ekipman A.Ş.",
+      "position": "Manufacturing Engineering Intern",
+      "location": "İzmir, Türkiye",
+      "startDate": "2024-09",
+      "endDate": "2024-10",
+      "summary": "Manufacturing engineering internship.",
+      "highlights": [
+        "Analyzed end-to-end production across fabrication, assembly and quality control.",
+        "Design-for-manufacturing work on custom vehicle components in AutoCAD."
+      ]
+    },
+    {
+      "name": "Elektral Elektromekanik A.Ş.",
+      "position": "Quality Control and Process Engineering Intern",
+      "location": "İzmir, Türkiye",
+      "startDate": "2023-09",
+      "endDate": "2023-10",
+      "summary": "Quality control and process engineering internship.",
+      "highlights": [
+        "Quality-control analysis on automated production lines.",
+        "Evaluated the effect of heat treatment and surface coating on component quality."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Yaşar University",
+      "url": "https://www.yasar.edu.tr/",
+      "area": "Mechanical Engineering",
+      "studyType": "B.Sc.",
+      "startDate": "2021",
+      "endDate": "2026",
+      "courses": [
+        "Generative AI for Engineering Applications",
+        "Advanced Mechatronics",
+        "Fintech"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "16-wheel rover (senior design project)",
+      "description": "Rover with a two-stage passive bogie suspension; a single central motor drives all 16 wheels through 36-tooth pulleys (nominal 1:1) and a multi-stage TPU belt network.",
+      "highlights": [
+        "Lead CAD designer: built and owned the 115-occurrence Fusion 360 assembly (14 unique parts).",
+        "Generative-design bogie arm: 0.086 kg, minimum safety factor 2.3 (Fusion PLA material), maximum displacement 2.6 mm.",
+        "Printed and assembled prototype; ~4.6 kg PLA rover (estimated from CAD volumes) built for rough ground up a ~32° benchmark slope (50 mm rise over 80 mm)."
+      ],
+      "keywords": ["Fusion 360", "Generative design", "Topology optimization", "3D printing"],
+      "roles": ["Lead CAD designer"],
+      "entity": "Yaşar University",
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/mechanical/#rover"
+    },
+    {
+      "name": "Ortam Aurora",
+      "description": "ESP32-S3 smart room monitor and sunrise alarm. v2 firmware is hardened (per-device setup password, API token, BLE passkey pairing; known limits in SECURITY.md) and flashed on hardware; the companion Flutter phone app is a separate project whose v2 token/PIN update is pending.",
+      "highlights": [
+        "Four sensor modules (DHT22, BH1750, SGP30, MAX4466) and an OLED measure temperature, humidity, light, air quality and sound; live data over a built-in web dashboard, WebSocket, REST and BLE (4-characteristic GATT).",
+        "60-LED WS2812B strip runs a 30-minute fade that begins 30 minutes before local sunrise.",
+        "Breadboard wiring documented in 33 numbered steps."
+      ],
+      "keywords": ["ESP32-S3", "BLE", "WebSocket", "REST", "IoT security", "WS2812B"],
+      "type": "application"
+    },
+    {
+      "name": "Arduino bench prototypes",
+      "description": "Ultrasonic proximity alert planned in Tinkercad and built on the bench in stages (sensor, LED zone code, small propeller fan), plus a servo-follow sketch rewritten in 2026 (not yet tested with a servo).",
+      "highlights": [
+        "Super Fulffy: a soil-moisture plant-watering design in Tinkercad (Arduino Uno, soil sensor, micro servo); simulation only, no physical build.",
+        "Wiring for each build drawn as numbered breadboard guides."
+      ],
+      "keywords": ["Arduino Uno", "HC-SR04", "Tinkercad", "DC motor", "Servo", "Soil-moisture sensor"],
+      "type": "application"
+    },
+    {
+      "name": "AI coding agent quality gate",
+      "description": "Development workflow where planner and implementer AI agents work behind an automated gate: lint, types, tests, coverage and mutation testing where a tool exists; merge only on green.",
+      "highlights": [
+        "Same automated gate rolled out across 7 project repositories (6 distinct codebases).",
+        "Agents built a detector for tests unable to fail; flagged tests in one repository went from 45 to 14."
+      ],
+      "keywords": ["Claude Code", "Codex", "pytest", "Mutation testing", "GitHub Actions"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#method"
+    },
+    {
+      "name": "Sesli Kitap",
+      "description": "Android app that turns PDF books into narrated Turkish audio: OCR fallback, LLM cleanup, text-to-speech with sentence highlight, quizzes, a voice discussion mode and a private-lesson mode that explains a chapter part by part, asks questions and grades the answers. Built by directing AI agents.",
+      "highlights": [
+        "100% line-coverage gate on business logic, enforced by CI.",
+        "1,500+ tests."
+      ],
+      "keywords": ["Flutter", "Dart", "OCR", "Text-to-speech", "LLM"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#sesli-kitap"
+    },
+    {
+      "name": "Quant Engine",
+      "description": "Local research and paper-trading platform on real Binance and Yahoo Finance data, with no path to a real exchange: VWAP fills, drawdown kill switch, GARCH, VaR/ES, Markowitz and DCF models.",
+      "keywords": ["Python", "NumPy", "pandas", "pytest"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#quant"
+    },
+    {
+      "name": "AlphaPulse",
+      "description": "Local financial-intelligence terminal: news feed with AI analysis, portfolio with risk measures, a four-agent strategy debate and a compliance centre. Demo build runs on mock data with one command; no API key needed.",
+      "highlights": [
+        "Nine CI jobs: lint, type-check and build, unit tests, Playwright and demo smoke tests, Python tests, Python lint and security scan, dependency scan, secret scan."
+      ],
+      "keywords": ["React", "Vite", "Express", "TypeScript", "Prisma", "Playwright"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#alphapulse"
+    },
+    {
+      "name": "Live voice translation",
+      "description": "Web app: speak Turkish, read English moments later; speech recognition, Gemini translation, auto-loop mode and conversation history.",
+      "keywords": ["Gemini", "Speech recognition", "Web"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#translate"
+    },
+    {
+      "name": "Habit coach",
+      "description": "Flutter app that helps people break a habit: daily tasks with points and a streak, and an AI coach that answers in chat.",
+      "keywords": ["Flutter", "AI coach"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#habit"
+    }
+  ],
+  "skills": [
+    {
+      "name": "CAD & manufacturing",
+      "keywords": ["Fusion 360", "Generative design", "Topology optimization", "SolidWorks", "AutoCAD", "Technical drawing", "3D printing", "Design for manufacturing", "Quality control", "Root-cause analysis"]
+    },
+    {
+      "name": "Embedded & IoT",
+      "keywords": ["ESP32-S3", "Arduino", "BLE GATT", "WebSocket", "REST", "Firebase Firestore", "Sensor and motor control"]
+    },
+    {
+      "name": "Software & AI",
+      "keywords": ["Claude Code", "Codex", "Gemini API", "Python", "Flutter", "Dart", "pytest", "Mutation testing", "GitHub Actions CI/CD"]
+    }
+  ],
+  "languages": [
+    { "language": "Turkish", "fluency": "Native speaker" },
+    { "language": "English", "fluency": "B2; English-medium B.Sc." }
+  ],
+  "meta": {
+    "canonical": "https://alpserkanmerkit.github.io/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2026-10-06T00:00:00"
+  }
+}

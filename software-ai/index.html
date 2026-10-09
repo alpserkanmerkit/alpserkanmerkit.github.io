@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- shell:head (byte-identical on every page; page-specific title, meta, JSON-LD and page CSS follow it) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080b'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='15' fill='%23ffb547'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script>/* before first paint: hide the Home loader on repeat visits; record the incoming View Transition (window.__vtP, html[data-vt]) */
+(function(d){var h=d.documentElement;try{if(sessionStorage.getItem('asm-seen')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)h.classList.add('seen')}catch(e){}
+window.__vtP='onpagereveal' in window?new Promise(function(r){addEventListener('pagereveal',function(e){h.dataset.vt=e.viewTransition?'yes':'no';r(e.viewTransition||null)},{once:true})}):Promise.resolve(null)})(document);</script>
+<!-- /shell:head -->
+<title>Software &amp; AI — I orchestrate AI agents that build software · Alp Serkan Merkit</title>
+<meta name="description" content="AI-agent-built software held to automated quality gates: spec and failing test first, role-separated agents, merge only on green. 45→14 toothless tests, the same gate in 7 repositories, a 100% line-coverage gate.">
+<link rel="canonical" href="https://alpserkanmerkit.github.io/software-ai/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Software &amp; AI — code I didn't type, verified by the gate · Alp Serkan Merkit">
+<meta property="og:description" content="AI-agent-built software held to automated quality gates: spec and failing test first, role-separated agents, merge only on green.">
+<meta property="og:url" content="https://alpserkanmerkit.github.io/software-ai/">
+<meta property="og:image" content="https://alpserkanmerkit.github.io/assets/media/app_translate_poster.jpg">
+<meta property="og:image:width" content="560">
+<meta property="og:image:height" content="1312">
+<meta property="og:image:alt" content="Live Turkish-to-English voice translation web app on a monitor: spoken Turkish above, the English translation below">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="expect" href="#track-hero" blocking="render">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebPage", "@id": "https://alpserkanmerkit.github.io/software-ai/#webpage",
+ "url": "https://alpserkanmerkit.github.io/software-ai/", "inLanguage": "en",
+ "name": "Software & AI — code I didn't type, verified by the gate · Alp Serkan Merkit",
+ "description": "AI-agent-built software held to automated quality gates: spec and failing test first, role-separated agents, merge only on green.",
+ "author": {"@id": "https://alpserkanmerkit.github.io/#person"},
+ "mainEntity": {"@type": "CreativeWork", "name": "Code I didn't type, verified by the gate.",
+  "about": "A quality-gate method for software built by AI coding agents: spec, failing test, agent implementation, automated gate (lint, types, tests, coverage, mutation), merge only on green.",
+  "keywords": ["AI coding agents", "test-driven development", "mutation testing", "CI", "Python", "Flutter"],
+  "author": {"@id": "https://alpserkanmerkit.github.io/#person"}}}
+</script>
+<script>document.documentElement.classList.add('sw-js')</script>
+<style>
+/* ---------- hero: a full-bleed gate run types itself behind the title (decorative, illustrative) ---------- */
+.ht{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ht-glow{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+.g-amb{opacity:1;background:radial-gradient(900px 520px at 78% 26%,#ffb5471a,transparent 70%)}
+.g-red{background:radial-gradient(900px 560px at 78% 26%,#ff5d5d26,transparent 70%)}
+.g-grn{background:radial-gradient(1000px 600px at 78% 26%,#57e08a26,transparent 70%)}
+.ht[data-state="fail"] .g-red,.ht[data-state="pass"] .g-grn{opacity:1}
+.ht[data-state="fail"] .g-amb,.ht[data-state="pass"] .g-amb{opacity:0}
+.ht-win{position:absolute;left:0;right:0;top:clamp(70px,11vh,104px);padding-inline:max(24px,calc((100% - 1240px) / 2))}
+.ht-bar{display:flex;align-items:center;gap:14px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid #ffffff12}
+.ht-dots{display:flex;gap:7px}.ht-dots i{width:10px;height:10px;border-radius:50%;background:#262b36}
+.ht-label{font-size:11.5px}
+.ht-pill{margin-left:auto;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1px solid #ffb54766;color:var(--amber);transition:color .4s,border-color .4s,background .4s}
+.ht[data-state="fail"] .ht-pill{color:var(--red);border-color:#ff5d5d88;background:#ff5d5d12}
+.ht[data-state="pass"] .ht-pill{color:var(--green);border-color:#57e08a88;background:#57e08a14}
+.ht-body{margin:0;font-family:var(--f-mono);font-size:clamp(11px,1.22vw,18px);line-height:1.85;color:#aab0bc;white-space:pre;counter-reset:ln}
+.ht-body>span::before{counter-increment:ln;content:counter(ln,decimal-leading-zero);display:inline-block;width:3.2em;color:#3a404c}
+.ht-body .tk{transition:opacity .25s}
+.sw-js .ht-body>span:not(.shown),.sw-js .ht-body .tk:not(.shown){visibility:hidden}
+.ht-body .caret{display:inline-block;width:.6em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--amber);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ht-body .l-merge{color:var(--green);font-weight:600}
+.ht-body .l-fail{color:var(--red)}
+.ht-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
+.ht::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,#07080bf2 30%,#07080b99 50%,#07080b00 70%)}
+#track-hero .track-copy h1{text-shadow:0 2px 40px #07080b}
+.hero-scroll{position:absolute;right:max(24px,calc((100% - 1240px) / 2));bottom:10vh;z-index:2}
+@media (max-width:720px){.ht-dots{display:none}.ht-label{font-size:10.5px}.hero-scroll{display:none}.ht-body>span::before{width:2.6em}}
+
+/* ---------- shared page rhythm (EXP-S: long, airy page; every project in its own section) ---------- */
+:root{--blk:clamp(88px,12vh,150px)}
+@media (max-width:720px){:root{--blk:72px}}
+.lead{font-family:var(--f-display);font-size:clamp(19px,1.75vw,25px);line-height:1.45;letter-spacing:-.01em;color:var(--soft);max-width:860px}
+.blk{margin-top:var(--blk)}
+.blk-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px 24px;flex-wrap:wrap;margin-bottom:36px}
+.blk-head h3{font-family:var(--f-display);font-size:clamp(26px,2.6vw,38px);letter-spacing:-.025em;line-height:1.1;font-weight:700}
+.dtag{display:inline-block;max-width:100%;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px dashed #ffffff33;color:var(--mute)}
+.dtag.real{border-style:solid;border-color:#57e08a66;color:var(--green)}
+
+/* ---------- method: pipeline (from v4) + notes ---------- */
+#method{padding:var(--sec-y-lg) 0;background:radial-gradient(1200px 600px at 50% 0%,#14181f,transparent),var(--bg)}
+#method .sec-head{margin-bottom:var(--head-gap-s)}
+#method .bridge{margin:0 0 6px}
+.pipe{position:relative;margin-top:56px}
+.pipe svg{width:100%;height:auto;overflow:visible}
+.pipe .node rect{fill:#0d1016;stroke:#2a303c;stroke-width:1.5;transition:stroke .4s,fill .4s}
+.pipe .node text{font-family:var(--f-display);fill:#e9e7e1;font-size:19px}
+.pipe .node .sub{font-family:var(--f-mono);fill:#8b91a0;font-size:11px;letter-spacing:.06em}
+.pipe .node.on rect{stroke:var(--amber)}
+.pipe .node.pass rect{stroke:var(--green);stroke-width:2;fill:#0d1a13}
+.pipe .flow{fill:none;stroke:url(#flowGrad);stroke-width:3;stroke-linecap:round}
+.pipe .flow-v{stroke:url(#flowGradV)}
+.pipe .base{fill:none;stroke:#1f2430;stroke-width:3}
+.pipe-v{display:none;max-width:420px;margin-inline:auto}
+.verdict{display:flex;align-items:center;gap:10px;margin-top:14px;justify-content:flex-end}
+.verdict b{font-weight:600;color:var(--amber);transition:color .3s}
+.verdict.pass b{color:var(--green)}
+.method-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap);margin-top:var(--blk)}
+.note{border-top:1px solid var(--line);padding-top:32px}
+.note .big{font-family:var(--f-display);font-size:clamp(40px,4.4vw,68px);letter-spacing:-.03em;line-height:1;font-weight:700}
+.note .big .arrow{color:var(--amber);font-weight:400}
+.note .big .to{color:var(--green)}
+.note p{color:var(--mute);margin-top:14px;font-size:16px}
+.note a{display:inline-block;margin-top:14px;color:var(--txt)}
+.note a:hover{color:var(--amber)}
+@media (max-width:720px){.pipe-h{display:none}.pipe-v{display:block}.verdict{justify-content:center}}
+@media (max-width:900px){.method-notes{grid-template-columns:1fr;gap:8px}.note{padding:22px 0 18px}}
+
+/* ---------- code excerpts (real code from the private repos; secrets-free, comments trimmed) ---------- */
+.code{margin:0;border:1px solid var(--line);border-radius:18px;background:#050608;overflow:hidden;min-width:0}
+.code-bar{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;padding:13px 20px;border-bottom:1px solid var(--line);background:#0a0c10}
+.code-bar .path{font-family:var(--f-mono);font-size:12px;color:#c9ccd4;letter-spacing:.02em;overflow-wrap:anywhere}
+.code pre{margin:0;padding:22px 24px;overflow-x:auto;font-family:var(--f-mono);font-size:13.5px;line-height:1.8;color:#b9bdc8;tab-size:4;white-space:pre}
+.code .k{color:var(--amber)}.code .s{color:#8fe3ad}.code .c{color:#5d6472}.code .f{color:#fff}.code .n{color:#ffcf8a}
+.code figcaption{padding:14px 20px 16px;border-top:1px solid var(--line);color:var(--mute);font-size:14.5px;line-height:1.6}
+.code figcaption b{color:var(--txt);font-weight:500}
+.codes{display:grid;grid-template-columns:1fr 1fr;gap:var(--card-gap);align-items:start}
+.codes.one{grid-template-columns:1fr;max-width:1000px}
+.code.blk{margin-top:var(--blk)}
+@media (max-width:1000px){.codes{grid-template-columns:1fr}}
+@media (max-width:720px){.code pre{font-size:11.5px;padding:16px}.code-bar{padding:11px 14px}.code figcaption{padding:12px 14px 14px;font-size:14px}}
+
+/* ---------- flow diagram (HTML, responsive): nodes light amber → green on scroll ---------- */
+.flowd{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:22px;counter-reset:fd}
+.flowd li{position:relative;padding:20px 18px 18px;border:1px solid #2a303c;border-radius:16px;background:#0b0d12;counter-increment:fd;transition:border-color .5s,background .5s}
+.flowd li::before{content:counter(fd,decimal-leading-zero);display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--mute);margin-bottom:10px}
+.flowd li:not(:last-child)::after{content:"→";position:absolute;right:-17px;top:50%;transform:translateY(-50%);width:12px;text-align:center;color:#4a5160;font-family:var(--f-mono)}
+.flowd b{display:block;font-family:var(--f-display);font-weight:500;font-size:17px;line-height:1.2;letter-spacing:-.01em}
+.flowd span{display:block;margin-top:8px;color:var(--mute);font-size:13.5px;line-height:1.45}
+.flowd li.lit{border-color:#ffb54788}
+.flowd li.lit::before{color:var(--amber)}
+.flowd li.end.lit{border-color:#57e08a99;background:#0d1a13}
+.flowd li.end.lit::before{color:var(--green)}
+.flowd.wide{grid-auto-flow:row;grid-template-columns:repeat(5,minmax(0,1fr));row-gap:28px}
+.flowd.wide li:nth-child(5n)::after{content:none}
+.side{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:22px}
+.side .mono{margin-right:6px}
+.side i{font-style:normal;font-family:var(--f-mono);font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid #ffb54755;color:#ffd79a}
+.flow-note{margin-top:18px;color:var(--mute);font-size:14.5px}
+@media (max-width:1100px){.flowd.wide{grid-template-columns:repeat(3,minmax(0,1fr))}.flowd.wide li:nth-child(5n)::after{content:"→"}.flowd.wide li:nth-child(3n)::after{content:none}}
+@media (max-width:900px){.flowd,.flowd.wide{grid-auto-flow:row;grid-template-columns:1fr;gap:18px}
+  .flowd li:not(:last-child)::after,.flowd.wide li:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-17px;transform:translateX(-50%)}
+  .flowd li{padding:16px 18px}}
+
+/* ---------- gate: roles + stages + self-tests ---------- */
+#gate,#toothless,#apps,.proj{padding:var(--sec-y-lg) 0}
+#gate{background:radial-gradient(1000px 520px at 85% 0%,#ffb5470d,transparent),var(--bg)}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap);margin-top:72px}
+.role{position:relative;padding:38px 34px 34px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(170deg,#11141b,#090a0e)}
+.role .mono{color:var(--amber)}
+.role:nth-child(3) .mono{color:var(--green)}
+.role h3{font-family:var(--f-display);font-size:clamp(24px,2.2vw,31px);letter-spacing:-.02em;line-height:1.1;margin:12px 0 22px}
+.role dl{display:grid;gap:16px}
+.role dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.role dd{color:var(--soft);font-size:15.5px;line-height:1.55;margin-top:2px}
+.role dd.no{color:#ff9d9d}
+.role:not(:last-child)::after{content:"→";position:absolute;right:-27px;top:50%;transform:translateY(-50%);width:14px;text-align:center;color:#4a5160;font-family:var(--f-mono)}
+.green-means{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,6vw,96px);align-items:start}
+.stages{list-style:none;counter-reset:sg;border-top:1px solid var(--line)}
+.stages li{display:grid;grid-template-columns:44px 132px minmax(0,1fr);gap:14px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line);counter-increment:sg}
+.stages li::before{content:counter(sg,decimal-leading-zero);font-family:var(--f-mono);font-size:12px;color:var(--green)}
+.stages code{font-family:var(--f-mono);font-size:14px;color:var(--txt)}
+.stages span{color:var(--mute);font-size:15px}
+.stages li.ci::before{content:"CI";color:var(--amber)}
+.stacks{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;list-style:none}
+.stacks li{font-family:var(--f-mono);font-size:12px;padding:7px 13px;border-radius:999px;border:1px solid #ffffff1c;color:#c9ccd4;background:#ffffff06}
+.selftests{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap)}
+.st{border-top:2px solid var(--red);padding-top:24px}
+.st:nth-child(2){border-top-color:var(--amber)}
+.st:nth-child(3){border-top-color:var(--green)}
+.st h4{font-family:var(--f-display);font-size:21px;letter-spacing:-.015em;line-height:1.2;font-weight:500}
+.st p{color:var(--mute);font-size:15px;margin-top:10px}
+@media (max-width:1000px){.green-means{grid-template-columns:1fr}}
+@media (max-width:900px){.roles,.selftests{grid-template-columns:1fr;gap:20px}.role:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-22px;transform:translateX(-50%)}.role{padding:28px 24px}}
+@media (max-width:560px){.stages li{grid-template-columns:34px minmax(0,1fr);gap:4px 10px}.stages li span{grid-column:2}}
+
+/* ---------- toothless tests ---------- */
+#toothless{background:radial-gradient(900px 520px at 10% 10%,#ff5d5d0d,transparent),var(--bg)}
+.tooth-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,100px);align-items:end}
+.tooth-num{font-family:var(--f-display);font-weight:700;font-size:clamp(96px,15vw,230px);line-height:.85;letter-spacing:-.05em;white-space:nowrap}
+.tooth-num .arrow{color:var(--amber);font-weight:400}
+.tooth-num .to{color:var(--green)}
+.tooth-top p{color:var(--soft);font-size:17px}
+.tooth-top p+p{margin-top:16px}
+.classes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--card-gap)}
+.cls{border:1px solid var(--line);border-radius:20px;background:#0b0d12;overflow:hidden;min-width:0}
+.cls-h{display:flex;align-items:baseline;gap:14px;padding:22px 24px 6px}
+.cls-h .mono{color:var(--red);font-size:12px}
+.cls-h h4{font-family:var(--f-display);font-size:20px;font-weight:500;letter-spacing:-.01em}
+.cls pre{margin:12px 24px 0;padding:16px 18px;border-radius:12px;background:#050608;border:1px solid #ffffff0d;font-family:var(--f-mono);font-size:13px;line-height:1.7;color:#b9bdc8;overflow-x:auto}
+.cls pre .k{color:var(--amber)}
+.cls .why{padding:16px 24px 22px;color:var(--mute);font-size:14.5px}
+.cls .msg{display:block;margin-top:8px;font-family:var(--f-mono);font-size:12px;color:#ff9d9d}
+@media (max-width:900px){.tooth-top,.classes{grid-template-columns:1fr}}
+@media (max-width:720px){.cls pre{margin:10px 16px 0;font-size:12px}.cls-h{padding:18px 16px 4px}.cls .why{padding:14px 16px 18px}}
+
+/* ---------- apps index ---------- */
+#apps .sec-head{margin-bottom:var(--head-gap-s)}
+.idx{list-style:none;border-top:1px solid var(--line);margin-top:64px}
+.idx a{display:grid;grid-template-columns:70px minmax(0,1.1fr) minmax(0,1.5fr) auto;gap:20px;align-items:baseline;padding:30px 4px;border-bottom:1px solid var(--line);transition:background .3s,padding .4s var(--ease-door)}
+.idx a:hover{background:#ffffff05;padding-left:14px}
+.idx .n{font-family:var(--f-mono);font-size:12px;color:var(--amber)}
+.idx b{font-family:var(--f-display);font-size:clamp(24px,2.4vw,34px);font-weight:700;letter-spacing:-.025em;line-height:1.1}
+.idx em{display:block;font-style:normal;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-top:6px}
+.idx .d{color:var(--soft);font-size:15.5px}
+.idx .go{font-family:var(--f-mono);font-size:13px;color:var(--txt)}
+@media (max-width:900px){.idx a{grid-template-columns:44px minmax(0,1fr);gap:6px 12px;padding:24px 0}.idx .d{grid-column:2}.idx .go{display:none}}
+
+/* ---------- project sections ---------- */
+.proj-head{max-width:980px}
+.proj-n{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.proj-n b{color:var(--amber);font-weight:400}
+.sw-tag{white-space:nowrap;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid #ffffff24;color:var(--mute)}
+.proj-title{font-family:var(--f-display);font-weight:700;font-size:clamp(56px,8.4vw,132px);line-height:.92;letter-spacing:-.045em;margin:26px 0 30px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none}
+.chips li{font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;padding:6px 11px;border-radius:8px;background:#ffffff08;border:1px solid #ffffff12;color:#c9ccd4}
+.sw-stats{display:flex;flex-wrap:wrap;gap:22px 56px}
+.sw-stats div{display:flex;flex-direction:column;gap:4px}
+.sw-stats b{font-family:var(--f-display);font-size:clamp(46px,5vw,76px);letter-spacing:-.035em;line-height:1}
+.sw-stats b.ok{color:var(--green)}
+.sw-stats span{font-size:14.5px;color:var(--mute);max-width:260px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,100px);align-items:center}
+@media (max-width:900px){.split{grid-template-columns:1fr}}
+/* Sesli Kitap illustration: page → cleaned sentences → narrated, current sentence highlighted */
+.reader{border:1px solid var(--line);border-radius:22px;background:#07090d;padding:26px 28px 24px}
+.reader .mono{font-size:11px;display:flex;justify-content:space-between;gap:10px}
+.reader-text{margin:20px 0 22px;font-family:var(--f-display);font-size:clamp(20px,1.9vw,27px);line-height:1.5;color:#7d8391}
+.reader-text .s{-webkit-box-decoration-break:clone;box-decoration-break:clone;border-radius:4px;padding:1px 2px;transition:color .5s,background .5s}
+.reader-text .s.on{color:#0b0c0f;background:var(--amber)}
+.wave{display:flex;align-items:center;gap:3px;height:46px}
+.wave i{flex:1;max-width:6px;border-radius:3px;background:#2c3240;height:calc(var(--h) * 1%);transform-origin:50% 50%;animation:wv 1.1s ease-in-out infinite alternate;animation-delay:calc(var(--d) * -1s)}
+.wave i.p{background:var(--amber)}
+@keyframes wv{to{transform:scaleY(.35)}}
+.screens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:56px 36px}
+.scr{margin:0}
+.scr-frame{border-radius:28px;overflow:hidden;border:7px solid #1c2029;background:#12100d;box-shadow:0 40px 100px -30px #000,0 0 0 1px #ffffff10}
+.scr-frame img{width:100%;height:auto}
+.scr figcaption{margin-top:16px;color:var(--mute);font-size:14.5px;line-height:1.5}
+.scr figcaption b{display:block;color:var(--txt);font-family:var(--f-display);font-weight:500;font-size:18px;letter-spacing:-.01em;margin-bottom:2px}
+.tutor{align-items:start}
+.tutor .src-line{display:block;margin-top:22px;font-size:11px;text-transform:none;letter-spacing:.03em}
+.flowd.col{grid-auto-flow:row;grid-template-columns:1fr;gap:20px}
+.flowd.col li:not(:last-child)::after{content:"↓";right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%)}
+@media (max-width:900px){.screens{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 16px}.scr-frame{border-width:5px;border-radius:20px}.scr figcaption{font-size:13.5px}.scr figcaption b{font-size:16px}}
+.screens.web{grid-template-columns:repeat(2,minmax(0,1fr));gap:56px 40px;align-items:start}
+.scr-frame.browser{border-radius:12px;border:1px solid #2a2f3a;background:#0b0d12}
+.scr-frame.browser::before{content:"";display:block;height:26px;border-bottom:1px solid #222733;background:radial-gradient(circle at 16px 50%,#3a404d 0 4px,transparent 4.5px),radial-gradient(circle at 30px 50%,#3a404d 0 4px,transparent 4.5px),radial-gradient(circle at 44px 50%,#3a404d 0 4px,transparent 4.5px),#141821}
+@media (max-width:900px){.screens.web{grid-template-columns:1fr;gap:36px}.scr-frame.browser{border-width:1px;border-radius:10px}.scr-frame.browser::before{height:20px}}
+.honest{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap)}
+.honest div{border-top:1px solid var(--line);padding-top:24px}
+.honest h4{font-family:var(--f-display);font-size:21px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
+.honest p{color:var(--mute);font-size:15px;margin-top:10px}
+@media (max-width:900px){.honest{grid-template-columns:1fr;gap:12px}}
+
+/* video projects: big phone frame next to the story */
+.vid-row{display:grid;grid-template-columns:minmax(260px,400px) minmax(0,1fr);gap:clamp(48px,8vw,140px);align-items:center}
+.vid-row.flip{grid-template-columns:minmax(0,1fr) minmax(260px,400px)}
+.vid-row.flip .phone-fig{order:2}
+.phone-fig{margin:0}
+.phone{position:relative;border-radius:36px;overflow:hidden;border:9px solid #1c2029;background:#000;box-shadow:0 50px 140px -30px #000,0 0 0 1px #ffffff10}
+.phone video{width:100%;height:100%;object-fit:cover}
+.phone-fig figcaption{margin-top:16px;font-size:11px;line-height:1.6}
+.vid-row .proj-title{margin-top:20px}
+.seen-list{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
+.blk-title{font-family:var(--f-display);font-weight:700;font-size:clamp(40px,5vw,76px);line-height:.95;letter-spacing:-.04em;margin:18px 0 8px}
+.seen-list li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding:15px 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:15.5px}
+.seen-list li::before{content:"▸";color:var(--amber);font-size:12px;padding-top:4px}
+@media (max-width:900px){.vid-row,.vid-row.flip{grid-template-columns:1fr}.vid-row.flip .phone-fig{order:0}.phone-fig{width:min(76vw,330px);margin-inline:auto}}
+
+/* quant facts */
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--card-gap)}
+.fact{padding:34px 34px 30px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(170deg,#11141b,#090a0e)}
+.fact h4{font-family:var(--f-display);font-size:clamp(22px,2vw,28px);letter-spacing:-.02em;line-height:1.15;font-weight:700}
+.fact p{color:var(--soft);font-size:15.5px;margin-top:12px}
+.fact .src{display:block;margin-top:18px;font-size:11px;letter-spacing:.04em;text-transform:none;overflow-wrap:anywhere}
+.fact.kill{border-color:#ff5d5d44;background:radial-gradient(500px 220px at 0% 0%,#ff5d5d12,transparent),linear-gradient(170deg,#11141b,#090a0e)}
+.disclaimer{margin-top:40px;font-size:12px}
+@media (max-width:900px){.facts{grid-template-columns:1fr;gap:20px}.fact{padding:26px 22px}}
+
+/* ---------- how I work: 3 steps ---------- */
+#how{padding:var(--sec-y-lg) 0 calc(var(--sec-y) * .5)}
+#how .sec-head h2{font-size:clamp(34px,4.4vw,64px)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--card-gap);list-style:none;counter-reset:st}
+.step{position:relative;padding:44px 38px 40px;border:1px solid var(--line);border-radius:20px;background:#0b0d12}
+.step .n{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;color:var(--amber)}
+.step:nth-child(1) .n{color:var(--red)}
+.step:nth-child(3) .n{color:var(--green)}
+.step h3{font-family:var(--f-display);font-size:24px;letter-spacing:-.02em;line-height:1.15;margin:12px 0 10px}
+.step p{color:var(--mute);font-size:15.5px}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-27px;top:50%;transform:translateY(-50%);z-index:1;width:14px;text-align:center;color:#4a5160;font-family:var(--f-mono)}
+@media (max-width:900px){.steps{grid-template-columns:1fr;gap:16px}.step:not(:last-child)::after{content:none}}
+
+/* ---------- guardrails: visual first (before → after, flow, real demo run); story & install in a closed <details> ---------- */
+#guardrails{padding:calc(var(--sec-y) * .6) 0}
+#guardrails .sec-head{margin-bottom:36px}
+#guardrails .sec-head h2{font-size:clamp(30px,4.4vw,64px);overflow-wrap:anywhere}
+#guardrails svg{display:block;width:100%;height:auto;overflow:visible}
+#guardrails .gr-ba{max-width:900px;margin-inline:auto}
+#guardrails .gr-ba .lbl{font-family:var(--f-display);font-weight:700;font-size:38px;letter-spacing:-.02em;fill:var(--txt)}
+#guardrails .gr-ba .tag{font-family:var(--f-mono);font-size:15px;letter-spacing:.14em;fill:var(--mute)}
+#guardrails .gr-ba .f{fill:#ffb54738;stroke:#ffb547bb;stroke-width:1.2}
+#guardrails .gr-ba .ghost{fill:none;stroke:#2a303c;stroke-width:1.2;stroke-dasharray:3 3}
+#guardrails .gr-ba .arrow{fill:none;stroke:url(#grGrad);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+#guardrails .gr-ba .box rect{fill:#0d1016;stroke:#2a303c;stroke-width:2;transition:stroke .5s,fill .5s}
+#guardrails .gr-ba .box .ic{fill:none;stroke:#4a5160;stroke-width:3;stroke-linejoin:round;transition:stroke .5s}
+#guardrails .gr-ba .box .name{font-family:var(--f-mono);font-size:16px;letter-spacing:.06em;fill:var(--mute);transition:fill .5s}
+#guardrails .gr-ba .box.on rect{stroke:var(--green);fill:#0d1a13}
+#guardrails .gr-ba .box.on .ic{stroke:var(--green)}
+#guardrails .gr-ba .box.on .name{fill:var(--green)}
+#guardrails .gr-row{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:var(--card-gap);margin-top:44px;align-items:start}
+#guardrails .gr-card{padding:26px;border:1px solid var(--line);border-radius:20px;background:#0b0d12;min-width:0}
+#guardrails .gr-flow .nd rect{fill:#0d1016;stroke:#2a303c;stroke-width:1.5;transition:stroke .4s,fill .4s}
+#guardrails .gr-flow text{font-family:var(--f-display);font-size:21px;fill:var(--txt)}
+#guardrails .gr-flow .sub{font-family:var(--f-mono);font-size:15px;fill:var(--mute)}
+#guardrails .gr-flow .ic{fill:none;stroke:#6a7180;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .4s}
+#guardrails .gr-flow .ln{fill:none;stroke:#3a404c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#guardrails .gr-flow .mk circle{fill:#2a303c;transition:fill .4s}
+#guardrails .gr-flow .mk path{fill:none;stroke:#07080b;stroke-width:3;stroke-linecap:round}
+#guardrails .gr-flow .nd.lit rect,#guardrails .gr-flow .nd.lit .ic{stroke:var(--amber)}
+#guardrails .gr-flow .nd.no.lit rect{stroke:var(--red);fill:#1a0d0e}
+#guardrails .gr-flow .nd.no.lit .mk circle{fill:var(--red)}
+#guardrails .gr-flow .nd.ok.lit rect{stroke:var(--green);fill:#0d1a13}
+#guardrails .gr-flow .nd.ok.lit .mk circle{fill:var(--green)}
+#guardrails .gr-term{font-size:12px;line-height:1.75;padding:18px 20px}
+#guardrails .gr-term .ok{color:var(--green);font-weight:600}
+.sw-js #guardrails .gr-term>span:not(.shown){visibility:hidden}
+#guardrails .gr-more{margin-top:32px;border-top:1px solid var(--line);padding-top:18px}
+#guardrails .gr-more summary{display:inline-flex;align-items:center;gap:10px;cursor:pointer;list-style:none;color:var(--soft)}
+#guardrails .gr-more summary::-webkit-details-marker{display:none}
+#guardrails .gr-more summary::before{content:"+";display:inline-grid;place-items:center;width:24px;height:24px;border:1px solid #ffffff2a;border-radius:50%;color:var(--amber)}
+#guardrails .gr-more[open] summary::before{content:"−"}
+#guardrails .gr-more summary:hover{color:var(--amber)}
+#guardrails .gr-more-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--card-gap);margin-top:24px}
+#guardrails .gr-more h3{font-family:var(--f-display);font-size:20px;letter-spacing:-.02em;line-height:1.2;margin-bottom:10px}
+#guardrails .gr-more p{color:var(--soft);font-size:15px}
+#guardrails .gr-nums{margin-top:14px;font-size:11.5px;line-height:1.9;text-transform:none;letter-spacing:.04em}
+#guardrails .gr-install{position:relative}
+#guardrails .gr-install .term{font-size:13px;line-height:1.8;padding:40px 18px 16px;white-space:pre}
+#guardrails .gr-copy{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid #ffffff2a;background:#0b0d12;color:var(--soft);cursor:pointer}
+#guardrails .gr-copy:hover{border-color:var(--amber);color:var(--amber)}
+#guardrails .gr-hint{margin:10px 0 18px;font-size:11px;line-height:1.7;text-transform:none;letter-spacing:.04em}
+#guardrails .gr-more-body>div{min-width:0}
+@media (max-width:900px){#guardrails .gr-row,#guardrails .gr-more-body{grid-template-columns:minmax(0,1fr);gap:16px}#guardrails .gr-card{padding:18px 16px}}
+@media (max-width:720px){#guardrails .gr-term{font-size:11px;padding:14px}#guardrails .gr-install .term{font-size:11.5px;padding:40px 14px 14px}}
+
+/* ---------- visual-first (09.10): details folded, code shown as live diagrams ---------- */
+.more{margin-top:var(--blk);border-top:1px solid var(--line);padding-top:18px}
+.vid-row .more,.proj-head .more{margin-top:28px}
+.more summary{display:inline-flex;align-items:center;gap:10px;cursor:pointer;list-style:none;color:var(--soft)}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"+";display:inline-grid;place-items:center;width:24px;height:24px;border:1px solid #ffffff2a;border-radius:50%;color:var(--amber)}
+.more[open] summary::before{content:"−"}
+.more summary:hover{color:var(--amber)}
+.more-body{display:grid;gap:14px;margin-top:20px;max-width:920px}
+.more-body p{color:var(--soft);font-size:15.5px;line-height:1.65}
+.more-body .mono{font-size:11px;text-transform:none;letter-spacing:.03em;color:var(--mute)}
+.more-body code{font-family:var(--f-mono);font-size:13px;color:var(--txt)}
+.dg{border:1px solid var(--line);border-radius:22px;background:#0b0d12;padding:clamp(14px,2.4vw,30px);overflow-x:auto;overflow-y:hidden}
+.dg svg{display:block;width:100%;height:auto}
+.dg.tiled{display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(18px,2.4vw,36px);--k:1.55}
+.dg.tiled svg.tile{flex:none;width:calc(var(--w) * var(--k) * 1px);max-width:100%;overflow:hidden}
+.dg svg.dg-src{position:absolute;width:0;height:0;overflow:hidden}
+@media (max-width:720px){.dg:not(.tiled) svg{min-width:740px}.dg:not(.tiled)::after{content:"swipe →";display:block;margin-top:8px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;color:var(--mute);position:sticky;left:0}}
+.dg text{font-family:var(--f-mono)}
+.dg .t{font-family:var(--f-display);font-weight:500}
+.rw{display:flex;flex-wrap:wrap;gap:8px}
+.rw span{font-family:var(--f-mono);font-size:12.5px;padding:6px 12px;border-radius:999px}
+.rw .y{border:1px solid #57e08a55;color:#a6f0c0}
+.rw .x{border:1px solid #ff5d5d55;color:#ff9d9d}
+.chk{list-style:none;display:flex;flex-wrap:wrap;gap:14px 12px;align-items:center}
+.chk li{position:relative;display:flex;align-items:center;gap:10px;padding:14px 18px;border:1px solid #2a303c;border-radius:14px;background:#0b0d12;font-family:var(--f-mono);font-size:14px;color:var(--mute);transition:border-color .35s,background .35s,color .35s}
+.chk li.ci{border-style:dashed}
+.chk li i{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:2px solid #3a404c;font-style:normal;font-size:12px;font-weight:700;color:#07080b;transition:background .35s,border-color .35s}
+.chk li.run{border-color:#ffb54788;color:var(--txt)}
+.chk li.run i{border-color:var(--amber)}
+.chk li.ok{border-color:#57e08a99;background:#0d1a13;color:var(--txt)}
+.chk li.ok i{border-color:var(--green);background:var(--green)}
+.chk li.ok i::after{content:"✓"}
+.chk li.bad{border-color:var(--red);background:#1a0d0e;color:#ffb3b3}
+.chk li.bad i{border-color:var(--red);background:var(--red)}
+.chk li.bad i::after{content:"✗"}
+.chk li.bad[data-note]::after{content:attr(data-note);position:absolute;left:4px;top:calc(100% + 6px);white-space:nowrap;font-size:11.5px;color:var(--red)}
+.chk-v{margin-top:34px}
+.chk-v b{font-weight:600;color:var(--amber);transition:color .3s}
+.chk-v.pass b{color:var(--green)}.chk-v.fail b{color:var(--red)}
+.chk.col{flex-direction:column;align-items:stretch;gap:10px}
+.chk.col li{padding:12px 16px}
+.chk.col em{margin-left:auto;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:999px;opacity:0;transition:opacity .35s}
+.chk.col li.ok em{opacity:1}
+.chk.col em.no{color:var(--red);border:1px solid #ff5d5d77}
+.chk.col em.ok{color:var(--green);border:1px solid #57e08a77}
+.chk.col+.chk-v{margin-top:18px}
+#guardrails .gr-src{margin-top:10px;font-size:10.5px;text-transform:none;letter-spacing:.04em}
+.tooth-top .lead{margin:0}
+@media (max-width:720px){.chk li{font-size:12.5px;padding:11px 13px}.chk.col li{font-size:12px}}
+
+@media (prefers-reduced-motion:reduce){.ht-body .caret,.wave i{animation:none}}
+</style>
+</head>
+<body data-page="software-ai">
+<!-- shell:top (byte-identical on every page; first thing in the body, after the Home-only #loader) -->
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div><div class="cursor-ring" aria-hidden="true"></div>
+<div class="sprog" aria-hidden="true"></div>
+<div class="hud mono" aria-hidden="true"><span class="hud-n">00</span> / <span class="hud-total">00</span> — <span class="hud-t">INTRO</span></div>
+<nav class="site-nav" aria-label="Primary">
+  <a class="logo" href="/" aria-label="Alp Serkan Merkit — home">ASM</a>
+  <ul>
+    <li><a href="/mechanical/">Mechanical</a></li>
+    <li><a href="/mechatronics/">Mechatronics</a></li>
+    <li><a href="/software-ai/">Software &amp; AI</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<!-- /shell:top -->
+
+<main id="main">
+<section id="track-hero" data-hud="INTRO">
+  <div class="ht" data-state="run" aria-hidden="true">
+    <div class="ht-glow g-amb"></div><div class="ht-glow g-red"></div><div class="ht-glow g-grn"></div>
+    <video class="ht-vid" data-src="/assets/media/software/alphapulse_door.mp4" poster="/assets/media/software/alphapulse_door_poster.jpg" muted loop playsinline preload="none"></video>
+  </div>
+  <div class="wrap track-copy">
+    <span class="kicker mono">Mechanical Engineer · B.Sc. 2026 · İzmir, Türkiye</span>
+    <h1 class="track-title">I orchestrate AI agents that build software.</h1>
+    <p class="identity">I build with AI — <a href="/mechanical/">generative-design hardware</a>, <a href="/mechatronics/">ESP32 devices</a>, and <a href="/software-ai/">AI-agent-built software</a> held to automated quality gates.</p>
+  </div>
+  <a class="mono hero-scroll" href="#apps">The apps ↓</a>
+</section>
+
+<section id="apps" data-hud="APPS" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Software I direct</h2><span class="mono reveal">Built with AI agents · held to the gate</span></div>
+  <p class="lead reveal">Five apps, built by AI coding agents and held to one automated gate.</p>
+  <ol class="idx">
+    <li class="reveal"><a href="#quant"><span class="n">01</span><span><b>Quant Engine</b><em>Python · paper trading</em></span><span class="d">Paper trading on real market data.</span><span class="go">↓</span></a></li>
+    <li class="reveal"><a href="#alphapulse"><span class="n">02</span><span><b>AlphaPulse</b><em>React · Express · TypeScript</em></span><span class="d">Financial-intelligence terminal · mock data.</span><span class="go">↓</span></a></li>
+    <li class="reveal"><a href="#sesli-kitap"><span class="n">03</span><span><b>Sesli Kitap</b><em>Android · Flutter</em></span><span class="d">PDF books → narrated audio.</span><span class="go">↓</span></a></li>
+    <li class="reveal"><a href="#translate"><span class="n">04</span><span><b>Live voice translation</b><em>Web · Gemini</em></span><span class="d">Speak Turkish, read English.</span><span class="go">↓</span></a></li>
+    <li class="reveal"><a href="#habit"><span class="n">05</span><span><b>Habit coach</b><em>Flutter · AI coach</em></span><span class="d">Tasks, streaks and a coach.</span><span class="go">↓</span></a></li>
+  </ol>
+  <details class="more"><summary class="mono">Details</summary><div class="more-body"><p>Each app was built by AI coding agents under the loop shown at the end of this page. The repositories are private demo builds; what is shown here is real footage, real screenshots, or a diagram — and labelled as such.</p></div></details>
+</div></section>
+
+<section id="quant" class="proj" data-hud="QUANT" data-stack><div class="wrap">
+  <div class="proj-head">
+    <div class="proj-n mono"><span><b>01</b> / 05</span><span>Python · Quant</span><span class="sw-tag">demo build · private</span></div>
+    <h2 class="proj-title" data-wipe>Quant Engine</h2>
+    <p class="lead">Paper trading on real market data — no path to a real exchange.</p>
+    <ul class="chips" aria-label="Models and safeguards"><li>VWAP fills</li><li>Drawdown kill switch</li><li>GARCH</li><li>VaR / ES</li><li>Markowitz</li><li>DCF</li><li>Options pricing</li></ul>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>Fills walk the real order book</h3><span class="dtag">diagram · from walk_book() · illustrative numbers</span></div>
+    <div class="dg reveal" data-dg="book" role="img" aria-label="Diagram: a paper market order is filled level by level against the order book at the volume-weighted price; an order bigger than the book is rejected"></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>Drawdown kill switch</h3><span class="dtag">diagram · from the kill-switch code · illustrative series</span></div>
+    <div class="dg reveal" data-dg="kill" role="img" aria-label="Diagram: equity rises to a peak and falls; when the drawdown from the peak reaches 10 percent the autopilot pauses without forced selling and waits for a user command"></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>One paper trade</h3><span class="dtag">diagram · simplified</span></div>
+    <ol class="flowd">
+      <li><b>Market data</b><span>Binance · Yahoo.</span></li>
+      <li><b>Signal</b><span>e.g. GARCH.</span></li>
+      <li><b>Kill-switch check</b><span>Paused = no order.</span></li>
+      <li><b>Paper fill</b><span>VWAP + fees.</span></li>
+      <li class="end"><b>Ledger</b><span>Cash · positions.</span></li>
+    </ol>
+  </div>
+
+  <details class="more"><summary class="mono">Details</summary><div class="more-body">
+    <p><b>Fills walk the real order book:</b> a paper market order is filled level by level against a live Binance depth snapshot, at the volume-weighted price, plus a taker fee; if the book is too thin the order is rejected. <span class="mono">paper_execution.py · walk_book</span></p>
+    <p><b>Stocks only trade in market hours:</b> stock orders fill only inside the NYSE regular session, at the quoted bid or ask; a missing quote makes the slippage an explicit estimate.</p>
+    <p><b>Drawdown kill switch:</b> each account tracks its peak equity; a drawdown past the limit (10% by default) pauses that account's autopilot — no forced selling — records why it fired, and only an explicit user command resumes it. <span class="mono">live_bot_engine.py</span></p>
+    <p><b>No made-up prices:</b> when market data is missing the order is rejected; a static test fails the suite if fabricated data finds its way back into the runtime. No order ever leaves the machine: the code has no exchange order endpoint to call.</p>
+  </div></details>
+  <p class="mono disclaimer">Paper trading for research and learning · not investment advice</p>
+</div></section>
+
+<section id="alphapulse" class="proj" data-hud="ALPHAPULSE" data-stack><div class="wrap">
+  <div class="proj-head">
+    <div class="proj-n mono"><span><b>02</b> / 05</span><span>React · Express · TypeScript</span><span class="sw-tag">demo build · mock data</span></div>
+    <h2 class="proj-title" data-wipe>AlphaPulse</h2>
+    <p class="lead">A financial-intelligence terminal, running on mock data.</p>
+    <ul class="chips" aria-label="Stack"><li>React + Vite</li><li>Express</li><li>Prisma · SQLite</li><li>Playwright</li><li>Mock data only</li></ul>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>Four agents, one headline</h3><span class="dtag">diagram · from the demo build · mock data</span></div>
+    <div class="dg reveal" data-dg="ap" role="img" aria-label="Diagram: four agent roles — Macro Bear, Tech Bull, Risk Officer, Quant Analyst — take a side on a sample headline as a fixed-template simulation; then the compliance centre blocks an order for a restricted ticker and a list change waits for a second reviewer"></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>The demo build, running</h3><span class="dtag real">real screenshots · demo build · mock data</span></div>
+    <div class="screens web">
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/ap_demo_01_feed.webp" width="2880" height="1800" loading="lazy" decoding="async" alt="AlphaPulse demo build, mock data: intelligence feed with three sample headlines, scores, sentiment and Simulation labels; the first item's quick take is open"></div>
+        <figcaption><b>Intelligence feed</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/ap_demo_02_portfolio.webp" width="2880" height="1328" loading="lazy" decoding="async" alt="AlphaPulse demo build, mock data: portfolio page with balance, cash and unrealized P&amp;L cards and an AAPL candlestick chart from the DemoData source"></div>
+        <figcaption><b>Portfolio &amp; risk</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/ap_demo_04_boardroom.webp" width="2880" height="1800" loading="lazy" decoding="async" alt="AlphaPulse demo build, mock data: strategy boardroom where Macro Bear, Tech Bull, Risk Officer and Quant Analyst agents debate a headline; banners say the output is a simulation from fixed templates"></div>
+        <figcaption><b>Strategy boardroom</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/ap_demo_05_compliance.webp" width="2880" height="1800" loading="lazy" decoding="async" alt="AlphaPulse demo build, mock data: compliance centre with dataset status, restricted-ticker check, alerts and a restricted securities list"></div>
+        <figcaption><b>Compliance</b></figcaption></figure>
+    </div>
+  </div>
+  <details class="more"><summary class="mono">Details</summary><div class="more-body">
+    <p>A local terminal: a news feed with AI analysis, a portfolio with risk measures, a four-agent strategy debate (Macro Bear, Tech Bull, Risk Officer, Quant Analyst) and a compliance centre where list changes need a second reviewer. The demo build starts with one command and runs on mock data — no AI key, no market API; the “Live” labels are the app's own interface.</p>
+    <p>Nine CI jobs passed on the commit shown: lint, type-check and build, unit tests, Playwright and demo smoke tests, Python tests, Python lint and security scan, dependency scan, secret scan.</p>
+  </div></details>
+  <p class="mono disclaimer">Demo build · mock data · not investment advice</p>
+</div></section>
+
+<section id="sesli-kitap" class="proj" data-hud="SESLI KITAP" data-stack><div class="wrap">
+  <div class="split">
+    <div class="proj-head">
+      <div class="proj-n mono"><span><b>03</b> / 05</span><span>Android · Flutter</span><span class="sw-tag">demo build · private</span></div>
+      <h2 class="proj-title" data-wipe>Sesli Kitap</h2>
+      <p class="lead">PDF books, read aloud sentence by sentence.</p>
+      <ul class="chips" aria-label="Features"><li>OCR fallback</li><li>LLM cleanup</li><li>TTS + sentence highlight</li><li>Quizzes</li><li>Voice discussion</li><li>Private lesson</li></ul>
+    </div>
+    <div class="reveal">
+      <div class="reader" aria-hidden="true">
+        <div class="mono"><span>PDF → narrated audio</span><span>illustration</span></div>
+        <p class="reader-text"><span class="s on">The page is first turned into text.</span> <span class="s">The model cleans the text and splits it into sentences.</span> <span class="s">While the audio reads, each sentence lights up here.</span></p>
+        <div class="wave"><i class="p" style="--h:25;--d:0.00"></i><i class="p" style="--h:76;--d:0.13"></i><i class="p" style="--h:75;--d:0.26"></i><i class="p" style="--h:38;--d:0.39"></i><i class="p" style="--h:28;--d:0.52"></i><i class="p" style="--h:44;--d:0.65"></i><i class="p" style="--h:58;--d:0.78"></i><i class="p" style="--h:26;--d:0.91"></i><i class="p" style="--h:80;--d:1.04"></i><i class="p" style="--h:92;--d:0.07"></i><i class="p" style="--h:49;--d:0.20"></i><i class="p" style="--h:44;--d:0.33"></i><i class="p" style="--h:43;--d:0.46"></i><i class="p" style="--h:30;--d:0.59"></i><i class="p" style="--h:26;--d:0.72"></i><i style="--h:67;--d:0.85"></i><i style="--h:88;--d:0.98"></i><i style="--h:53;--d:0.01"></i><i style="--h:56;--d:0.14"></i><i style="--h:76;--d:0.27"></i><i style="--h:48;--d:0.40"></i><i style="--h:25;--d:0.53"></i><i style="--h:41;--d:0.66"></i><i style="--h:66;--d:0.79"></i><i style="--h:48;--d:0.92"></i><i style="--h:59;--d:1.05"></i><i style="--h:93;--d:0.08"></i><i style="--h:69;--d:0.21"></i><i style="--h:28;--d:0.34"></i><i style="--h:40;--d:0.47"></i><i style="--h:32;--d:0.60"></i><i style="--h:37;--d:0.73"></i><i style="--h:51;--d:0.86"></i><i style="--h:90;--d:0.99"></i><i style="--h:76;--d:0.02"></i><i style="--h:30;--d:0.15"></i><i style="--h:68;--d:0.28"></i><i style="--h:54;--d:0.41"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="sw-stats blk">
+    <div class="reveal"><b>1,500+</b><span>tests in the suite</span></div>
+    <div class="reveal"><b class="ok">100%</b><span>line-coverage gate, enforced by CI</span></div>
+    <div class="reveal"><b>0</b><span>untested logic files allowed</span></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>The demo build, running</h3><span class="dtag real">real screenshots · demo build · mock AI answers</span></div>
+    <div class="screens web">
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/sk_en_01_library.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Sesli Kitap demo build: library with the sample book Üç Hikâye by Ömer Seyfettin and a Continue button; tabs Library, Reader, Discussion, Quiz, Report"></div>
+        <figcaption><b>Library</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/sk_en_02_reader.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Sesli Kitap demo build: reader narrating page 1 of 21, the sentence being read is highlighted"></div>
+        <figcaption><b>Reader</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/sk_en_03_discussion.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Sesli Kitap demo build: voice discussion with hosts Ahmet and Emel, Ahmet is speaking, an Ask button to jump in"></div>
+        <figcaption><b>Voice discussion</b></figcaption></figure>
+      <figure class="scr reveal" data-lightbox><div class="scr-frame browser"><img src="/assets/media/software/sk_en_04_tutor.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Sesli Kitap demo build: tutor explains part 1 of the chapter in English and asks a question with an answer box"></div>
+        <figcaption><b>Tutor</b></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>From a PDF page to a voice</h3><span class="dtag">diagram · from the app's page pipeline · illustrative page</span></div>
+    <div class="dg reveal" data-dg="sk" role="img" aria-label="Diagram: a PDF page is read from its text layer, or by OCR when it is only an image; the header and page number are stripped; the text is split into sentences; the audio reads them and the current sentence lights up"></div>
+    <div class="side"><span class="mono">Side modes</span><i>Quiz</i><i>Topic explanation</i><i>Multi-voice discussion</i></div>
+  </div>
+
+  <div class="blk split tutor">
+    <div>
+      <span class="mono">Private lesson</span>
+      <h3 class="blk-title">A tutor for one chapter.</h3>
+      <p class="lead">Explains a chapter part by part, then quizzes you.</p>
+    </div>
+    <ol class="flowd col">
+      <li><b>Split</b><span>A few parts.</span></li>
+      <li><b>Explain</b><span>In plain Turkish.</span></li>
+      <li><b>Ask &amp; grade</b><span>Correct, half or wrong.</span></li>
+      <li class="end"><b>Resume</b><span>Saved on the phone.</span></li>
+    </ol>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>One interface, any voice</h3><span class="dtag">diagram · from lib/io/tts_provider.dart</span></div>
+    <div class="dg reveal" data-dg="tts" role="img" aria-label="Diagram: the reader calls one TtsProvider interface with text, voice and rate; settings pick which text-to-speech service answers; the reader never changes"></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>The app's gate</h3><span class="dtag">diagram · from the app's Makefile</span></div>
+    <ol class="chk" data-chk aria-label="The app's gate: analyze with warnings as errors, format check, tests with coverage, coverage gate script, scenario probe, debug build; all must pass">
+      <li><i></i>analyze · warnings fail</li><li><i></i>format check</li><li><i></i>tests + coverage</li><li><i></i>coverage gate · 100%</li><li><i></i>scenario probe</li><li><i></i>build apk</li>
+    </ol>
+    <p class="chk-v mono" aria-hidden="true">Gate · <b>waiting</b></p>
+  </div>
+
+  <details class="more"><summary class="mono">Details</summary><div class="more-body">
+    <p>Turns PDF books into narrated Turkish audio — OCR fallback, LLM cleanup, text-to-speech with sentence highlight, quizzes and a voice discussion mode. The screenshots were captured by CI from the demo build (mock AI answers, silent audio); the UI is English, the sample book is a public-domain Turkish story.</p>
+    <p>Private lesson: pick a chapter and the app splits it into parts, explains each in plain Turkish — even when the book is in English — asks one or two questions only that part can answer, grades each answer as correct, half or wrong, and saves progress on the phone.</p>
+    <p>Each text-to-speech service implements one method; settings pick which one runs, so swapping a provider does not touch the reader. The gate runs analysis with warnings as errors, a scenario probe for what unit tests do not pin down, and a coverage script that reads the report itself.</p>
+    <p><b>Orphan files count as red:</b> coverage tools skip files no test imports, so the gate lists every logic file and fails if one is missing. <b>The UI is out of scope — and says so:</b> the 100% floor covers business logic only. <b>No mutation leg:</b> no mutation tool for Dart could be proven here, so that step reports red on purpose.</p>
+  </div></details>
+</div></section>
+
+<section id="translate" class="proj" data-hud="TRANSLATE" data-stack><div class="wrap">
+  <div class="vid-row">
+    <figure class="phone-fig reveal">
+      <div class="phone" style="aspect-ratio:560/1312"><video data-src="/assets/media/app_translate.mp4" poster="/assets/media/app_translate_poster.jpg" preload="none" muted loop playsinline aria-label="Live voice translation web app in use on a monitor"></video></div>
+      <figcaption class="mono">Phone recording of the monitor · demo build · muted</figcaption>
+    </figure>
+    <div>
+      <div class="proj-n mono"><span><b>04</b> / 05</span><span>Web · Gemini</span><span class="sw-tag">demo build · private</span></div>
+      <h2 class="proj-title" data-wipe>Live voice translation</h2>
+      <p class="lead">Speak Turkish, read English a moment later.</p>
+      <details class="more"><summary class="mono">Details</summary><div class="more-body"><p>Speech recognition, Gemini translation, an auto-loop mode and a running conversation history. In the clip: Türkçe and English labels above one large microphone button that glows while it listens; the spoken Turkish appears first, in quotes; the English translation follows below in larger type.</p></div></details>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="blk-head"><h3>One sentence, start to finish</h3><span class="dtag">diagram · the app's loop · illustrative sentences</span></div>
+    <div class="dg reveal" data-dg="tr" role="img" aria-label="Diagram: the microphone listens, the Turkish speech appears as text in quotes, Gemini translates it, the English appears below, and the pair is added to the conversation history"></div>
+  </div>
+</div></section>
+
+<section id="habit" class="proj" data-hud="HABIT" data-stack><div class="wrap">
+  <div class="vid-row flip">
+    <figure class="phone-fig reveal">
+      <div class="phone" style="aspect-ratio:580/1280"><video data-src="/assets/media/app_habit.mp4" poster="/assets/media/app_habit_poster.jpg" preload="none" muted loop playsinline aria-label="Habit coach app screens on a phone"></video></div>
+      <figcaption class="mono">Screen recording on a phone · demo build · muted</figcaption>
+    </figure>
+    <div>
+      <div class="proj-n mono"><span><b>05</b> / 05</span><span>Flutter · AI coach</span><span class="sw-tag">demo build · private</span></div>
+      <h2 class="proj-title" data-wipe>Habit coach</h2>
+      <p class="lead">Break a habit: tasks, points, a streak — and a coach.</p>
+    </div>
+  </div>
+  <div class="blk vid-row">
+    <figure class="phone-fig reveal">
+      <div class="phone" style="aspect-ratio:490/1028"><video data-src="/assets/media/software/app_habit_ai_coach.mp4" poster="/assets/media/software/app_habit_ai_coach_poster.jpg" preload="none" muted loop playsinline aria-label="Habit coach app: the AI coach answering a question in the chat"></video></div>
+      <figcaption class="mono">Screen recording · status bar cropped, the user's name blurred · muted</figcaption>
+    </figure>
+    <div>
+      <span class="mono">AI Coach tab · real answer, in Turkish</span>
+      <h3 class="blk-title">The coach answers.</h3>
+      <details class="more"><summary class="mono">Details</summary><div class="more-body"><p>The first clip shows a day counter with points and a streak, today's tasks ticked off one by one, and two tabs: Tasks and the AI Coach. In the second, the user asks for a tip for the first day; the coach thinks, answers with one concrete step for the habit on the card — only water and fruit today — and asks how the user feels.</p></div></details>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="blk-head"><h3>A day in the app</h3><span class="dtag">diagram · app flow · illustrative tasks and points</span></div>
+    <div class="dg reveal" data-dg="hb" role="img" aria-label="Diagram: daily tasks are ticked off and earn points; a completed day fills the streak; the AI coach answers with a tip and asks how the user feels"></div>
+  </div>
+</div></section>
+
+<section id="method" data-hud="METHOD" data-stack><div class="wrap">
+  <div class="sec-head"><h2>The loop behind<br>every merge.</h2><span class="mono reveal">Role-separated AI agents · automated gate</span></div>
+  <p class="mono bridge reveal">Same loop, different material: spec in · code out · the gate screens.</p>
+  <div class="pipe">
+    <svg class="pipe-h" viewBox="0 50 1200 160" role="img" aria-label="Pipeline: spec, failing test, agent codes, quality gate, merge only on green">
+      <defs><linearGradient id="flowGrad" x1="0" x2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#57e08a"/></linearGradient></defs>
+      <path class="base" d="M60 130 H1140"/>
+      <path class="flow" d="M60 130 H1140" pathLength="1"/>
+      <g class="node"><rect x="10" y="80" width="190" height="100" rx="16"/><text x="105" y="126" text-anchor="middle">Spec</text><text class="sub" x="105" y="152" text-anchor="middle">WHAT "DONE" MEANS</text></g>
+      <g class="node"><rect x="250" y="80" width="190" height="100" rx="16"/><text x="345" y="126" text-anchor="middle">Failing test</text><text class="sub" x="345" y="152" text-anchor="middle" fill="#ff5d5d">RED FIRST</text></g>
+      <g class="node"><rect x="490" y="80" width="190" height="100" rx="16"/><text x="585" y="126" text-anchor="middle">Agent codes</text><text class="sub" x="585" y="152" text-anchor="middle">PLANNER ≠ IMPLEMENTER</text></g>
+      <g class="node"><rect x="730" y="60" width="230" height="140" rx="16"/><text x="845" y="104" text-anchor="middle">Quality gate</text>
+        <text class="sub" x="845" y="132" text-anchor="middle">LINT · TYPES · TESTS</text><text class="sub" x="845" y="152" text-anchor="middle">COVERAGE · MUTATION</text></g>
+      <g class="node merge"><rect x="1010" y="80" width="180" height="100" rx="16"/><text x="1100" y="126" text-anchor="middle">Merge</text><text class="sub" x="1100" y="152" text-anchor="middle" fill="#57e08a">ONLY ON GREEN</text></g>
+    </svg>
+    <svg class="pipe-v" viewBox="0 0 360 570" role="img" aria-label="Pipeline: spec, failing test, agent codes, quality gate, merge only on green">
+      <defs><linearGradient id="flowGradV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#57e08a"/></linearGradient></defs>
+      <path class="base" d="M180 20 V550"/>
+      <path class="flow flow-v" d="M180 20 V550" pathLength="1"/>
+      <g class="node"><rect x="40" y="10" width="280" height="80" rx="16"/><text x="180" y="45" text-anchor="middle">Spec</text><text class="sub" x="180" y="71" text-anchor="middle">WHAT "DONE" MEANS</text></g>
+      <g class="node"><rect x="40" y="120" width="280" height="80" rx="16"/><text x="180" y="155" text-anchor="middle">Failing test</text><text class="sub" x="180" y="181" text-anchor="middle" fill="#ff5d5d">RED FIRST</text></g>
+      <g class="node"><rect x="40" y="230" width="280" height="80" rx="16"/><text x="180" y="265" text-anchor="middle">Agent codes</text><text class="sub" x="180" y="291" text-anchor="middle">PLANNER ≠ IMPLEMENTER</text></g>
+      <g class="node"><rect x="30" y="340" width="300" height="110" rx="16"/><text x="180" y="377" text-anchor="middle">Quality gate</text><text class="sub" x="180" y="405" text-anchor="middle">LINT · TYPES · TESTS</text><text class="sub" x="180" y="427" text-anchor="middle">COVERAGE · MUTATION</text></g>
+      <g class="node merge"><rect x="40" y="480" width="280" height="80" rx="16"/><text x="180" y="515" text-anchor="middle">Merge</text><text class="sub" x="180" y="541" text-anchor="middle" fill="#57e08a">ONLY ON GREEN</text></g>
+    </svg>
+    <p class="verdict mono" aria-hidden="true">Gate · <b>waiting</b></p>
+  </div>
+  <div class="method-notes">
+    <div class="note reveal"><div class="big"><span>45</span> <span class="arrow">→</span> <span class="to" data-from="45" data-to="14">14</span></div><p>Tests flagged as "toothless" (unable to fail) in one repository, after I had agents build a detector for them.</p><a class="mono" href="#toothless">How the detector works ↓</a></div>
+    <div class="note reveal"><div class="big">7 repos</div><p>The same automated gate rolled out across seven project repositories (six distinct codebases), from one template family.</p><a class="mono" href="#gate">Inside the gate ↓</a></div>
+    <div class="note reveal"><div class="big">100%</div><p>Line-coverage gate on business logic in the Sesli Kitap app — enforced by CI, not by promise.</p><a class="mono" href="#sesli-kitap">The app ↑</a></div>
+  </div>
+</div></section>
+
+<section id="gate" data-hud="GATE" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Inside<br>the gate.</h2><span class="mono reveal">Who may touch what · what “green” means</span></div>
+  <p class="lead reveal">One template, every repository. No agent's “done” is trusted.</p>
+
+  <div class="roles">
+    <div class="role reveal"><span class="mono">Role 1 · planner agent</span><h3>Writes what “done” means.</h3>
+      <p class="rw"><span class="y">✎ spec + failing tests</span><span class="x">✗ code</span></p></div>
+    <div class="role reveal"><span class="mono">Role 2 · implementer agent</span><h3>Writes only the code.</h3>
+      <p class="rw"><span class="y">✎ code in scope</span><span class="x">✗ tests</span></p></div>
+    <div class="role reveal"><span class="mono">Role 3 · the gate</span><h3>Decides what merges.</h3>
+      <p class="rw"><span class="y">✓ exit codes</span><span class="x">✗ opinions</span></p></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>What “green” means</h3><span class="dtag">diagram · from templates/python/Makefile</span></div>
+    <ol class="chk" data-chk data-fail="2" data-fail-note="1 untested branch" aria-label="The gate: ruff lint, mypy types, pytest with a 100 percent branch-coverage floor, toothless-test check, deptry, compileall, and mutation testing in CI; a single untested branch turns the whole run red">
+      <li><i></i>ruff · lint</li><li><i></i>mypy · types</li><li><i></i>pytest · 100% branches</li><li><i></i>toothless-test check</li><li><i></i>deptry · imports</li><li><i></i>compileall</li><li class="ci"><i></i>CI · mutation</li>
+    </ol>
+    <p class="chk-v mono" aria-hidden="true">Gate · <b>waiting</b></p>
+    <ul class="stacks" aria-label="Template stacks"><li>Python</li><li>TypeScript + React</li><li>JavaScript + React</li><li>Go</li><li>Rust</li><li>Flutter</li></ul>
+  </div>
+
+  <details class="more"><summary class="mono">Details</summary><div class="more-body">
+    <p>The gate is a set of scripts, git hooks and CI jobs copied into every repository from one template. The planner agent must prove “red first” with a fresh failing-test log; a role guard diffs the implementer's work against a snapshot so it cannot touch tests; editor hooks block out-of-role edits. The gate runs on GitHub Actions and locally as a twin of CI tied to the exact commit — it grades only by exit codes. One command, one verdict: each step must exit 0, and pytest carries <code>--cov-branch --cov-fail-under=100</code>, so a single untested branch turns the run red.</p>
+    <p><b>The gate is tested too.</b> Self-tests feed it broken code on purpose and expect red; attack self-tests try known bypasses — editing a test, staging a file outside scope, hiding a “no cover” pragma, rewriting the plan — and each must be blocked; a run that skipped its steps or found zero tests is reported as a failure.</p>
+  </div></details>
+</div></section>
+
+<section id="toothless" data-hud="TOOTHLESS" data-stack><div class="wrap">
+  <div class="sec-head"><h2>Tests that<br>can't fail.</h2><span class="mono reveal">A green suite can still be lying</span></div>
+  <div class="tooth-top">
+    <div class="tooth-num reveal" aria-label="45 to 14">45<span class="arrow">→</span><span class="to">14</span></div>
+    <p class="reveal lead">Toothless tests in one repository, after agents built a detector for them.</p>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>Four ways a test can't fail</h3><span class="dtag">diagram · real detector categories</span></div>
+    <div class="dg reveal" data-dg="scan" role="img" aria-label="Diagram: the detector scans five tests; a test that returns instead of asserting, one with no assert, one with only a weak assert and one that swallows its failure are flagged as toothless; the test with a real assert passes"></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-head"><h3>How it spots a weak assert</h3><span class="dtag">diagram · from scripts/dissiz_check.py</span></div>
+    <div class="dg reveal" data-dg="tree" role="img" aria-label="Decision diagram: an assert is weak if it checks an always-true constant, checks only that a value is not None, or compares a value with itself; otherwise it is a real check"></div>
+  </div>
+
+  <details class="more"><summary class="mono">Details</summary><div class="more-body">
+    <p>AI agents are very good at producing tests that pass. Some pass because they cannot fail: they check nothing, or they swallow the error that should have failed them. The detector — “dissiz” is Turkish for toothless — reads every test's syntax tree with Python's <code>ast</code> module (no test is run) and flags four patterns: returns a value instead of asserting, has no assert, uses only weak asserts, or has an except handler that swallows the error. In one repository its count went from <b>45</b> to <b>14</b>; what remains sits in a baseline file, and any new toothless test turns the gate red. The detector has its own test suite.</p>
+  </div></details>
+</div></section>
+
+<section id="how" data-hud="HOW" data-stack><div class="wrap">
+  <div class="sec-head"><h2>How I work with AI agents</h2><span class="mono reveal">Three rules, every repository</span></div>
+  <ol class="steps">
+    <li class="step reveal"><span class="n">01 · RED</span><h3>Spec and failing tests first</h3><p>I write what "done" means as tests that fail before any code exists.</p></li>
+    <li class="step reveal"><span class="n">02 · AGENTS</span><h3>Role-separated agents</h3><p>One agent plans, another implements; the author never grades its own work.</p></li>
+    <li class="step reveal"><span class="n">03 · GREEN</span><h3>The automated gate decides</h3><p>Lint, types, tests and coverage run in CI, plus mutation testing where a tool exists. Merge happens only on green.</p></li>
+  </ol>
+</div></section>
+
+<section id="guardrails" data-hud="GUARDRAILS" data-stack><div class="wrap">
+  <div class="sec-head"><h2>claude-code-guardrails</h2><span class="mono reveal">A free safety kit for AI coding agents</span></div>
+
+  <svg class="gr-ba" viewBox="0 0 800 350" role="img" aria-label="Before: about 2,900 scattered files. After: one plugin, agent-guardrails.">
+    <defs><linearGradient id="grGrad" x1="0" x2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#57e08a"/></linearGradient></defs>
+    <text class="tag" x="180" y="30" text-anchor="middle">BEFORE</text>
+    <text class="tag" x="620" y="30" text-anchor="middle">AFTER</text>
+    <g class="gr-ghost"></g>
+    <path class="arrow" d="M352 177 H440 M428 165 L440 177 L428 189"/>
+    <g class="box"><rect x="470" y="92" width="300" height="170" rx="22"/>
+      <path class="ic" transform="translate(620 150) scale(1.5)" d="M0 -21 L17 -14 V-1 C17 10 9 18 0 22 C-9 18 -17 10 -17 -1 V-14 Z"/>
+      <text class="name" x="620" y="232" text-anchor="middle">agent-guardrails</text></g>
+    <g class="gr-files"></g>
+    <text class="lbl" x="180" y="340" text-anchor="middle">2,900 files</text>
+    <text class="lbl" x="620" y="340" text-anchor="middle">1 plugin</text>
+  </svg>
+
+  <div class="gr-row">
+    <div class="gr-card reveal">
+      <svg class="gr-flow" viewBox="0 0 600 340" role="img" aria-label="An AI agent sends a command; the guardrail blocks a search of the whole disk and lets npm test through.">
+        <g class="nd" data-i="0"><rect x="5" y="10" width="165" height="110" rx="16"/>
+          <g class="ic" transform="translate(87.5 50)"><rect x="-17" y="-12" width="34" height="26" rx="7"/><circle cx="-7" cy="1" r="2.5"/><circle cx="7" cy="1" r="2.5"/><path d="M0 -12 V-19"/></g>
+          <text x="87.5" y="100" text-anchor="middle">AI agent</text></g>
+        <path class="ln" d="M176 65 H209 M202 58 L209 65 L202 72"/>
+        <g class="nd" data-i="1"><rect x="217.5" y="10" width="165" height="110" rx="16"/>
+          <path class="ic" transform="translate(300 50)" d="M-16 -11 L-6 -1 L-16 9 M-2 11 H14"/>
+          <text x="300" y="100" text-anchor="middle">command</text></g>
+        <path class="ln" d="M388 65 H421 M414 58 L421 65 L414 72"/>
+        <g class="nd" data-i="2"><rect x="430" y="10" width="165" height="110" rx="16"/>
+          <path class="ic" transform="translate(512.5 50)" d="M0 -21 L17 -14 V-1 C17 10 9 18 0 22 C-9 18 -17 10 -17 -1 V-14 Z"/>
+          <text x="512.5" y="100" text-anchor="middle">guardrail</text></g>
+        <path class="ln" d="M512.5 120 V160 H147.5 V200 M452.5 160 V200 M141.5 194 L147.5 200 L153.5 194 M446.5 194 L452.5 200 L458.5 194"/>
+        <g class="nd no" data-i="3"><rect x="5" y="205" width="285" height="125" rx="16"/>
+          <g class="mk" transform="translate(45 267)"><circle r="17"/><path d="M-6 -6 L6 6 M6 -6 L-6 6"/></g>
+          <text x="78" y="259">blocked</text><text class="sub" x="78" y="291">find / · whole disk</text></g>
+        <g class="nd ok" data-i="4"><rect x="310" y="205" width="285" height="125" rx="16"/>
+          <g class="mk" transform="translate(350 267)"><circle r="17"/><path d="M-7 0 L-2 5 L7 -5"/></g>
+          <text x="383" y="259">allowed</text><text class="sub" x="383" y="291">npm test</text></g>
+      </svg>
+    </div>
+    <div class="gr-card reveal">
+      <ol class="chk col" data-chk data-pass="7 checks passed · DEMO OK" aria-label="Real checks from the repository's demo.sh: a search of the whole disk is blocked, a background sleep loop is blocked, npm test is allowed, tools are locked after a greeting and unlocked once a real task is given; 7 checks passed">
+        <li><i></i><span>find / · whole disk</span><em class="no">blocked</em></li>
+        <li><i></i><span>background sleep loop</span><em class="no">blocked</em></li>
+        <li><i></i><span>npm test</span><em class="ok">allowed</em></li>
+        <li><i></i><span>tool call after “hello”</span><em class="no">locked</em></li>
+        <li><i></i><span>tool call after a real task</span><em class="ok">unlocked</em></li>
+      </ol>
+      <p class="chk-v mono" aria-hidden="true">demo.sh · <b>waiting</b></p>
+      <p class="mono gr-src">diagram · from the repository's demo.sh output</p>
+    </div>
+  </div>
+
+  <details class="gr-more">
+    <summary class="mono">Story</summary>
+    <div class="gr-more-body">
+      <div>
+        <h3>Why I shut down my 2,900-file guardrail system</h3>
+        <p>Every agent mistake got a new watcher, until there were many rules and very little product. I learned that the goal is finished work, so I kept only the checks for problems I had measured again and again — and packed them so other people can start there.</p>
+        <p class="mono gr-nums">Before: 7 hooks · 6 git hooks · 4 workflows · 26 self-tests · about 2,900 tracked evidence files<br>Distilled from about 3,300 of my messages to agents (raw transcript entries) · 168 requests<br>Now: 301 tests · 98.6% coverage · CI in 24 s · MIT licence</p>
+        <p class="mono gr-hint">A guardrail, not a sandbox: it catches common mistakes, not a determined attacker. The night-watchman hook is opt-in and not installed by default.</p>
+      </div>
+    </div>
+  </details>
+</div></section>
+
+<section class="next-door" data-hud="NEXT"><div class="wrap">
+  <span class="mono">Next door</span>
+    <a class="door door-mech" data-door href="/mechanical/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/mechanical/stress_test_wide_poster.jpg" width="896" height="560" alt="" loading="lazy" decoding="async">
+        <span class="door-print"><video data-t0="1" data-src="/assets/media/mechanical/stress_test_wide.mp4" poster="/assets/media/mechanical/stress_test_wide_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">01 · Mechanical</span>
+        <h3 class="door-title">From load cases to printed parts.</h3>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+</div></section>
+</main>
+
+<!-- shell:footer (byte-identical on every page; right after the main element closes) -->
+<footer id="contact" class="site-footer" data-hud="CONTACT">
+  <div class="wrap">
+    <span class="mono">Open to engineering roles and an M.Sc. in Artificial Intelligence</span>
+    <h2><a href="mailto:alpserkanmer@outlook.com">Let's build something.</a></h2>
+    <div class="links">
+      <a class="btn primary magnetic" href="mailto:alpserkanmer@outlook.com">alpserkanmer@outlook.com</a>
+      <a class="btn magnetic" href="https://github.com/alpserkanmerkit" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/alp-serkan-merkit-b8990a202" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="foot-row"><span class="mono">© 2026 Alp Serkan Merkit</span><span class="mono">Built with AI agents · <span class="gate">verified by the gate</span></span></div>
+  </div>
+</footer>
+<div class="lightbox" role="dialog" aria-label="Enlarged image"><img alt=""></div>
+<!-- /shell:footer -->
+
+<!-- shell:scripts (byte-identical on every page; last thing before page-specific scripts and the end of the body) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="/assets/site.js"></script>
+<!-- /shell:scripts -->
+<script>
+/* Software & AI page: hero gate run (one-shot typing), pipeline draw → ASM.pass(), 45→14 countdown, reader highlight, flow diagrams */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const ASM = window.ASM || {}, G = window.gsap, ST = window.ScrollTrigger;
+  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  /* 1. hero: the gate run types itself once (red FAIL → green MERGE), then holds. Decorative + illustrative. */
+  const ht = $('.ht'), pill = $('.ht-pill');   // (terminal replaced by footage 09.10; kept guarded)
+  const PILL = { run: 'Gate · running', fail: 'Gate · failed', pass: 'Gate · green' };
+  const setState = s => { ht.dataset.state = s; pill.textContent = PILL[s]; };
+  async function run() {
+    if (REDUCED) { $$('.ht-body > span, .ht-body .tk').forEach(e => e.classList.add('shown')); setState('pass'); return; }   // reduced motion: final frame at once
+    const lines = $$('.ht-body > span'), caret = document.createElement('span');
+    caret.className = 'caret';
+    for (const ln of lines) {
+      await sleep(+ln.dataset.d || 0);
+      if (ln.hasAttribute('data-type')) {             // the command line is typed key by key
+        const html = ln.innerHTML, txt = ln.textContent;
+        ln.textContent = ''; ln.classList.add('shown');
+        for (let i = 1; i <= txt.length; i++) { ln.textContent = txt.slice(0, i); ln.append(caret); await sleep(26); }
+        ln.innerHTML = html; ln.append(caret);
+        continue;
+      }
+      ln.classList.add('shown'); ln.append(caret);
+      const tks = $$('.tk', ln);                     // gate checks tick one by one
+      for (const t of tks) { await sleep(230); t.classList.add('shown'); }
+      if (ln.dataset.state) setState(ln.dataset.state);
+    }
+  }
+  if (document.documentElement.classList.contains('sw-js') && $('.ht-body'))
+    (ASM.ready || Promise.resolve()).then(() => sleep(250)).then(run);
+
+  /* 4. Sesli Kitap illustration: the narrated sentence moves along while the card is in view (ambient → static when reduced) */
+  const sents = $$('.reader-text .s');
+  if (!REDUCED && sents.length) {
+    let k = 0, timer = null;
+    new IntersectionObserver(es => es.forEach(e => {
+      clearInterval(timer);
+      if (e.isIntersecting) timer = setInterval(() => { sents[k].classList.remove('on'); k = (k + 1) % sents.length; sents[k].classList.add('on'); }, 2200);
+    })).observe($('.reader'));
+  }
+
+  /* 6. guardrails: copy button · before→after (files fly into one plugin, scroll-scrubbed; kept under reduced motion = owner's choice) · flow lights up · real demo.sh output appears line by line */
+  const gr = $('#guardrails');
+  if (gr) {
+    $$('.gr-copy', gr).forEach(b => {
+      if (!navigator.clipboard) return;
+      b.hidden = false;
+      b.addEventListener('click', () => navigator.clipboard.writeText($(b.dataset.copy).textContent.trim())
+        .then(() => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1600); }, () => {}));
+    });
+
+    const NS = 'http://www.w3.org/2000/svg', ba = $('.gr-ba', gr), files = $('.gr-files', ba), ghost = $('.gr-ghost', ba), box = $('.box', ba);
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;   // fixed seed: the same "scatter" on every load
+    const mk = (cls, parent, x, y) => { const e = document.createElementNS(NS, 'rect');
+      [['class', cls], ['x', x.toFixed(1)], ['y', y.toFixed(1)], ['width', 20], ['height', 24], ['rx', 3]].forEach(([k, v]) => e.setAttribute(k, v));
+      parent.append(e); return e; };
+    const rects = [];
+    for (let r = 0; r < 8; r++) for (let c = 0; c < 10; c++) {
+      const x = 33 + c * 30 + (rnd() - .5) * 8, y = 60 + r * 30 + (rnd() - .5) * 8, rot = (rnd() - .5) * 24;
+      mk('ghost', ghost, x, y).setAttribute('transform', `rotate(${rot.toFixed(1)} ${(x + 10).toFixed(1)} ${(y + 12).toFixed(1)})`);
+      const f = mk('f', files, x, y); f.dataset.rot = rot; f.dataset.cx = x + 10; f.dataset.cy = y + 12; rects.push(f);
+    }
+    if (!G || !ST) { rects.forEach(f => { f.style.opacity = 0; }); box.classList.add('on'); }
+    else {
+      rects.forEach(f => G.set(f, { rotation: +f.dataset.rot, transformOrigin: '50% 50%' }));
+      const tl = G.timeline({ scrollTrigger: { trigger: ba, start: 'top 75%', end: 'bottom 40%', scrub: .6 },
+        onUpdate() { box.classList.toggle('on', this.progress() > .92); } });
+      tl.to(rects, { x: (i, f) => 620 - f.dataset.cx, y: (i, f) => 177 - f.dataset.cy, rotation: 0, scale: .3, opacity: 0,
+        ease: 'power2.in', duration: 1, stagger: { each: .012, from: 'random' } });
+    }
+
+    const once = (el, fn) => { const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); fn(); } }, { threshold: .35 }); io.observe(el); };
+    once($('.gr-flow', gr), () => $$('.gr-flow .nd', gr).forEach(n => setTimeout(() => n.classList.add('lit'), +n.dataset.i * 380)));
+  }
+
+  if (!G || !ST) return;
+
+  /* 2. pipeline: the flow draws with scroll; nodes light amber; Merge (and the page progress bar) turn green on arrival */
+  const verdict = $('.verdict'), vb = $('b', verdict);
+  const setup = (svg, start, end) => {
+    const fp = $('.flow', svg), nodes = $$('.node', svg), merge = nodes[nodes.length - 1], MERGE_T = (nodes.length - 1) * 1.05;
+    const pass = p => { merge.classList.toggle('pass', p); verdict.classList.toggle('pass', p); vb.textContent = p ? 'green · merged' : 'waiting'; if (ASM.pass) ASM.pass(p); };
+    G.set(fp, { strokeDasharray: 1, strokeDashoffset: 1 });
+    G.set(nodes, { opacity: .25 });
+    const tl = G.timeline({ onUpdate() { pass(this.time() >= MERGE_T); },
+      scrollTrigger: { trigger: svg, start, end, scrub: true } });
+    tl.to(fp, { strokeDashoffset: 0, ease: 'none', duration: MERGE_T }, 0);
+    nodes.forEach((n, i) => tl.to(n, { opacity: 1, duration: .4, onStart: () => n.classList.add('on'), onReverseComplete: () => n.classList.remove('on') }, i * 1.05));
+    return () => { nodes.forEach(n => n.classList.remove('on', 'pass')); pass(false); };
+  };
+  const mm = G.matchMedia();
+  mm.add('(min-width: 721px)', () => setup($('.pipe-h'), 'top 85%', 'top 38%'));
+  mm.add('(max-width: 720px)', () => setup($('.pipe-v'), 'top 80%', 'bottom 72%'));
+
+  /* 3. 45 → 14: the second number counts down from 45 when the note enters (markup keeps the real value) */
+  const to = $('.note .to');
+  if (to) {
+    const o = { v: +to.dataset.from }, end = +to.dataset.to;
+    to.textContent = o.v;
+    ST.create({ trigger: to, start: 'top 90%', once: true,
+      onEnter: () => G.to(o, { v: end, duration: 1.6, ease: 'power3.out', onUpdate: () => { to.textContent = Math.round(o.v); } }) });
+  }
+
+  /* 5. flow diagrams: nodes light amber one by one when the diagram enters; the last one turns green */
+  $$('.flowd').forEach(fd => {
+    const li = $$('li', fd);
+    ST.create({ trigger: fd, start: 'top 78%', once: true,
+      onEnter: () => li.forEach((n, k) => setTimeout(() => n.classList.add('lit'), k * 160)) });
+  });
+})();
+</script>
+<script>
+/* Software & AI: code shown as live diagrams (09.10). Time-driven, independent of scroll; each runs only while in view. */
+(() => {
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const NS = 'http://www.w3.org/2000/svg';
+  const C = { amb: '#ffb547', grn: '#57e08a', red: '#ff5d5d', line: '#2a303c', box: '#0d1016', mute: '#8b91a0', txt: '#e9e7e1', soft: '#aab0bc' };
+  const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.append(e); return e; };
+  const tx = (p, x, y, s, a = {}) => { const e = el('text', { x, y, fill: a.class === 't' ? C.txt : C.soft, ...a }, p); e.textContent = s; return e; };
+  const box = (p, x, y, w, h, r = 14) => el('rect', { x, y, width: w, height: h, rx: r, fill: C.box, stroke: C.line, 'stroke-width': 2 }, p);
+  /* tiles (09.10): each diagram is drawn once into a hidden source group and shown as cropped tiles [x, y, w, h]
+     (<use> of the same group, so the animation stays one). Tiles sit side by side while they fit and wrap below
+     when they don't, so the diagram grows taller and its text bigger instead of shrinking into one wide strip. */
+  const TILES = {
+    book: [[0, 0, 440, 335], [590, 30, 410, 320]],
+    kill: [[30, 15, 640, 330], [670, 30, 330, 280]],
+    ap: [[0, 8, 660, 400], [650, 28, 350, 360]],
+    sk: [[0, 10, 320, 360], [330, 25, 320, 340], [660, 10, 340, 360]],
+    tr: [[0, 20, 640, 320], [650, 20, 350, 316]],
+    hb: [[0, 10, 550, 360], [570, 10, 430, 360]],
+    scan: [[0, 0, 590, 260], [590, 40, 410, 220]],
+    tree: [[0, 40, 412, 280], [412, 40, 588, 280]],
+  };
+  /* phone (≤ 720 px): narrower tiles (≈ 400 units) so nothing scrolls sideways; some drawings compress (N) */
+  const NM = matchMedia('(max-width:720px)'); let N = NM.matches;
+  const TILES_N = {
+    book: [[0, 0, 380, 335], [590, 30, 410, 320]],
+    kill: [[30, 15, 400, 330], [670, 30, 330, 280]],
+    ap: [[0, 8, 480, 400], [650, 28, 350, 360]],
+    tts: [[0, 0, 400, 560]],
+    tr: [[20, 120, 100, 110], [130, 20, 510, 320], [650, 20, 350, 316]],
+    hb: [[0, 10, 450, 360], [460, 30, 80, 320], [570, 10, 430, 360]],
+    scan: [[0, -6, 392, 266], [392, 40, 392, 220], [784, 40, 392, 220]],
+    tree: [[0, 40, 408, 280], [408, 40, 396, 280], [804, 40, 396, 280]],
+  };
+  const tilesOf = host => (N && TILES_N[host.dataset.dg]) || TILES[host.dataset.dg];
+  const svgIn = (host, W, H) => {
+    const tiles = tilesOf(host);
+    if (!tiles) { const s = el('svg', { viewBox: `0 0 ${W} ${H}`, 'aria-hidden': 'true' }); host.replaceChildren(s); host.classList.remove('tiled'); return s; }
+    const id = `dg-${host.dataset.dg}`, src = el('svg', { class: 'dg-src', 'aria-hidden': 'true' }), g = el('g', { id }, src);
+    host.replaceChildren(src, ...tiles.map(([x, y, w, h]) => {
+      const t = el('svg', { class: 'tile', viewBox: `${x} ${y} ${w} ${h}`, 'aria-hidden': 'true', style: `--w:${w}` });
+      el('use', { href: `#${id}` }, t); return t;
+    }));
+    host.classList.add('tiled'); fitK(host); return g;
+  };
+  /* scale: as big as fits one screen when the tiles stack (text ≥ ~15 px at k 1.25, never above 1.55) */
+  const fitK = host => {
+    const ts = tilesOf(host); if (!ts) return;
+    const hs = ts.map(t => t[3]), H = hs.reduce((a, b) => a + b, 0) + 30 * (hs.length - 1);
+    host.style.setProperty('--k', Math.min(1.55, Math.max(1.25, (innerHeight - 120) / H)).toFixed(3));
+  };
+  addEventListener('resize', () => $$('.dg.tiled').forEach(fitK));
+  /* phone: no label below 10 px on screen — small labels grow in place (positions unchanged) */
+  const FLOOR = 10;
+  const floorText = host => {
+    if (!N) return;
+    const tiles = [...host.querySelectorAll('svg.tile')].map(t => ({ vb: t.viewBox.baseVal, k: t.getBoundingClientRect().width / t.viewBox.baseVal.width }));
+    host.querySelectorAll('.dg-src text').forEach(e => {
+      const x = +e.getAttribute('x'), fs = +e.getAttribute('font-size') || 16;
+      const t = tiles.find(t => x >= t.vb.x - 1 && x < t.vb.x + t.vb.width); if (!t || !t.k) return;
+      if (fs * t.k < FLOOR) e.setAttribute('font-size', (FLOOR / t.k).toFixed(1));
+    });
+  };
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+
+  const B = {};
+
+  /* Sesli Kitap · lib/io/tts_provider.dart: the reader calls one interface; settings pick the service */
+  B.tts = host => {
+    // phone: the same chain top → bottom (reader, interface, three services) instead of left → right
+    const s = N ? svgIn(host, 400, 560) : svgIn(host, 1000, 330);
+    const [rx, ry, hx, hy, cx] = N ? [100, 10, 50, 140, 200] : [10, 120, 330, 95, 480];
+    const rd = box(s, rx, ry, N ? 200 : 210, N ? 80 : 90);
+    tx(s, rx + (N ? 100 : 105), ry + 40, 'Reader', { class: 't', 'font-size': 24, 'text-anchor': 'middle' });
+    tx(s, rx + (N ? 100 : 105), ry + 68, 'text · voice · rate', { 'font-size': 13, 'text-anchor': 'middle' });
+    const l0 = el('path', { d: N ? 'M200 90 V140' : 'M220 165 H330', stroke: C.line, 'stroke-width': 3, fill: 'none' }, s);
+    const hub = box(s, hx, hy, 300, N ? 130 : 140, 18);
+    tx(s, cx, hy + 55, 'TtsProvider', { class: 't', 'font-size': 26, 'text-anchor': 'middle' });
+    tx(s, cx, hy + 85, 'one method', { 'font-size': 13, 'text-anchor': 'middle' });
+    tx(s, cx, hy + 109, 'synthesize()', { 'font-size': 15, 'text-anchor': 'middle', fill: C.amb });
+    const svc = [0, 1, 2].map(i => {
+      const y = N ? 310 + i * 76 : 20 + i * 105;
+      const l = el('path', { d: N ? `M${170 + i * 30} 270 V${288 + i * 8} H${44 - i * 14} V${y + 31} H80` : `M630 165 C700 165 700 ${y + 40} 760 ${y + 40}`, stroke: C.line, 'stroke-width': 3, fill: 'none' }, s);
+      const r = N ? box(s, 80, y, 240, 62) : box(s, 760, y, 230, 80);
+      tx(s, N ? 200 : 875, y + (N ? 39 : 47), `TTS service ${i + 1}`, { class: 't', 'font-size': 20, 'text-anchor': 'middle' });
+      return { l, r };
+    });
+    tx(s, 10, N ? 552 : 318, 'settings pick one · the reader never changes', { 'font-size': 13, fill: C.mute });
+    const dot = el('circle', { r: 9, fill: C.amb }, s);
+    const at = (path, f) => path.getPointAtLength(path.getTotalLength() * clamp(f));
+    return t => {
+      const k = Math.floor(t / 3) % 3, p = (t % 3) / 3;
+      svc.forEach((v, i) => { const c = i === k ? C.amb : C.line; v.l.setAttribute('stroke', c); v.r.setAttribute('stroke', c); });
+      l0.setAttribute('stroke', C.amb); hub.setAttribute('stroke', C.amb);
+      let pt;
+      if (p < .3) pt = at(l0, p / .3);
+      else if (p < .6) pt = at(svc[k].l, (p - .3) / .3);
+      else { const q = (p - .6) / .4; pt = q < .5 ? at(svc[k].l, 1 - q / .5) : at(l0, 1 - (q - .5) / .5); }
+      const back = p >= .6;
+      dot.setAttribute('fill', back ? C.grn : C.amb);                     // text goes out amber, audio comes back green
+      rd.setAttribute('stroke', back ? C.grn : C.line);
+      dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
+    };
+  };
+
+  /* Quant · walk_book(): a market order eats the book level by level at the VWAP; too big → rejected */
+  B.book = host => {
+    const s = svgIn(host, 1000, 380);
+    const L = [[100.00, 2], [100.05, 3], [100.10, 1.5], [100.20, 4], [100.35, 2]], U = N ? 40 : 50, X0 = 150;
+    const total = L.reduce((a, [, q]) => a + q, 0);
+    tx(s, 10, 28, 'ASK SIDE · BOOK SNAPSHOT', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    const rows = L.map(([p, q], i) => {
+      const y = 50 + i * 58;
+      tx(s, X0 - 14, y + 26, p.toFixed(2), { 'font-size': 15, 'text-anchor': 'end' });
+      el('rect', { x: X0, y, width: q * U, height: 38, rx: 6, fill: '#1a1e27' }, s);
+      const f = el('rect', { x: X0, y, width: 0, height: 38, rx: 6, fill: C.amb }, s);
+      tx(s, X0 + q * U + 12, y + 25, `qty ${q}`, { 'font-size': 13, fill: C.mute });
+      return { f, p, q };
+    });
+    box(s, 600, 40, 390, 300, 18);
+    const h = tx(s, 630, 88, '', { class: 't', 'font-size': 24 }), sub = tx(s, 630, 116, '', { 'font-size': 13, fill: C.mute });
+    el('rect', { x: 630, y: 140, width: 330, height: 14, rx: 7, fill: '#1a1e27' }, s);
+    const bar = el('rect', { x: 630, y: 140, width: 0, height: 14, rx: 7, fill: C.amb }, s);
+    const l1 = tx(s, 630, 196, '', { 'font-size': 15 }), l2 = tx(s, 630, 226, '', { 'font-size': 15 });
+    const st = tx(s, 630, 300, '', { class: 't', 'font-size': 22 });
+    return t => {
+      const sc = Math.floor(t / 8) % 2, Q = sc ? 15 : 6, f = clamp(((t % 8) - .6) / 3.6), want = Q * f;
+      let filled = 0, notional = 0, used = 0;
+      rows.forEach(r => { const take = clamp(want - filled, 0, r.q); r.f.setAttribute('width', take * U); filled += take; notional += take * r.p; if (take > 0) used++; });
+      h.textContent = `Paper market buy · ${Q}`; sub.textContent = sc ? 'bigger than the whole book' : 'fits inside the book';
+      bar.setAttribute('width', 330 * clamp(filled / Q));
+      l1.textContent = `filled ${filled.toFixed(2)} / ${Q}`;
+      l2.textContent = filled > 0 ? `VWAP ${(notional / filled).toFixed(3)} · ${used} level${used > 1 ? 's' : ''}` : 'VWAP —';
+      const thin = Q > total && filled >= total - 1e-9, c = thin ? C.red : f >= 1 ? C.grn : C.amb;
+      st.textContent = thin ? '✗ REJECTED · book too thin' : f >= 1 ? '✓ FILLED at the VWAP' : 'walking the book…';
+      st.setAttribute('fill', c); bar.setAttribute('fill', c); rows.forEach(r => r.f.setAttribute('fill', thin ? C.red : C.amb));
+    };
+  };
+
+  /* Quant · kill switch: equity vs. its running peak; 10 % drawdown → autopilot paused, no forced selling */
+  B.kill = host => {
+    const s = svgIn(host, 1000, 360);
+    const N = 60, eq = [...Array(N)].map((_, i) => i < 30 ? 100 + 18 * (i / 30) + 1.4 * Math.sin(i * 1.3)
+      : i < 46 ? 118 - 13.6 * ((i - 30) / 15) + .9 * Math.sin(i * 1.7) : 104.6 + .8 * Math.sin(i * .9));
+    const pk = []; eq.reduce((m, v, i) => (pk[i] = Math.max(m, v)), -1e9);
+    const P = eq.findIndex((v, i) => (pk[i] - v) / pk[i] >= .10);
+    const x0 = 60, x1 = N ? 400 : 640, y0 = 40, y1 = 300, vmin = 95, vmax = 122;
+    const X = i => x0 + (x1 - x0) * i / (N - 1), Y = v => y1 - (y1 - y0) * (v - vmin) / (vmax - vmin);
+    el('path', { d: `M${x0} ${y0} V${y1} H${x1}`, stroke: '#ffffff22', fill: 'none' }, s);
+    tx(s, x0 + 8, y0 - 12, 'EQUITY', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    tx(s, x1, y1 + 28, 'time →', { 'font-size': 12, fill: C.mute, 'text-anchor': 'end' });
+    const peakL = el('path', { stroke: C.amb, 'stroke-dasharray': '5 7', 'stroke-width': 1.5, fill: 'none' }, s);
+    const thrL = el('path', { stroke: C.red, 'stroke-dasharray': '3 6', 'stroke-width': 1.5, fill: 'none' }, s);
+    const pkT = tx(s, 0, 0, 'peak', { 'font-size': 12, fill: C.amb }), thT = tx(s, 0, 0, '−10 %', { 'font-size': 12, fill: C.red });
+    const live = el('path', { stroke: C.amb, 'stroke-width': 3, fill: 'none', 'stroke-linejoin': 'round' }, s);
+    const after = el('path', { stroke: '#4a5160', 'stroke-width': 3, fill: 'none', 'stroke-linejoin': 'round' }, s);
+    const head = el('circle', { r: 6, fill: C.amb }, s);
+    box(s, 680, 40, 310, 260, 18);
+    const tP = tx(s, 705, 88, '', { 'font-size': 15 }), tE = tx(s, 705, 116, '', { 'font-size': 15 });
+    const tD = tx(s, 705, 172, '', { class: 't', 'font-size': 38 });
+    tx(s, 705, 200, 'drawdown · limit 10 %', { 'font-size': 13, fill: C.mute });
+    const tS = tx(s, 705, 250, '', { class: 't', 'font-size': 19 }), tS2 = tx(s, 705, 276, '', { 'font-size': 12, fill: C.mute });
+    const line = (a, b) => eq.slice(a, b).map((v, j) => `${j ? 'L' : 'M'}${X(a + j).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ');
+    return t => {
+      const n = Math.max(2, Math.round(1 + (N - 1) * clamp((t % 11) / 7.5))), last = n - 1, paused = last >= P;
+      const k = paused ? P : last, peak = pk[k], dd = (peak - eq[k]) / peak * 100;
+      live.setAttribute('d', line(0, Math.min(n, P + 1)));
+      after.setAttribute('d', paused ? line(P, n) : '');
+      head.setAttribute('cx', X(last)); head.setAttribute('cy', Y(eq[last])); head.setAttribute('fill', paused ? C.red : C.amb);
+      const xs = X(pk.indexOf(peak)), xe = X(last);
+      peakL.setAttribute('d', `M${xs} ${Y(peak)} H${xe}`); thrL.setAttribute('d', `M${xs} ${Y(peak * .9)} H${xe}`);
+      pkT.setAttribute('x', xs); pkT.setAttribute('y', Y(peak) - 8); thT.setAttribute('x', xs); thT.setAttribute('y', Y(peak * .9) + 18);
+      tP.textContent = `peak    ${peak.toFixed(1)}`; tE.textContent = `equity  ${eq[k].toFixed(1)}`;
+      tD.textContent = `${dd.toFixed(1)} %`; tD.setAttribute('fill', paused ? C.red : C.txt);
+      tS.textContent = paused ? '⏸ AUTOPILOT PAUSED' : '▶ autopilot trading'; tS.setAttribute('fill', paused ? C.red : C.grn);
+      tS2.textContent = paused ? 'no forced selling · waits for a user' : '';
+    };
+  };
+
+  /* toothless tests: the detector scans five tests; four can't fail, one can */
+  B.scan = host => {
+    const s = svgIn(host, 1000, 290);
+    const T = [['C1', 'returns,', 'never asserts', 1], ['C2', 'no assert', 'at all', 1], ['C3', 'only a weak', 'assert', 1], ['C4', 'swallows', 'the failure', 1], ['OK', 'a real', 'assert', 0]];
+    (N ? ["DETECTOR · READS EACH TEST'S", 'SYNTAX TREE · NO TEST IS RUN'] : ["DETECTOR · READS EACH TEST'S SYNTAX TREE · NO TEST IS RUN"])
+      .forEach((l, i, a) => tx(s, 10, a.length > 1 ? 12 + i * 22 : 30, l, { 'font-size': 12, 'letter-spacing': '.1em', fill: C.mute }));
+    const W = 176, cards = T.map(([tag, a, b, bad], i) => {
+      const x = 10 + i * (W + 20), y = 60;
+      const r = box(s, x, y, W, 190, 16);
+      tx(s, x + 18, y + 34, tag, { 'font-size': 13, fill: C.mute });
+      tx(s, x + 18, y + 82, a, { class: 't', 'font-size': 20 }); tx(s, x + 18, y + 108, b, { class: 't', 'font-size': 20 });
+      const v = tx(s, x + 18, y + 160, '', { 'font-size': 14 });
+      return { r, v, bad, cx: x + W / 2 };
+    });
+    const glow = el('rect', { y: 50, width: 70, height: 210, fill: C.amb, opacity: .12 }, s);
+    const beam = el('rect', { y: 50, width: 3, height: 210, fill: C.amb }, s);
+    return t => {
+      const u = t % 7, bx = u < 4 ? -40 + 1080 * (u / 4) : 1100;
+      beam.setAttribute('x', bx); glow.setAttribute('x', bx - 70); beam.style.display = glow.style.display = u < 4 ? '' : 'none';
+      cards.forEach(c => {
+        const on = bx > c.cx, col = c.bad ? C.red : C.grn;
+        c.r.setAttribute('stroke', on ? col : C.line); c.r.setAttribute('fill', on ? (c.bad ? '#1a0d0e' : '#0d1a13') : C.box);
+        c.v.textContent = on ? (c.bad ? '✗ toothless' : '✓ can fail') : ''; c.v.setAttribute('fill', col);
+      });
+    };
+  };
+
+  /* dissiz_check._is_weak_assert(): three questions; any "yes" = weak, all "no" = a real check */
+  B.tree = host => {
+    const s = svgIn(host, 1000, 340);
+    const EX = [['assert True', 0], ['assert x is not None', 1], ['assert x == x', 2], ['assert total([2, 3]) == 5', 3]];
+    const Q = [[300, 'always true?', 'a constant'], [500, 'only “not None”?', 'any value passes'], [700, 'same both sides?', 'x == x']];
+    tx(s, 100, 70, 'ASSERT', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute, 'text-anchor': 'middle' });
+    el('path', { d: 'M190 140 H815', stroke: C.line, 'stroke-width': 3, fill: 'none' }, s);
+    const st = box(s, 10, 95, 180, 90);
+    const exT = tx(s, 100, 146, '', { 'font-size': 13, fill: C.amb, 'text-anchor': 'middle' });
+    const qs = Q.map(([cx, a, b]) => {
+      el('path', { d: `M${cx} 188 V250`, stroke: C.line, 'stroke-width': 3, fill: 'none' }, s);
+      tx(s, cx + 10, 226, 'yes', { 'font-size': 12, fill: C.red });
+      tx(s, cx + 89, 130, 'no', { 'font-size': 12, fill: C.grn });
+      const r = box(s, cx - 85, 92, 170, 96, 16);
+      tx(s, cx, 136, a, { class: 't', 'font-size': 17, 'text-anchor': 'middle' }); tx(s, cx, 162, b, { 'font-size': 12, 'text-anchor': 'middle', fill: C.mute });
+      const w = box(s, cx - 75, 250, 150, 56, 12);
+      const wt = tx(s, cx, 284, 'weak', { class: 't', 'font-size': 18, 'text-anchor': 'middle', fill: C.mute });
+      return { cx, r, w, wt };
+    });
+    const end = box(s, 815, 95, 175, 90, 16);
+    const endT = tx(s, 902, 146, 'real check', { class: 't', 'font-size': 19, 'text-anchor': 'middle', fill: C.mute });
+    const tok = el('circle', { r: 10, fill: C.amb }, s);
+    return t => {
+      const D = 3.6, idx = Math.floor(t / D) % EX.length, [ex, k] = EX[idx], m = clamp((t % D) / 2.2);
+      exT.textContent = ex;
+      const pts = [[190, 140], ...Q.slice(0, Math.min(k + 1, 3)).map(q => [q[0], 140])];
+      if (k < 3) pts.push([Q[k][0], 278]); else pts.push([902, 140]);
+      const seg = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1])), tot = seg.reduce((a, b) => a + b, 0);
+      let d = m * tot, i = 0; while (i < seg.length - 1 && d > seg[i]) d -= seg[i++];
+      const f = seg[i] ? d / seg[i] : 1, x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * f, y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * f;
+      tok.setAttribute('cx', x); tok.setAttribute('cy', y);
+      const arrived = m >= 1;
+      qs.forEach((q, j) => {
+        q.r.setAttribute('stroke', x >= q.cx - 1 && j <= k ? C.amb : C.line);
+        const hit = arrived && j === k; q.w.setAttribute('stroke', hit ? C.red : C.line); q.w.setAttribute('fill', hit ? '#1a0d0e' : C.box); q.wt.setAttribute('fill', hit ? C.red : C.mute);
+      });
+      const ok = arrived && k === 3; end.setAttribute('stroke', ok ? C.grn : C.line); end.setAttribute('fill', ok ? '#0d1a13' : C.box); endT.setAttribute('fill', ok ? C.grn : C.mute);
+      tok.setAttribute('fill', arrived ? (k === 3 ? C.grn : C.red) : C.amb);
+    };
+  };
+
+  /* AlphaPulse · strategy boardroom + compliance (demo build, fixed templates, mock data) */
+  B.ap = host => {
+    const s = svgIn(host, 1000, 410);
+    tx(s, 10, 26, 'SAMPLE HEADLINE · MOCK DATA', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    const M = N ? 280 : 420, SC = N ? 110 : 200;                         // bar centre + scale (phone: narrower)
+    box(s, 10, 38, N ? 460 : 620, 64, 14);
+    tx(s, 30, 78, 'Chipmaker beats earnings estimates', { class: 't', 'font-size': 22 });
+    const A = [['Macro Bear', -.7, 'bearish'], ['Tech Bull', .85, 'bullish'], ['Risk Officer', -.35, 'cautious'], ['Quant Analyst', .45, 'mildly bullish']];
+    el('path', { d: `M${M} 122 V368`, stroke: '#ffffff22', 'stroke-dasharray': '3 6' }, s);
+    tx(s, M - 12, 392, '← bear', { 'font-size': 12, fill: C.red, 'text-anchor': 'end' }); tx(s, M + 12, 392, 'bull →', { 'font-size': 12, fill: C.grn });
+    const rows = A.map(([n, v, lab], i) => {
+      const y = 128 + i * 60;
+      tx(s, 10, y + 25, n, { class: 't', 'font-size': 18 });
+      const b = el('rect', { x: M, y, width: 0, height: 34, rx: 6, fill: v < 0 ? C.red : C.grn }, s);
+      const t = tx(s, 0, y + 23, lab, { 'font-size': 13, fill: v < 0 ? C.red : C.grn });
+      return { b, t, v };
+    });
+    box(s, 660, 38, 330, 340, 18);
+    const pT = tx(s, 685, 74, '', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    const p1 = tx(s, 685, 128, '', { 'font-size': 16 }), p2 = tx(s, 685, 166, '', { 'font-size': 16 }), p3 = tx(s, 685, 204, '', { 'font-size': 16 });
+    const big = tx(s, 685, 300, '', { class: 't', 'font-size': 22 }), sub = tx(s, 685, 330, '', { 'font-size': 12, fill: C.mute });
+    return t => {
+      const u = t % 12, debate = u < 6;
+      let shown = 0, bull = 0, bear = 0;
+      rows.forEach((r, i) => {
+        const f = clamp((u - (.4 + i * 1.1)) / .7), w = Math.abs(r.v) * SC * (debate ? f : 1);
+        r.b.setAttribute('x', r.v < 0 ? M - w : M); r.b.setAttribute('width', w);
+        r.b.setAttribute('opacity', debate ? 1 : .25); r.t.setAttribute('opacity', (debate ? f > 0 : 1) ? (debate ? 1 : .35) : 0);
+        r.t.setAttribute('x', r.v < 0 ? M - w - 10 : M + w + 10); r.t.setAttribute('text-anchor', r.v < 0 ? 'end' : 'start');
+        if (f >= 1 || !debate) { shown++; r.v > 0 ? bull++ : bear++; }
+      });
+      if (debate) {
+        pT.textContent = 'STRATEGY BOARDROOM';
+        p1.textContent = `views     ${shown} / 4`; p2.textContent = `bull ${bull}  ·  bear ${bear}`; p3.textContent = '';
+        big.textContent = shown < 4 ? 'agents debating…' : '4 views on the table'; big.setAttribute('fill', shown < 4 ? C.amb : C.txt);
+        sub.textContent = '⚠ fixed-template simulation';
+      } else {
+        pT.textContent = 'COMPLIANCE CENTRE';
+        p1.textContent = 'order ticket · ACME';
+        p2.textContent = u > 7.2 ? 'restricted list → ✗ blocked' : 'checking restricted list…'; p2.setAttribute('fill', u > 7.2 ? C.red : C.soft);
+        p3.textContent = u > 9 ? 'edit list → ⏳ 2nd reviewer' : ''; p3.setAttribute('fill', C.amb);
+        big.textContent = u > 9 ? 'no single-person changes' : u > 7.2 ? '✗ ORDER BLOCKED' : 'checking…';
+        big.setAttribute('fill', u > 9 ? C.amb : u > 7.2 ? C.red : C.amb);
+        sub.textContent = 'demo build · mock data';
+      }
+    };
+  };
+
+  /* Sesli Kitap · page pipeline: text layer (or OCR) → strip artefacts → sentences → narration with highlight */
+  B.sk = host => {
+    const s = svgIn(host, 1000, 380);
+    box(s, 10, 20, 300, 340, 14);
+    const hdr = tx(s, 30, 54, 'CHAPTER 1 · p. 3', { 'font-size': 11, 'letter-spacing': '.1em', fill: C.mute });
+    const ftr = tx(s, 160, 344, '— 3 —', { 'font-size': 12, 'text-anchor': 'middle', fill: C.mute });
+    const hS = el('path', { d: 'M26 50 H170', stroke: C.red, 'stroke-width': 2 }, s), fS = el('path', { d: 'M135 340 H185', stroke: C.red, 'stroke-width': 2 }, s);
+    [250, 238, 256, 226, 250, 244, 150].forEach((w, i) => el('rect', { x: 30, y: 82 + i * 32, width: w, height: 10, rx: 5, fill: '#2a303c' }, s));
+    const img = el('rect', { x: 10, y: 20, width: 300, height: 340, rx: 14, fill: '#232835' }, s);
+    const imgT = tx(s, 160, 196, 'scanned image · no text layer', { 'font-size': 12, 'text-anchor': 'middle', fill: C.mute });
+    const beam = el('rect', { x: 12, width: 296, height: 3, fill: C.amb }, s);
+    const S = ['The page becomes text.', 'Noise is stripped away.', 'Each sentence is read aloud.'];
+    const pills = S.map((t, i) => { const g = el('g', {}, s); const r = box(g, 340, 40 + i * 70, 300, 52, 12); const x = tx(g, 360, 72 + i * 70, t, { 'font-size': 15 }); return { g, r, x }; });
+    const bars = [...Array(30)].map((_, i) => el('rect', { x: 342 + i * 10, width: 6, rx: 3, fill: '#2c3240' }, s));
+    box(s, 670, 20, 320, 340, 18);
+    const q1 = tx(s, 695, 70, 'page 3 / 21', { 'font-size': 16 }), q2 = tx(s, 695, 106, '', { 'font-size': 15 }), q3 = tx(s, 695, 142, '', { 'font-size': 15 }), q4 = tx(s, 695, 178, '', { 'font-size': 15 });
+    const big = tx(s, 695, 290, '', { class: 't', 'font-size': 21 }), sub = tx(s, 695, 320, '', { 'font-size': 12, fill: C.mute });
+    return t => {
+      const u = t % 10, ocr = Math.floor(t / 10) % 2 === 1;
+      img.setAttribute('opacity', ocr ? clamp(1 - (u - 1.2) / .6) * .92 : 0); imgT.setAttribute('opacity', ocr && u < 1.4 ? 1 : 0);
+      beam.setAttribute('y', 20 + 337 * clamp(u / 1.6)); beam.setAttribute('opacity', u < 1.6 ? 1 : 0);
+      const strip = clamp((u - 1.8) / .6);
+      [hS, fS].forEach(p => { p.setAttribute('opacity', u > 1.8 ? 1 : 0); p.style.strokeDasharray = 160; p.style.strokeDashoffset = 160 * (1 - strip); });
+      [hdr, ftr, hS, fS].forEach(e => e.style.opacity = u > 2.7 ? .2 : '');
+      const k = u < 4.5 ? -1 : Math.min(2, Math.floor((u - 4.5) / 1.8));
+      pills.forEach((p, i) => {
+        p.g.setAttribute('opacity', clamp((u - 3 - i * .45) / .4));
+        p.r.setAttribute('stroke', i === k ? C.amb : C.line); p.r.setAttribute('fill', i === k ? '#ffb5471f' : C.box);
+        p.x.setAttribute('fill', i === k ? C.txt : C.soft);
+      });
+      bars.forEach((b, i) => { const h = k >= 0 ? 8 + 26 * Math.abs(Math.sin(t * 6 + i * .7) * Math.sin(t * 2.3 + i * .3)) : 4;
+        b.setAttribute('y', 330 - h / 2); b.setAttribute('height', h); b.setAttribute('fill', k >= 0 ? C.amb : '#2c3240'); });
+      q2.textContent = u < 1.6 ? (ocr ? 'no text layer → OCR…' : 'reading text layer…') : (ocr ? 'OCR fallback ✓' : 'text layer ✓');
+      q2.setAttribute('fill', u < 1.6 ? C.amb : C.grn);
+      q3.textContent = u > 2.7 ? 'header + page no. stripped ✓' : ''; q3.setAttribute('fill', C.grn);
+      q4.textContent = u > 4.2 ? 'cleaned · 3 sentences ✓' : ''; q4.setAttribute('fill', C.grn);
+      big.textContent = k >= 0 ? `▶ NARRATING · ${k + 1} / 3` : 'preparing the page…'; big.setAttribute('fill', k >= 0 ? C.grn : C.amb);
+      sub.textContent = k >= 0 ? 'the sentence being read lights up' : '';
+    };
+  };
+
+  /* Live voice translation: listen → Turkish text → Gemini → English text; the history builds up */
+  B.tr = host => {
+    const s = svgIn(host, 1000, 350);
+    const P = [['Yarın sabah toplantı var mı?', 'Is there a meeting tomorrow morning?'], ['Raporu akşama kadar bitiririm.', "I'll finish the report by evening."], ['Kahve içmek ister misin?', 'Would you like some coffee?']];
+    const rings = [0, 1].map(() => el('circle', { cx: 66, cy: 175, r: 34, fill: 'none', stroke: C.amb, 'stroke-width': 2 }, s));
+    const mic = el('circle', { cx: 66, cy: 175, r: 34, fill: C.box, stroke: C.line, 'stroke-width': 2 }, s);
+    el('rect', { x: 58, y: 154, width: 16, height: 28, rx: 8, fill: C.soft }, s);
+    el('path', { d: 'M50 174 a16 16 0 0 0 32 0 M66 190 V198', stroke: C.soft, 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' }, s);
+    box(s, 140, 30, 490, 104, 14); tx(s, 160, 58, 'TÜRKÇE · SPEECH → TEXT', { 'font-size': 11, 'letter-spacing': '.1em', fill: C.mute });
+    const trT = tx(s, 160, 106, '', { class: 't', 'font-size': 22 });
+    el('path', { d: 'M385 134 V158 M385 202 V222', stroke: C.line, 'stroke-width': 3 }, s);
+    const gem = box(s, 330, 158, 110, 44, 22); tx(s, 385, 186, 'Gemini', { 'font-size': 15, 'text-anchor': 'middle' });
+    box(s, 140, 222, 490, 104, 14); tx(s, 160, 250, 'ENGLISH', { 'font-size': 11, 'letter-spacing': '.1em', fill: C.mute });
+    const enT = tx(s, 160, 298, '', { class: 't', 'font-size': 22, fill: C.amb });
+    box(s, 660, 30, 330, 296, 18); tx(s, 685, 62, 'CONVERSATION HISTORY', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    const hist = [0, 1, 2].map(j => [tx(s, 685, 104 + j * 72, '', { 'font-size': 12.5, fill: C.mute }), tx(s, 685, 128 + j * 72, '', { 'font-size': 12.5 })]);
+    const type = (str, f) => str.slice(0, Math.round(str.length * clamp(f)));
+    return t => {
+      const n = Math.floor(t / 7), u = t % 7, [tr, en] = P[n % 3], listen = u < 1.5;
+      mic.setAttribute('stroke', listen ? C.amb : C.line);
+      rings.forEach((r, i) => { const ph = ((t * 1.2 + i * .5) % 1); r.setAttribute('r', 34 + ph * 28); r.setAttribute('opacity', listen ? (1 - ph) * .7 : 0); });
+      trT.textContent = u < 1.5 ? '' : `“${type(tr, (u - 1.5) / 1.5)}”`;
+      gem.setAttribute('stroke', u > 3 && u < 3.9 ? C.amb : C.line);
+      enT.textContent = type(en, (u - 3.8) / 1.5);
+      hist.forEach(([a, b], j) => { const m = n - 1 - j, on = m >= 0; a.textContent = on ? P[m % 3][0] : ''; b.textContent = on ? P[m % 3][1] : ''; });
+    };
+  };
+
+  /* Habit coach: tasks ticked → points; a full day fills the streak; the coach answers */
+  B.hb = host => {
+    const s = svgIn(host, 1000, 380);
+    box(s, 10, 20, 430, 60, 14); tx(s, 30, 57, 'Habit · unhealthy eating', { class: 't', 'font-size': 19 });
+    const T = ['Write why you want to quit', 'Drink a glass of water', "Plan tomorrow's meals", 'Take a 20-minute walk'];
+    const tasks = T.map((name, i) => {
+      const y = 100 + i * 64, r = box(s, 10, y, 430, 52, 12);
+      const c = el('circle', { cx: 40, cy: y + 26, r: 12, fill: 'none', stroke: '#3a404c', 'stroke-width': 2 }, s);
+      const k = el('path', { d: `M34 ${y + 26} l4 5 l9 -10`, stroke: '#07080b', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' }, s);
+      const nm = tx(s, 64, y + 31, name, { 'font-size': 14 });
+      const pt = tx(s, 420, y + 31, '+10', { 'font-size': 13, 'text-anchor': 'end', fill: C.mute });
+      return { r, c, k, nm, pt };
+    });
+    tx(s, 470, 46, 'STREAK', { 'font-size': 12, 'letter-spacing': '.12em', fill: C.mute });
+    const days = [...Array(7)].map((_, j) => { const y = 74 + j * 42; tx(s, 470, y + 6, `D${j + 1}`, { 'font-size': 12, fill: C.mute }); return el('circle', { cx: 520, cy: y, r: 13, fill: 'none', stroke: '#3a404c', 'stroke-width': 2 }, s); });
+    box(s, 580, 20, 410, 340, 18);
+    const dT = tx(s, 605, 78, '', { class: 't', 'font-size': 34 });
+    const pT = tx(s, 605, 116, '', { 'font-size': 16 }), sT = tx(s, 605, 146, '', { 'font-size': 16 });
+    const bub = el('g', {}, s); el('rect', { x: 605, y: 190, width: 360, height: 130, rx: 16, fill: '#ffb54714', stroke: '#ffb54766' }, bub);
+    tx(bub, 625, 222, 'AI COACH', { 'font-size': 11, 'letter-spacing': '.12em', fill: C.amb });
+    tx(bub, 625, 256, 'Today: only water and fruit.', { 'font-size': 15 }); tx(bub, 625, 286, 'How do you feel?', { 'font-size': 15 });
+    return t => {
+      const day = Math.floor(t / 8) % 7 + 1, u = t % 8;
+      let done = 0;
+      tasks.forEach((k, i) => { const on = u > .6 + i * .9; if (on) done++;
+        k.c.setAttribute('fill', on ? C.grn : 'none'); k.c.setAttribute('stroke', on ? C.grn : '#3a404c'); k.k.setAttribute('opacity', on ? 1 : 0);
+        k.r.setAttribute('stroke', on ? '#57e08a99' : C.line); k.nm.setAttribute('fill', on ? C.txt : C.soft); k.pt.setAttribute('fill', on ? C.grn : C.mute); });
+      const full = done === 4 && u > 4.4;
+      days.forEach((c, j) => { const f = j < day - 1 || (j === day - 1 && full); c.setAttribute('fill', f ? C.amb : 'none'); c.setAttribute('stroke', f ? C.amb : j === day - 1 ? C.amb : '#3a404c'); });
+      dT.textContent = `Day ${day}`;
+      pT.textContent = `points   ${(day - 1) * 40 + done * 10}`;
+      sT.textContent = `streak   ${full ? day : day - 1} day${(full ? day : day - 1) === 1 ? '' : 's'}`;
+      bub.setAttribute('opacity', clamp((u - 4.9) / .5));
+    };
+  };
+
+  /* one clock for all diagrams; each draws only while on screen */
+  const live = new Set(); let raf = 0;
+  const tick = now => { live.forEach(h => h._draw(now / 1000)); raf = live.size ? requestAnimationFrame(tick) : 0; };
+  const build = h => { h._draw = B[h.dataset.dg](h); h._draw(0); floorText(h); };
+  NM.addEventListener('change', () => { N = NM.matches; $$('[data-dg]').forEach(h => B[h.dataset.dg] && build(h)); });
+  $$('[data-dg]').forEach(h => {
+    if (!B[h.dataset.dg]) return;
+    build(h);
+    new IntersectionObserver(es => es.forEach(e => {
+      e.isIntersecting ? live.add(h) : live.delete(h);
+      if (live.size && !raf) raf = requestAnimationFrame(tick);
+    })).observe(h);
+  });
+
+  /* check chains: steps tick green one by one; data-fail = step that fails on every other run (red → back to the agent) */
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  $$('[data-chk]').forEach(ol => {
+    const li = $$('li', ol), vp = ol.parentElement.querySelector('.chk-v'), vb = vp && vp.querySelector('b');
+    const failAt = ol.dataset.fail ? +ol.dataset.fail : -1, passTxt = ol.dataset.pass || 'green · merge';
+    let seen = false, failRun = failAt >= 0;
+    new IntersectionObserver(es => es.forEach(e => { seen = e.isIntersecting; })).observe(ol);
+    const verdict = (cls, txt) => { if (!vp) return; vp.classList.remove('pass', 'fail'); if (cls) vp.classList.add(cls); vb.textContent = txt; };
+    (async () => {
+      for (;;) {
+        while (!seen) await sleep(300);
+        li.forEach(n => { n.classList.remove('run', 'ok', 'bad'); n.removeAttribute('data-note'); });
+        verdict('', 'running'); await sleep(500);
+        let failed = false;
+        for (let i = 0; i < li.length; i++) {
+          li[i].classList.add('run'); await sleep(420);
+          li[i].classList.remove('run');
+          if (failRun && i === failAt) { li[i].classList.add('bad'); if (ol.dataset.failNote) li[i].dataset.note = ol.dataset.failNote; failed = true; break; }
+          li[i].classList.add('ok');
+        }
+        verdict(failed ? 'fail' : 'pass', failed ? 'red · back to the agent' : passTxt);
+        await sleep(failed ? 2400 : 3200);
+        if (failAt >= 0) failRun = !failRun;
+      }
+    })();
+  });
+})();
+</script>
+</body>
+</html>

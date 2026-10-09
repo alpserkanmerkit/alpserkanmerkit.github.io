@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- shell:head (byte-identical on every page; page-specific title, meta, JSON-LD and page CSS follow it) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307080b'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='15' fill='%23ffb547'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<script>/* before first paint: hide the Home loader on repeat visits; record the incoming View Transition (window.__vtP, html[data-vt]) */
+(function(d){var h=d.documentElement;try{if(sessionStorage.getItem('asm-seen')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches)h.classList.add('seen')}catch(e){}
+window.__vtP='onpagereveal' in window?new Promise(function(r){addEventListener('pagereveal',function(e){h.dataset.vt=e.viewTransition?'yes':'no';r(e.viewTransition||null)},{once:true})}):Promise.resolve(null)})(document);</script>
+<!-- /shell:head -->
+<title>Alp Serkan Merkit — Mechanical Engineer who builds with AI</title>
+<meta name="description" content="Alp Serkan Merkit — mechanical engineer (B.Sc. 2026, Yaşar University, İzmir). Generative-design hardware, ESP32 devices, and AI-agent-built software held to automated quality gates.">
+<link rel="canonical" href="https://alpserkanmerkit.github.io/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Alp Serkan Merkit — Mechanical Engineer who builds with AI">
+<meta property="og:description" content="Generative-design hardware · ESP32 devices · AI-agent-built software held to automated quality gates.">
+<meta property="og:url" content="https://alpserkanmerkit.github.io/">
+<meta property="og:image" content="https://alpserkanmerkit.github.io/assets/media/generative_design.jpg">
+<meta property="og:image:width" content="1760">
+<meta property="og:image:height" content="1052">
+<meta property="og:image:alt" content="Generative-design study of the rover bogie arm in Fusion 360 and the printed parts">
+<meta name="twitter:card" content="summary_large_image">
+<script>/* hash redirects (Home only): old one-page anchors → their new pages, before anything paints */
+(function(m){var t=m[location.hash];if(t)location.replace(t)})({'#rover':'/mechanical/#rover','#ortam':'/mechatronics/#ortam','#bench':'/mechatronics/#origin','#method':'/software-ai/#method','#software':'/software-ai/#apps'});</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="speculationrules">{"prefetch":[{"source":"list","urls":["/mechanical/","/mechatronics/","/software-ai/"]}]}</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://alpserkanmerkit.github.io/#person",
+  "url": "https://alpserkanmerkit.github.io/",
+  "name": "Alp Serkan Merkit",
+  "givenName": "Alp Serkan",
+  "familyName": "Merkit",
+  "alternateName": "alpserkanmerkit",
+  "jobTitle": "Mechanical Engineer",
+  "description": "Mechanical engineer who builds with AI: generative-design hardware, ESP32 devices, and AI-agent-built software held to automated quality gates.",
+  "image": "https://alpserkanmerkit.github.io/assets/media/me_presenting.jpg",
+  "email": "mailto:alpserkanmer@outlook.com",
+  "address": {"@type": "PostalAddress", "addressLocality": "İzmir", "addressCountry": "TR"},
+  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Yaşar University", "url": "https://www.yasar.edu.tr/"},
+  "hasCredential": {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "B.Sc. Mechanical Engineering (2026)"},
+  "knowsAbout": ["Mechanical engineering", "Generative design", "Topology optimization", "Autodesk Fusion 360", "SolidWorks", "AutoCAD", "3D printing", "Design for manufacturing", "ESP32-S3", "Arduino", "Bluetooth Low Energy", "Flutter", "AI coding agents", "Claude Code", "Codex", "Automated quality gates", "Test-driven development", "Mutation testing", "pytest", "GitHub Actions"],
+  "knowsLanguage": [{"@type": "Language", "name": "Turkish", "alternateName": "tr"}, {"@type": "Language", "name": "English", "alternateName": "en"}],
+  "sameAs": ["https://github.com/alpserkanmerkit", "https://www.linkedin.com/in/alp-serkan-merkit-b8990a202"],
+  "subjectOf": [
+    {"@type": "WebPage", "name": "Mechanical — from load cases to printed parts", "url": "https://alpserkanmerkit.github.io/mechanical/"},
+    {"@type": "WebPage", "name": "Mechatronics — devices that sense, decide, act", "url": "https://alpserkanmerkit.github.io/mechatronics/"},
+    {"@type": "WebPage", "name": "Software & AI — code verified by the gate", "url": "https://alpserkanmerkit.github.io/software-ai/"}
+  ]
+}
+</script>
+<style>
+/* ---- Home only ---- */
+#hero{position:relative;height:100vh;height:100svh;min-height:620px;overflow:hidden}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+.hero-copy{position:absolute;left:0;right:0;bottom:9vh;z-index:2}
+.hero-copy .kicker{margin-bottom:20px}
+.hero-copy h1{font-family:var(--f-display);font-weight:700;font-size:clamp(54px,10.5vw,164px);line-height:.88;letter-spacing:-.045em}
+.hero-copy h1 .ln{display:block;overflow:hidden;padding-bottom:.04em}
+.hero-copy h1 .ch{display:inline-block;transform:translateY(110%)}
+.hero-copy h1 .accent{color:transparent;-webkit-text-stroke:1.5px var(--txt)}
+.hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:22px 32px;margin-top:26px;flex-wrap:wrap}
+[data-intro]{opacity:0;transform:translateY(14px)}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.scroll-hint{position:absolute;right:var(--gutter);bottom:28px;z-index:2;writing-mode:vertical-rl}
+.scroll-hint::after{content:"";display:block;width:1px;height:60px;margin:12px auto 0;background:linear-gradient(var(--amber),transparent);animation:drip 1.6s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media (prefers-reduced-motion:reduce){.scroll-hint::after{animation:none}}
+@media (max-width:720px){.scroll-hint{display:none}.hero-copy{bottom:6vh}}
+
+#manifesto{padding:calc(var(--sec-y-lg) * 1.2) 0 var(--sec-y-lg)}
+#manifesto p{font-family:var(--f-display);font-size:clamp(28px,3.8vw,58px);line-height:1.18;letter-spacing:-.03em;font-weight:500;max-width:1180px}
+#manifesto .hl{color:var(--amber)}
+
+/* three doors: one wide card per track, media large, alternating sides (desktop); stacked on small screens */
+#doors{padding:var(--sec-y-lg) 0}
+#doors .sec-head{margin-bottom:var(--head-gap)}
+#doors .sec-head h2{font-size:clamp(40px,5.4vw,84px)}
+#doors .doors{grid-template-columns:1fr;gap:clamp(56px,9vh,110px)}
+#doors .door{flex-direction:row;min-height:min(66vh,600px)}
+#doors .door:nth-child(even){flex-direction:row-reverse}
+#doors .door-media{flex:0 0 57%;aspect-ratio:auto;border-bottom:0;border-right:1px solid var(--line)}
+#doors .door:nth-child(even) .door-media{border-right:0;border-left:1px solid var(--line)}
+#doors .door:nth-child(2) .door-media img{object-fit:contain;padding:4% 3%}   /* the setup graphic is text: show it whole */
+#doors .door-body{justify-content:center;gap:22px;padding:clamp(36px,4.4vw,72px)}
+#doors .door-title{font-size:clamp(30px,3.3vw,52px);line-height:1.04}
+#doors .door-term{font-size:clamp(13px,1.3vw,19px);line-height:1.8;padding:0 9%}
+/* Mechanical door: the rover's belt drive runs live until the stress-test film prints over it (hover / in view on touch) */
+.door-3d{position:absolute;inset:0;width:100%;height:100%;display:block;background:radial-gradient(70% 70% at 50% 55%,#171b24,#08090d)}
+.door-3d-tag{position:absolute;left:16px;top:14px;font-size:11px;color:var(--amber);transition:opacity .4s}
+.door:hover .door-3d-tag,.door.door-printed .door-3d-tag{opacity:0}
+.door-desc{display:block;color:var(--soft);font-size:16.5px;line-height:1.6;max-width:46ch}
+.door-facts{display:flex;flex-wrap:wrap;gap:8px}
+.door-facts span{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;padding:6px 11px;border-radius:8px;background:#ffffff08;border:1px solid #ffffff14;color:#c9ccd4;white-space:nowrap}
+#doors .door-go{margin-top:12px}
+@media (max-width:900px){
+  #doors .door,#doors .door:nth-child(even){flex-direction:column;min-height:0}
+  #doors .door-media,#doors .door:nth-child(even) .door-media{flex:none;aspect-ratio:16/10;border:0;border-bottom:1px solid var(--line)}
+  #doors .door-body{padding:30px 24px 30px;gap:18px}
+  .door-desc{font-size:15.5px}
+  #doors .door-term{font-size:12px;padding:0 6%}
+}
+
+/* proof: six numbers, each with where it comes from */
+#proof{padding:var(--sec-y-lg) 0 var(--sec-y);background:var(--bg2);border-block:1px solid var(--line)}
+#proof .sec-head{margin-bottom:var(--head-gap-s)}
+#proof .sec-head h2{font-size:clamp(40px,5.4vw,84px)}
+.proof-lead{color:var(--soft);font-size:clamp(17px,1.4vw,20px);max-width:720px;margin:-24px 0 56px}
+.proof{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.proof li{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.proof a{display:flex;flex-direction:column;height:100%;padding:56px 44px 44px;transition:background .3s}
+.proof a:hover{background:#ffffff06}
+.proof b{display:block;font-family:var(--f-display);font-size:clamp(54px,6vw,100px);font-weight:700;letter-spacing:-.045em;line-height:1;white-space:nowrap;transition:color .3s}
+.proof b small{font-size:.38em;font-weight:500;color:var(--mute);margin-left:6px;letter-spacing:0}
+.proof b small.pre{margin:0 6px 0 0}
+.proof b .arrow{color:var(--amber)}
+.proof a:hover b{color:var(--amber)}
+.proof .l{display:block;color:var(--soft);font-size:16px;line-height:1.45;margin-top:18px;max-width:30ch}
+.proof .src{display:block;margin-top:auto;padding-top:28px;font-size:11.5px}
+.proof a:hover .src{color:var(--amber)}
+
+/* path: education + internships, then two classroom photos, large */
+#path{padding:var(--sec-y-lg) 0}
+#path .sec-head{margin-bottom:var(--head-gap-s)}
+#path .sec-head h2{font-size:clamp(40px,5.4vw,84px)}
+.path-list{list-style:none;border-top:1px solid var(--line)}
+.path-list li{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:30px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.path-list .what{color:var(--mute);font-size:16.5px;line-height:1.45}
+.path-list .what b{color:var(--txt);font-family:var(--f-display);font-weight:500;font-size:clamp(20px,1.8vw,26px);letter-spacing:-.015em}
+.path-more{display:inline-block;margin-top:30px;color:var(--txt)}
+.path-more:hover{color:var(--amber)}
+.path-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:clamp(48px,7vw,110px);align-items:end}
+.path-photo{margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:var(--bg2)}
+.path-photo img{width:100%;filter:saturate(.9) contrast(1.05)}
+.path-photo figcaption{padding:14px 18px;font-size:11.5px;line-height:1.6}
+
+@media (max-width:900px){
+  .proof{grid-template-columns:repeat(2,1fr)}
+  .proof a{padding:36px 22px 30px}
+  .proof .l{font-size:14.5px}
+  .path-list li{grid-template-columns:150px minmax(0,1fr);gap:20px;padding:24px 0}
+  .path-grid{grid-template-columns:1fr}
+  .path-photo{max-width:560px}
+}
+@media (max-width:560px){
+  .proof b{font-size:clamp(40px,12vw,54px)}
+  .proof a{padding:30px 16px 24px}
+  .proof .l{font-size:13.5px;margin-top:12px}
+  .proof .src{padding-top:18px;font-size:10.5px}
+  .proof-lead{margin:-12px 0 36px}
+  .path-list li{grid-template-columns:1fr;gap:2px}
+}
+</style>
+</head>
+<body data-page="home">
+<div id="loader" aria-hidden="true"><div class="count">0</div><div class="bar"></div></div>
+<!-- shell:top (byte-identical on every page; first thing in the body, after the Home-only #loader) -->
+<a class="skip" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div><div class="cursor-ring" aria-hidden="true"></div>
+<div class="sprog" aria-hidden="true"></div>
+<div class="hud mono" aria-hidden="true"><span class="hud-n">00</span> / <span class="hud-total">00</span> — <span class="hud-t">INTRO</span></div>
+<nav class="site-nav" aria-label="Primary">
+  <a class="logo" href="/" aria-label="Alp Serkan Merkit — home">ASM</a>
+  <ul>
+    <li><a href="/mechanical/">Mechanical</a></li>
+    <li><a href="/mechatronics/">Mechatronics</a></li>
+    <li><a href="/software-ai/">Software &amp; AI</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+<!-- /shell:top -->
+
+<main id="main">
+<section id="hero" data-hud="INTRO">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="wrap hero-copy">
+    <span class="kicker mono">Mechanical Engineer · B.Sc. 2026 · İzmir, Türkiye</span>
+    <h1 aria-label="Alp Serkan Merkit">
+      <span class="ln" data-split>Alp Serkan</span>
+      <span class="ln accent" data-split>Merkit</span>
+    </h1>
+    <div class="hero-sub">
+      <div data-intro><p class="identity">I build with AI — <a href="/mechanical/">generative-design hardware</a>, <a href="/mechatronics/">ESP32 devices</a>, and <a href="/software-ai/">AI-agent-built software</a> held to automated quality gates.</p></div>
+      <div class="ctas" data-intro>
+        <a class="btn primary magnetic" href="#doors">Pick a track ↓</a>
+        <a class="btn magnetic" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint mono" aria-hidden="true">Scroll</div>
+</section>
+
+<section id="manifesto" data-hud="IDEA"><div class="wrap">
+  <p data-words>Algorithms propose the shapes. Agents write the code. <span class="hl">I decide what “correct” means</span> — and build the gate that proves it.</p>
+</div></section>
+
+<section id="doors" data-hud="TRACKS"><div class="wrap">
+  <div class="sec-head"><h2>Three doors.</h2><span class="mono reveal">Each one opens a full page</span></div>
+  <div class="doors">
+    <a class="door door-mech" data-door href="/mechanical/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/mechanical/stress_test_wide_poster.jpg" width="896" height="560" alt="" loading="lazy" decoding="async">
+        <canvas class="door-3d" id="door-rover"></canvas><span class="door-3d-tag mono">Live 3D · belt drive concept</span>
+        <span class="door-print"><video data-t0="1" data-src="/assets/media/mechanical/stress_test_wide.mp4" poster="/assets/media/mechanical/stress_test_wide_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">01 · Mechanical</span>
+        <h3 class="door-title">From load cases to printed parts.</h3>
+        <span class="door-desc">A 16-wheel rover driven by one central motor: I owned the CAD assembly, shaped the bogie arm with generative design and had it 3D-printed. Plus three internships in manufacturing and quality.</span>
+        <span class="door-facts"><span>16 wheels · 1 motor</span><span>115-part assembly</span><span>0.086 kg · SF 2.3</span></span>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+    <a class="door door-ortam" data-door href="/mechatronics/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/ortam_voice_led_colours_poster.jpg" width="464" height="832" alt="" loading="lazy" decoding="async">
+        <span class="door-print"><video data-src="/assets/media/ortam_voice_led_colours.mp4" poster="/assets/media/ortam_voice_led_colours_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">02 · Mechatronics</span>
+        <h3 class="door-title">It wakes you with a sunrise.</h3>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+    <a class="door" data-door href="/software-ai/">
+      <span class="door-media" aria-hidden="true">
+        <img class="door-ghost" src="/assets/media/software/alphapulse_door_poster.jpg" width="1280" height="800" alt="" loading="lazy" decoding="async">
+        <span class="door-print"><video data-src="/assets/media/software/alphapulse_door.mp4" poster="/assets/media/software/alphapulse_door_poster.jpg" muted loop playsinline preload="none"></video></span>
+        <i class="door-edge"></i>
+      </span>
+      <span class="door-body">
+        <span class="door-kicker mono">03 · Software &amp; AI</span>
+        <h3 class="door-title">I orchestrate AI agents that build software.</h3>
+        <span class="door-desc">I plan the work, give each AI agent a clear role and define what "done" means; automated quality gates decide what ships. The code is AI-written, the process is mine. Four apps built this way.</span>
+        <span class="door-facts"><span>AI agent orchestration</span><span>Automated quality gates</span><span>7 repos</span></span>
+        <span class="door-go mono">Enter</span>
+      </span>
+    </a>
+  </div>
+</div></section>
+
+<section id="proof" data-hud="PROOF" aria-label="Proof in numbers"><div class="wrap">
+  <div class="sec-head"><h2>Proof, in numbers.</h2><span class="mono reveal">Every number links to its evidence</span></div>
+  <p class="proof-lead reveal">Six numbers, each with its source: design results, counts and gate thresholds from the three tracks. Each one opens the page where it is shown.</p>
+  <ul class="proof">
+    <li><a href="/mechanical/#rover"><b data-count="16">16</b><span class="l">wheels, all driven by one central motor</span><span class="mono src">Mechanical · rover →</span></a></li>
+    <li><a href="/mechanical/#rover"><b><span data-count="0.086" data-dec="3">0.086</span><small>kg</small></b><span class="l">generative-design bogie arm</span><span class="mono src">Mechanical · rover →</span></a></li>
+    <li><a href="/mechanical/#rover"><b><small class="pre">SF</small><span data-count="2.3" data-dec="1">2.3</span></b><span class="l">minimum safety factor, same arm · Fusion PLA</span><span class="mono src">Mechanical · rover →</span></a></li>
+    <li><a href="/mechatronics/#ortam"><b><span data-count="33">33</span><small>steps</small></b><span class="l">numbered breadboard wiring guide</span><span class="mono src">Mechatronics · Ortam Aurora →</span></a></li>
+    <li><a href="/software-ai/#method"><b>45<span class="arrow">→</span>14</b><span class="l">“toothless” tests flagged, after agents built a detector</span><span class="mono src">Software &amp; AI · method →</span></a></li>
+    <li><a href="/software-ai/#apps"><b><span data-count="100">100</span><small>%</small></b><span class="l">line-coverage gate, enforced by CI</span><span class="mono src">Software &amp; AI · apps →</span></a></li>
+  </ul>
+</div></section>
+
+<section id="path" data-hud="PATH"><div class="wrap">
+  <div class="sec-head"><h2>Path</h2><span class="mono reveal">Education · internships</span></div>
+  <div class="path-grid">
+    <div>
+      <ol class="path-list">
+        <li class="reveal"><span class="when mono">2021 — 2026</span><span class="what"><b>B.Sc. Mechanical Engineering</b> · Yaşar University, İzmir</span></li>
+        <li class="reveal"><span class="when mono">Aug — Sep 2025</span><span class="what"><b>R&amp;D and Manufacturing Engineering Intern</b> · Katmerciler</span></li>
+        <li class="reveal"><span class="when mono">Sep — Oct 2024</span><span class="what"><b>Manufacturing Engineering Intern</b> · Katmerciler</span></li>
+        <li class="reveal"><span class="when mono">Sep — Oct 2023</span><span class="what"><b>Quality Control and Process Engineering Intern</b> · Elektral</span></li>
+      </ol>
+      <a class="mono path-more" href="/mechanical/#internships">What I did in each internship →</a>
+    </div>
+    <figure class="path-photo reveal" data-lightbox><img src="/assets/media/software/path_ortam_class.jpg" width="1600" height="1200" loading="lazy" decoding="async" alt="Alp Serkan Merkit presenting Ortam in class, with #KISS — keep it simple — written on the board">
+      <figcaption class="mono">Presenting Ortam in class — #KISS: keep it simple</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<!-- shell:footer (byte-identical on every page; right after the main element closes) -->
+<footer id="contact" class="site-footer" data-hud="CONTACT">
+  <div class="wrap">
+    <span class="mono">Open to engineering roles and an M.Sc. in Artificial Intelligence</span>
+    <h2><a href="mailto:alpserkanmer@outlook.com">Let's build something.</a></h2>
+    <div class="links">
+      <a class="btn primary magnetic" href="mailto:alpserkanmer@outlook.com">alpserkanmer@outlook.com</a>
+      <a class="btn magnetic" href="https://github.com/alpserkanmerkit" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/alp-serkan-merkit-b8990a202" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+    <div class="foot-row"><span class="mono">© 2026 Alp Serkan Merkit</span><span class="mono">Built with AI agents · <span class="gate">verified by the gate</span></span></div>
+  </div>
+</footer>
+<div class="lightbox" role="dialog" aria-label="Enlarged image"><img alt=""></div>
+<!-- /shell:footer -->
+
+<!-- shell:scripts (byte-identical on every page; last thing before page-specific scripts and the end of the body) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="/assets/site.js"></script>
+<!-- /shell:scripts -->
+<script>/* Home: hero copy drifts up and fades as the hero scrolls away (the arm un-prints in arm3d.js) */
+if (window.gsap) gsap.to(['.hero-copy', '.scroll-hint'], { yPercent: -30, opacity: 0, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });</script>
+<script type="module">
+import { hero } from '/assets/arm3d.js';
+hero(document.getElementById('gl'), { light: true });
+/* Mechanical door: same rover model, drive only (no teardown); the grey poster stays as fallback */
+import { teardown } from '/assets/rover3d.js';
+const dc = document.getElementById('door-rover'), drop = () => { dc.remove(); document.querySelector('.door-3d-tag')?.remove(); };
+if (!teardown(dc)) drop(); else dc.addEventListener('rover:error', drop);
+</script>
+</body>
+</html>
