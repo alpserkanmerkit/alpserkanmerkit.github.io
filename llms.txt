@@ -6,6 +6,8 @@ Handle everywhere: `alpserkanmerkit`. Contact: alpserkanmer@outlook.com. A schem
 
 Machine-readable profile: [resume.json](https://alpserkanmerkit.github.io/resume.json) (JSON Resume v1).
 
+License: CC BY-ND 4.0 (https://creativecommons.org/licenses/by-nd/4.0/) — share unchanged with credit; no modified versions.
+
 ## Pages
 
 - [Home](https://alpserkanmerkit.github.io/): positioning, three tracks ([#doors](https://alpserkanmerkit.github.io/#doors)), six numbers with their sources ([#proof](https://alpserkanmerkit.github.io/#proof): 16 wheels · 0.086 kg · safety factor 2.3 · 33 wiring steps · 45 → 14 · 100%), education and three engineering internships (Katmerciler 2025 and 2024, Elektral 2023; [#path](https://alpserkanmerkit.github.io/#path)), contact
