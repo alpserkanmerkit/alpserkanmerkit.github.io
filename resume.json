@@ -69,7 +69,7 @@
       "area": "Mechanical Engineering",
       "studyType": "B.Sc.",
       "startDate": "2021",
-      "endDate": "2026",
+      "endDate": "2026-06",
       "courses": [
         "Generative AI for Engineering Applications",
         "Advanced Mechatronics",
@@ -94,24 +94,27 @@
     },
     {
       "name": "Ortam Aurora",
-      "description": "ESP32-S3 smart room monitor and sunrise alarm. v2 firmware is hardened (per-device setup password, API token, BLE passkey pairing; known limits in SECURITY.md) and flashed on hardware; the companion Flutter phone app is a separate project whose v2 token/PIN update is pending.",
+      "description": "ESP32-S3 smart room monitor and sunrise alarm. v2 firmware is hardened (per-device setup password, API token, BLE passkey pairing; known limits in SECURITY.md) and flashed on hardware; an early companion app shows the live readings.",
       "highlights": [
         "Four sensor modules (DHT22, BH1750, SGP30, MAX4466) and an OLED measure temperature, humidity, light, air quality and sound; live data over a built-in web dashboard, WebSocket, REST and BLE (4-characteristic GATT).",
         "60-LED WS2812B strip runs a 30-minute fade that begins 30 minutes before local sunrise.",
+        "Voice commands change the LED strip colour (class demo).",
         "Breadboard wiring documented in 33 numbered steps."
       ],
       "keywords": ["ESP32-S3", "BLE", "WebSocket", "REST", "IoT security", "WS2812B"],
-      "type": "application"
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/mechatronics/#ortam"
     },
     {
       "name": "Arduino bench prototypes",
-      "description": "Ultrasonic proximity alert planned in Tinkercad and built on the bench in stages (sensor, LED zone code, small propeller fan), plus a servo-follow sketch rewritten in 2026 (not yet tested with a servo).",
+      "description": "Ultrasonic proximity alert planned in Tinkercad and built on the bench in stages (sensor, LED zone code, small propeller fan), plus a servo-follow build whose arm sweeps from 0 to 180 degrees as the hand moves from 5 to 50 cm.",
       "highlights": [
         "Super Fulffy: a soil-moisture plant-watering design in Tinkercad (Arduino Uno, soil sensor, micro servo); simulation only, no physical build.",
         "Wiring for each build drawn as numbered breadboard guides."
       ],
       "keywords": ["Arduino Uno", "HC-SR04", "Tinkercad", "DC motor", "Servo", "Soil-moisture sensor"],
-      "type": "application"
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/mechatronics/#final"
     },
     {
       "name": "AI coding agent quality gate",
@@ -123,6 +126,17 @@
       "keywords": ["Claude Code", "Codex", "pytest", "Mutation testing", "GitHub Actions"],
       "type": "application",
       "url": "https://alpserkanmerkit.github.io/software-ai/#method"
+    },
+    {
+      "name": "claude-code-guardrails",
+      "description": "A free safety kit for AI coding agents: it blocks common mistakes such as a whole-disk search or a background sleep loop, while normal commands like running the tests go through.",
+      "highlights": [
+        "Distilled from a much larger personal guardrail system into one plugin, keeping only the checks for problems measured again and again.",
+        "A guardrail, not a sandbox: it catches common mistakes, not a determined attacker. MIT licence."
+      ],
+      "keywords": ["Claude Code", "Hooks", "AI agent safety"],
+      "type": "application",
+      "url": "https://alpserkanmerkit.github.io/software-ai/#guardrails"
     },
     {
       "name": "PDF Audiobook (Sesli Kitap)",
@@ -137,7 +151,7 @@
     },
     {
       "name": "Quant Engine",
-      "description": "Local research and paper-trading platform on real Binance and Yahoo Finance data, with no path to a real exchange: VWAP fills, drawdown kill switch, GARCH, VaR/ES, Markowitz and DCF models.",
+      "description": "Local research and paper-trading platform on real Binance and Yahoo Finance data, with no path to a real exchange: VWAP fills, drawdown kill switch, GARCH, VaR/ES, Markowitz, DCF and options-pricing models.",
       "keywords": ["Python", "NumPy", "pandas", "pytest"],
       "type": "application",
       "url": "https://alpserkanmerkit.github.io/software-ai/#quant"
@@ -146,7 +160,7 @@
       "name": "AlphaPulse",
       "description": "Local financial-intelligence terminal: news feed with AI analysis, portfolio with risk measures, a four-agent strategy debate and a compliance centre. Demo build runs on mock data with one command; no API key needed.",
       "highlights": [
-        "Nine CI jobs: lint, type-check and build, unit tests, Playwright and demo smoke tests, Python tests, Python lint and security scan, dependency scan, secret scan."
+        "CI pipeline: lint, type-check and build, unit tests, Playwright and demo smoke tests, Python tests, Python lint and security scan, dependency scan and secret scan."
       ],
       "keywords": ["React", "Vite", "Express", "TypeScript", "Prisma", "Playwright"],
       "type": "application",
@@ -187,7 +201,7 @@
   ],
   "meta": {
     "canonical": "https://alpserkanmerkit.github.io/resume.json",
-    "version": "v1.0.0",
-    "lastModified": "2026-10-06T00:00:00"
+    "version": "v1.1.0",
+    "lastModified": "2026-10-31T00:00:00"
   }
 }
