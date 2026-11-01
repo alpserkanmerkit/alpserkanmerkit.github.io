@@ -41,8 +41,8 @@
       "name": "Katmerciler Araç Üstü Ekipman A.Ş.",
       "position": "Manufacturing Engineering Intern",
       "location": "İzmir, Türkiye",
-      "startDate": "2024-06",
-      "endDate": "2024-08",
+      "startDate": "2024-09",
+      "endDate": "2024-10",
       "summary": "Manufacturing engineering internship.",
       "highlights": [
         "Analyzed end-to-end production across fabrication, assembly and quality control.",
@@ -53,13 +53,21 @@
       "name": "Elektral Elektromekanik A.Ş.",
       "position": "Quality Control and Process Engineering Intern",
       "location": "İzmir, Türkiye",
-      "startDate": "2023-06",
-      "endDate": "2023-08",
+      "startDate": "2023-09",
+      "endDate": "2023-10",
       "summary": "Quality control and process engineering internship.",
       "highlights": [
         "Quality-control analysis on automated production lines.",
         "Evaluated the effect of heat treatment and surface coating on component quality."
       ]
+    },
+    {
+      "name": "Accounting office",
+      "position": "Administrative Assistant (part-time)",
+      "location": "İzmir, Türkiye",
+      "startDate": "2022-01",
+      "endDate": "2023-09",
+      "summary": "Part-time administrative work during university."
     }
   ],
   "education": [
@@ -157,14 +165,14 @@
       "url": "https://alpserkanmerkit.github.io/software-ai/#quant"
     },
     {
-      "name": "AlphaPulse",
-      "description": "Local financial-intelligence terminal: news feed with AI analysis, portfolio with risk measures, a four-agent strategy debate and a compliance centre. Demo build runs on mock data with one command; no API key needed.",
+      "name": "Quorum",
+      "description": "Local financial-intelligence terminal (public repository: github.com/alpserkanmerkit/quorum): news feed with AI analysis, portfolio with risk measures, a four-agent strategy debate and a compliance centre. Demo build runs on mock data with one command; no API key needed.",
       "highlights": [
         "CI pipeline: lint, type-check and build, unit tests, Playwright and demo smoke tests, Python tests, Python lint and security scan, dependency scan and secret scan."
       ],
       "keywords": ["React", "Vite", "Express", "TypeScript", "Prisma", "Playwright"],
       "type": "application",
-      "url": "https://alpserkanmerkit.github.io/software-ai/#alphapulse"
+      "url": "https://alpserkanmerkit.github.io/software-ai/#quorum"
     },
     {
       "name": "Live voice translation",
@@ -179,6 +187,14 @@
       "keywords": ["Flutter", "AI coach"],
       "type": "application",
       "url": "https://alpserkanmerkit.github.io/software-ai/#habit"
+    },
+    {
+      "name": "Teknofest Robotaxi passenger autonomous vehicle competition",
+      "description": "Team member in the Teknofest Robotaxi passenger autonomous vehicle competition.",
+      "roles": ["Team member"],
+      "startDate": "2022-08",
+      "endDate": "2022-09",
+      "type": "competition"
     }
   ],
   "skills": [
@@ -201,7 +217,7 @@
   ],
   "meta": {
     "canonical": "https://alpserkanmerkit.github.io/resume.json",
-    "version": "v1.1.0",
-    "lastModified": "2026-10-31T00:00:00"
+    "version": "v1.2.0",
+    "lastModified": "2026-11-01T00:00:00"
   }
 }
